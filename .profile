@@ -3,7 +3,7 @@
 ###############################################################################
 
 # vars
-if hash nvim 2>/dev/null; then
+if command -v nvim > /dev/null 2>&1; then
   export EDITOR="nvim"
   alias vim='nvim'
 else
@@ -14,13 +14,13 @@ export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTIGNORE="clear:keybase*"
-if hash dircolors 2>/dev/null; then
+if command -v dircolors > /dev/null 2>&1; then
   eval "$(dircolors -b "./.ls_colors")"
 else
   export LSCOLORS=gxfxcxdxbxggedabagacad
 fi
 export CLICOLOR=1
-if hash ag 2>/dev/null; then
+if command -v ag > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
 fi
 export FZF_DEFAULT_OPTS=""
@@ -50,19 +50,19 @@ export TZ="Atlantic/Reykjavik"
 
 # colors
 export TERM=screen-256color
-USER_COLOR="$(tput setaf 222)"; export DIRECTORY_COLOR
-PROMPT_COLOR="$(tput setaf 226)"; export PROMPT_COLOR
-AT_COLOR="$(tput setaf 240)"; export AT_COLOR
-HOST_COLOR="$(tput setaf 213)"; export HOST_COLOR
+USER_COLOR="$(tput setaf 222 0 0)"; export DIRECTORY_COLOR
+PROMPT_COLOR="$(tput setaf 226 0 0)"; export PROMPT_COLOR
+AT_COLOR="$(tput setaf 240 0 0)"; export AT_COLOR
+HOST_COLOR="$(tput setaf 213 0 0)"; export HOST_COLOR
 RESET_COLOR="$(tput sgr0)"; export RESET_COLOR
 
 # less and man colors
-export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green
-export LESS_TERMCAP_md=$(tput bold; tput setaf 6) # cyan
+export LESS_TERMCAP_mb=$(tput bold; tput setaf 2 0 0) # green
+export LESS_TERMCAP_md=$(tput bold; tput setaf 6 0 0) # cyan
 export LESS_TERMCAP_me=$(tput sgr0)
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # yellow on blue
+export LESS_TERMCAP_so=$(tput bold; tput setaf 3 0 0; tput setab 4 0 0) # yellow on blue
 export LESS_TERMCAP_se=$(tput rmso; tput sgr0)
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7) # white
+export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7 0 0) # white
 export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)
 export LESS_TERMCAP_mr=$(tput rev)
 export LESS_TERMCAP_mh=$(tput dim)
@@ -138,7 +138,11 @@ if [ -d "${HOME}/.functions" ]; then
 fi
 
 # basic shell aliases
-alias ls='ls --color'
+if command -v colorls > /dev/null 2>&1; then
+  alias ls='colorls -G'
+else
+  alias ls='ls --color'
+fi
 alias lsd='ls -Gl | grep "^d"'
 alias cd..="cd .."
 alias ..="cd .."
@@ -178,7 +182,7 @@ alias wrti="mplayer http://playerservices.streamtheworld.com/api/livestream-redi
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
 
 # javascript
-if hash node 2>/dev/null; then
+if command -v node > /dev/null 2>&1; then
   export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
   [ -d "$HOME/.yarn" ] && PATH=${PATH}:${HOME}/.yarn/bin
   [ -d "$HOME/.config/yarn" ] && PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
