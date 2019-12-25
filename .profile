@@ -50,19 +50,19 @@ export TZ="Atlantic/Reykjavik"
 
 # colors
 export TERM=screen-256color
-export DIRECTORY_COLOR="$(tput setaf 222)"
-export GIT_COLOR="$(tput setaf 240)"
-export STAGED_COLOR="$(tput setaf 11)"
-export MODIFIED_COLOR="$(tput setaf 64)"
-export UNTRACKED_COLOR="$(tput setaf 4)"
-export PROMPT_COLOR="$(tput setaf 226)"
-export USER_COLOR="$(tput setaf 87)"
-export BEAT_COLOR="$(tput setaf 195)"
-export ROOT_COLOR="$(tput setaf 160)"
-export AT_COLOR="$(tput setaf 240)"
-export HOST_COLOR="$(tput setaf 213)"
-export TIME_COLOR="$(tput setaf 60)"
-export RESET_COLOR="$(tput sgr0)"
+DIRECTORY_COLOR="$(tput setaf 222)"; export DIRECTORY_COLOR
+GIT_COLOR="$(tput setaf 240)"; export GIT_COLOR
+STAGED_COLOR="$(tput setaf 11)"; export STAGED_COLOR
+MODIFIED_COLOR="$(tput setaf 64)"; export MODIFIED_COLOR
+UNTRACKED_COLOR="$(tput setaf 4)"; export UNTRACKED_COLOR
+PROMPT_COLOR="$(tput setaf 226)"; export PROMPT_COLOR
+USER_COLOR="$(tput setaf 87)"; export USER_COLOR
+BEAT_COLOR="$(tput setaf 195)"; export BEAT_COLOR
+ROOT_COLOR="$(tput setaf 160)"; export ROOT_COLOR
+AT_COLOR="$(tput setaf 240)"; export AT_COLOR
+HOST_COLOR="$(tput setaf 213)"; export HOST_COLOR
+TIME_COLOR="$(tput setaf 60)"; export TIME_COLOR
+RESET_COLOR="$(tput sgr0)"; export RESET_COLOR
 
 # Base16 Tomorrow Night
 _gen_fzf_default_opts() {
@@ -107,7 +107,7 @@ PATH=${PATH}:/usr/X11/bin
 PATH=${PATH}:/opt/local/bin
 PATH=${PATH}:/opt/local/sbin
 PATH=${PATH}:${HOME}/bin
-PATH=${PATH};${HOME}/.yarn/bin
+PATH=${PATH}:${HOME}/.yarn/bin
 PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
 PATH=${PATH}:${HOME}/.node/bin
 PATH=${PATH}:${HOME}/.local/bin
