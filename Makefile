@@ -1,7 +1,7 @@
 help:
-	@echo "Make targets:"
-	@echo "\tinstall   - adds dotfiles to system and inits vim"
-	@echo "\tuninstall - removes dotfiles from system"
+	@printf "Make targets:\\n"
+	@printf "\tinstall   - adds dotfiles to system and inits vim\\n"
+	@printf "\tuninstall - removes dotfiles from system\\n"
 
 install:
 	stow -t "$$HOME" .
