@@ -1,0 +1,3 @@
+handler text/plain fold -sw 80 "%s" | lolcat -f
+set color_menus true
+go gopher.black
