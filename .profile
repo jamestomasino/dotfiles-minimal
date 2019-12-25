@@ -50,18 +50,10 @@ export TZ="Atlantic/Reykjavik"
 
 # colors
 export TERM=screen-256color
-DIRECTORY_COLOR="$(tput setaf 222)"; export DIRECTORY_COLOR
-GIT_COLOR="$(tput setaf 240)"; export GIT_COLOR
-STAGED_COLOR="$(tput setaf 11)"; export STAGED_COLOR
-MODIFIED_COLOR="$(tput setaf 64)"; export MODIFIED_COLOR
-UNTRACKED_COLOR="$(tput setaf 4)"; export UNTRACKED_COLOR
+USER_COLOR="$(tput setaf 222)"; export DIRECTORY_COLOR
 PROMPT_COLOR="$(tput setaf 226)"; export PROMPT_COLOR
-USER_COLOR="$(tput setaf 87)"; export USER_COLOR
-BEAT_COLOR="$(tput setaf 195)"; export BEAT_COLOR
-ROOT_COLOR="$(tput setaf 160)"; export ROOT_COLOR
 AT_COLOR="$(tput setaf 240)"; export AT_COLOR
 HOST_COLOR="$(tput setaf 213)"; export HOST_COLOR
-TIME_COLOR="$(tput setaf 60)"; export TIME_COLOR
 RESET_COLOR="$(tput sgr0)"; export RESET_COLOR
 
 # Base16 Tomorrow Night
@@ -196,5 +188,6 @@ if [ -d "${HOME}/sdk/" ]; then
   PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
 fi
 
+USER=$(id -un)
 HOSTNAME=$(uname -n)
-PS1="${HOST_COLOR}${HOSTNAME}${RESET_COLOR} ${DIRECTORY_COLOR}(${PWD})${RESET_COLOR} ${PROMPT_COLOR}-> ${RESET_COLOR}"
+PS1="${USER_COLOR}${USER}${RESET_COLOR}${AT_COLOR}@${RESET_COLOR}${HOST_COLOR}${HOSTNAME}${RESET_COLOR}${PROMPT_COLOR}-> ${RESET_COLOR}"
