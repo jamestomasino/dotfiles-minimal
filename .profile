@@ -140,6 +140,7 @@ fi
 # basic shell aliases
 if command -v colorls > /dev/null 2>&1; then
   alias ls='colorls -G'
+  unset LSCOLORS
 else
   alias ls='ls --color'
 fi
