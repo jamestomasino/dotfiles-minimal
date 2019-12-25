@@ -66,7 +66,6 @@ export RESET_COLOR="$(tput sgr0)"
 
 # Base16 Tomorrow Night
 _gen_fzf_default_opts() {
-
   color00='#1d1f21'
   color01='#282a2e'
   color02='#373b41'
@@ -168,5 +167,32 @@ alias wrti="mplayer http://playerservices.streamtheworld.com/api/livestream-redi
 
 # youtube-dl to get music
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
+
+# javascript
+if hash node 2>/dev/null; then
+  export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
+  [ -d "$HOME/.yarn" ] && PATH=${PATH}:${HOME}/.yarn/bin
+  [ -d "$HOME/.config/yarn" ] && PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
+  [ -d "$HOME/.node" ] && PATH=${PATH}:${HOME}/.node/bin
+fi
+
+# perl 5
+if [ -d "${HOME}/perl5" ]; then
+  PATH=${PATH}:${HOME}/perl5/bin
+  export PERL5LIB="/home/tomasino/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+  export PERL_LOCAL_LIB_ROOT="/home/tomasino/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+  export PERL_MB_OPT="--install_base 'home/tomasino/perl5'"
+  export PERL_MM_OPT="INSTALL_BASE=/home/tomasino/perl5"
+  [ -f "$HOME/perl5/perlbrew/etc/bashrc" ] && . "$HOME/perl5/perlbrew/etc/bashrc"
+fi
+
+# android sdk
+if [ -d "${HOME}/sdk/" ]; then  
+  export ANDROID_HOME="$HOME/sdk"
+  PATH=${PATH}:${HOME}/sdk/tools
+  PATH=${PATH}:${HOME}/sdk/tools/bin
+  PATH=${PATH}:${HOME}/sdk/platform-tools
+  PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
+fi
 
 PS1="\[$DIRECTORY_COLOR\]\w\[$RESET_COLOR\]\n\[$HOST_COLOR\]$(hostname -f)\[$PROMPT_COLOR\]-> \[$RESET_COLOR\]"
