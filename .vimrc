@@ -113,75 +113,75 @@ if has('autocmd')
 
     augroup func_whitespace
         autocmd!
-        autocmd filetype c,markdown,cpp,java,go,php,javascript,python,twig,text,xml,yml autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+        autocmd FileType c,markdown,cpp,java,go,php,javascript,python,twig,text,xml,yml autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     augroup END
 
     augroup type_gitcommit
         autocmd!
-        autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
-        autocmd filetype gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+        autocmd FileType gitcommit call setpos('.', [0, 1, 1, 0])
+        autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
     augroup END
 
     augroup type_javascript
         autocmd!
-        autocmd filetype javascript setlocal shiftwidth=2
-        autocmd filetype javascript setlocal softtabstop=2
-        autocmd filetype javascript setlocal tabstop=2
-        autocmd filetype javascript setlocal expandtab
-        autocmd filetype javascript setlocal foldmethod=syntax
+        autocmd FileType javascript setlocal shiftwidth=2
+        autocmd FileType javascript setlocal softtabstop=2
+        autocmd FileType javascript setlocal tabstop=2
+        autocmd FileType javascript setlocal expandtab
+        autocmd FileType javascript setlocal foldmethod=syntax
     augroup END
 
     augroup type_vue
         autocmd!
-        autocmd filetype vue syntax sync fromstart
+        autocmd FileType vue syntax sync fromstart
     augroup END
 
     augroup type_haskell
         autocmd!
-        autocmd filetype haskell compiler ghc
-        autocmd filetype haskell setlocal shiftwidth=2
-        autocmd filetype haskell setlocal expandtab
-        autocmd filetype haskell let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-        autocmd filetype haskell let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-        autocmd filetype haskell let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-        autocmd filetype haskell let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-        autocmd filetype haskell let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-        autocmd filetype haskell let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
-        autocmd filetype haskell let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
+        autocmd FileType haskell compiler ghc
+        autocmd FileType haskell setlocal shiftwidth=2
+        autocmd FileType haskell setlocal expandtab
+        autocmd FileType haskell let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
+        autocmd FileType haskell let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
+        autocmd FileType haskell let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
+        autocmd FileType haskell let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
+        autocmd FileType haskell let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
+        autocmd FileType haskell let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
+        autocmd FileType haskell let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
     augroup END
 
     augroup type_python
         autocmd!
-        autocmd filetype python setlocal expandtab
-        autocmd filetype python setlocal softtabstop=4
-        autocmd filetype python setlocal shiftwidth=4
-        autocmd filetype python setlocal tabstop=4
+        autocmd FileType python setlocal expandtab
+        autocmd FileType python setlocal softtabstop=4
+        autocmd FileType python setlocal shiftwidth=4
+        autocmd FileType python setlocal tabstop=4
     augroup END
 
     augroup type_json
         autocmd!
-        autocmd filetype json setlocal equalprg=python\ -m\ json.tool
+        autocmd FileType json setlocal equalprg=python\ -m\ json.tool
     augroup END
 
     augroup type_make
         autocmd!
-        autocmd filetype make setlocal noexpandtab
-        autocmd filetype make setlocal softtabstop=4
-        autocmd filetype make setlocal shiftwidth=4
-        autocmd filetype make setlocal tabstop=4
+        autocmd FileType make setlocal noexpandtab
+        autocmd FileType make setlocal softtabstop=4
+        autocmd FileType make setlocal shiftwidth=4
+        autocmd FileType make setlocal tabstop=4
     augroup END
 
     augroup bundle_rmarkdown
         autocmd!
-        autocmd filetype Rmd setlocal expandtab
-        autocmd filetype Rmd setlocal softtabstop=4
-        autocmd filetype Rmd setlocal shiftwidth=4
-        autocmd filetype Rmd setlocal tabstop=4
+        autocmd FileType Rmd setlocal expandtab
+        autocmd FileType Rmd setlocal softtabstop=4
+        autocmd FileType Rmd setlocal shiftwidth=4
+        autocmd FileType Rmd setlocal tabstop=4
     augroup END
 
     augroup pencil
         autocmd!
-        autocmd filetype markdown,mkd call pencil#init()
+        autocmd FileType markdown,mkd call pencil#init()
                     \ | call lexical#init()
                     \ | call litecorrect#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
