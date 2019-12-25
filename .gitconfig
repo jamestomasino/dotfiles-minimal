@@ -1,0 +1,195 @@
+[user]
+  name = James Tomasino
+  email = james@tomasino.org
+  signingkey = 09DDD7DF
+
+[github]
+  user = jamestomasino
+
+[gpg]
+  program = gpg
+
+[tag]
+  gpgsign = true
+  forceSignAnnotated = true
+
+[core]
+  whitespace = trailing-space, space-before-tab, cr-at-eol
+  excludesfile = ~/.gitignore_global
+  editor = 'vim'
+  eol = native
+  autocrlf = input
+  pager = less -r
+  compression = 9
+  bigFileThreshold = 20m
+  ignorecase = false
+  packedGitLimit = 256m
+  packedGitWindowSize = 256m
+
+[pack]
+  threads = 1
+  window = 0
+  windowMemory = 256m
+  SizeLimit = 256m
+  deltaCacheSize = 256m
+  packSizeLimet = 256m
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = auto
+
+[pager]
+  diff = diff-so-fancy | less --tabs=4 -RFX
+  show = diff-so-fancy | less --tabs=4 -RFX
+
+[diff]
+  tool = vimdiff
+  renames = copies
+  mnemonicprefix = true
+  algorithm = patience
+
+[difftool]
+  prompt = false
+
+[merge]
+  stat = true
+  log = true
+  tool = fugitive
+  renamelimit = 100000
+
+[mergetool]
+  keepBackup = false
+  prompt = false
+
+[mergetool "fugitive"]
+  cmd = vim -f -c "Gvdiff" "$MERGED"
+
+[branch]
+  autosetupmerge = true
+
+[push]
+  default = matching
+
+[fetch]
+  prune = true
+
+[rebase]
+  autosquash = true
+
+[advice]
+  statusHints = true
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+
+[color]
+  diff = auto
+  status = auto
+  branch = auto
+  interactive = auto
+  ui = auto
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+
+[color "diff"]
+  meta = yellow
+  frag = magenta bold
+  plain = white bold
+  old = red bold
+  new = green bold
+  commit = yellow bold
+  func = green dim
+  whitespace = red reverse
+
+[color "status"]
+  added = yellow
+  changed = green
+  untracked = cyan
+
+[color "diff-highlight"]
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
+
+[diff-so-fancy]
+  markEmptyLines = false
+  changeHunkIndicators = false
+
+[http "https://git.gsw.agency"]
+  sslVerify = false
+
+[alias]
+
+  # squash entire repo to a single commit (requires --force to push)
+  squash = "!git reset $(git commit-tree HEAD^{tree} -m 'initial commit') "
+
+  # rollback
+  rollback = "!f() { git reset $1; git reset --soft HEAD@{1}; git commit -m 'reverting to older revision $1'; git reset --hard; }; f"
+
+  # get biggest file according to repo history
+  biggest = "!git rev-list --objects --all | grep `git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -1 | awk '{ print $1 }'`"
+
+  # remove a file or folder from git history. Will require a push -f
+  balefire = "!f() { git filter-branch --index-filter \"git rm -rf --cached --ignore-unmatch $1\" HEAD; rm -rf .git/refs/original/ ; git reflog expire --all ; git gc --aggressive --prune; }; f"
+
+  # remove all remote branches that have been merged
+  removeallmerged = "!git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d"
+
+  # push to all remotes
+  pushall = "!git remote | xargs -L1 git push --all"
+
+  # local exclude
+  exclude = "!sh -c 'echo "$1" >> .git/info/exclude' -"
+
+  # What has changed since...
+  changelist = "!git whatchanged --since='$1' --oneline | awk '/^:/ {print $6}' | sort -u; #"
+
+  # various pretty loggers from various places
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  lp = log --pretty=format:'%Cblue%h%Creset %Cgreen%<(15)%ad%Creset | %s%d [%C(yellow)%an%Creset] %C(cyan)%d%Creset' --date=relative --no-merges
+
+  # List remote Git branches and the last commit date for each branch. Sort by most recent commit date.
+  latestremote = "!git for-each-ref refs/remotes/ --format=\"%(color:green)%(committerdate:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset)\" --sort -committerdate"
+
+  # show a log without the formating, occasionaly handy for c&p
+  rawlog = log --format=\"format:commit %H%nAuthor:%an%n%n%B%n\"
+
+  # show a list of branches sorted by time of last commit
+  branchage = "!f() { git for-each-ref --sort=committerdate refs/heads $1  --format=\"%(refname:short)\" ; }; g() { for C in $(f $1) ; do git show -s --pretty=format:\"%Cgreen%ci %Cblue%cr%Creset  $C\" \"$C\" -- ; done; }; g "
+
+  # show remote branches as well
+  branchageall = !git brage refs/remotes
+
+  # show a list of every branch and show their latests commit, sorted by last commit
+  branchlog = "!sh -c 'for C in $(git for-each-ref --sort=committerdate refs/heads --format=\"%(refname:short)\") ; do git show  -s --pretty=format:\"%Cgreen%ci %Cblue%cr%Creset  $C\" \"$C\" -- ; git show --stat -s $C ; echo; done'"
+
+  # from https://github.com/cypher/dotfiles/blob/master/gitconfig
+  ls-ignored = ls-files --exclude-standard --ignored --others
+
+  # ignore local changes to a file
+  ignore = update-index --assume-unchanged
+
+  # https://github.com/wadey/dotfiles/blob/master/gitconfig
+  # check if a branch has been merged into the current HEAD
+  #  if on master, "git merged topic" will tell you if topic
+  #  has been merged
+  merged = !sh -c 'git rev-list HEAD | grep $(git rev-parse $0)'
+
+  # https://github.com/prabirshrestha/ProfilesAndSettings/blob/master/.gitconfig
+  # show tags and any tag annotation (tito adds tag annotations for example)
+  tags = tag -n1 -l
+
+  # Poor man's force-gpg-sign-tags
+  tag = tag -s
+
+  mkrepo = "!github-newrepo $1"
