@@ -202,7 +202,7 @@ if compctl >/dev/null 2>&1; then
         # tab completion
         local compl
         read -l compl
-        reply=(${(f)"$(_z --complete "$compl")"})
+        reply=${(f)"$(_z --complete "$compl")"}
     }
     compctl -U -K _z_zsh_tab_completion _z
 elif complete >/dev/null 2>&1; then
@@ -211,7 +211,7 @@ elif complete >/dev/null 2>&1; then
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-        grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
+        echo "$PROMPT_COMMAND" | grep "_z --add" >/dev/null || {
             PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
         }
     }

@@ -125,7 +125,7 @@ set -o vi
 # Load functions
 if [ -d "${HOME}/.functions" ]; then
   for f in "${HOME}/.functions/"*; do
-    source "$f"
+    . "$f"
   done
 fi
 
@@ -196,4 +196,5 @@ if [ -d "${HOME}/sdk/" ]; then
   PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
 fi
 
-PS1="\[$DIRECTORY_COLOR\]\w\[$RESET_COLOR\]\n\[$HOST_COLOR\]$(hostname -f)\[$PROMPT_COLOR\]-> \[$RESET_COLOR\]"
+HOSTNAME=$(uname -n)
+PS1="${HOST_COLOR}${HOSTNAME}${RESET_COLOR} ${DIRECTORY_COLOR}(${PWD})${RESET_COLOR} ${PROMPT_COLOR}-> ${RESET_COLOR}"

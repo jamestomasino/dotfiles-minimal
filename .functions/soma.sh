@@ -6,18 +6,3 @@ soma() {
     mplayer -playlist "http://somafm.com/${1}.pls"
   fi
 }
-_soma() {
-  if [ "${#COMP_WORDS[@]}" != "2" ]; then
-    return
-  fi
-
-  tempfile="${HOME}/.somafm.tmp"
-  if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then
-    rm "$tempfile"
-  fi
-  if [ ! -f "$tempfile" ]; then
-    curl -s https://somafm.com/listen/ | awk -F '[<>]' '/MP3:/ { print $4 }' | awk -F '"' '{print $2}' | tr -d \\/ | sed 's|.pls$||' > "$tempfile"
-  fi
-  COMPREPLY=($(compgen -W "$(cat "$tempfile")" -- "${COMP_WORDS[1]}"))
-}
-complete -F _soma soma

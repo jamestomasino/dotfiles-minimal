@@ -5,6 +5,6 @@
 #   - Exit if there's no match (--exit-0)
 fe() {
   IFS=$'\n'
-  files=($(fzf --query="$1" --multi --select-1 --exit-0))
+  files=$(fzf --query="$1" --multi --select-1 --exit-0)
   [ -n "$files" ] && ${EDITOR:-vim} "${files[@]}"
 }
