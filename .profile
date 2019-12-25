@@ -14,7 +14,11 @@ export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTIGNORE="clear:keybase*"
-export LSCOLORS=gxfxcxdxbxggedabagacad
+if hash dircolors 2>/dev/null; then
+  eval "$(dircolors -b "./.ls_colors")"
+else
+  export LSCOLORS=gxfxcxdxbxggedabagacad
+fi
 export CLICOLOR=1
 if hash ag 2>/dev/null; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
@@ -33,6 +37,7 @@ export ANDROID_HOME="$HOME/sdk"
 # lastpass
 export LPASS_HOME="$HOME/.lpass"
 export LPASS_DISABLE_PINENTRY=1
+export SSH_KEY_LOCATIONS="${HOME}/.ssh/ ${HOME}/.spideroak/Documents/Keys/personal/ssh/ ${HOME}/.spideroak/Documents/Keys/work/ssh/"
 
 # personal app storage paths
 export TODO="$SYNCTHING_PATH/todo/personal.txt"
@@ -154,5 +159,14 @@ alias tmux='tmux -u2'
 alias t='tmux attach || tmux new'
 
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'
+
+# radio
+alias anonradio='mplayer http://anonradio.net:8000/anonradio'
+alias tilderadio='mplayer https://radio.tildeverse.org/radio/8000/radio.ogg'
+alias sleepbot='mplayer -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
+alias wrti="mplayer http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
+
+# youtube-dl to get music
+alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
 
 PS1="\[$DIRECTORY_COLOR\]\w\[$RESET_COLOR\]\n\[$HOST_COLOR\]$(hostname -f)\[$PROMPT_COLOR\]-> \[$RESET_COLOR\]"
