@@ -111,6 +111,7 @@ PATH=${PATH}:${HOME}/.yarn/bin
 PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
 PATH=${PATH}:${HOME}/.node/bin
 PATH=${PATH}:${HOME}/.local/bin
+PATH=${PATH}:${HOME}/.fzf/bin
 
 # PROMPT COMMANDS
 PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
