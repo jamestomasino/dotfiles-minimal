@@ -16,7 +16,9 @@ export HISTSIZE=10000
 export HISTIGNORE="clear:keybase*"
 export LSCOLORS=gxfxcxdxbxggedabagacad
 export CLICOLOR=1
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
+if hash ag 2>/dev/null; then
+  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
+fi
 export FZF_DEFAULT_OPTS=""
 export LYNX_CFG="$HOME/.lynxrc"
 export WWW_HOME="gopher://gopher.black"
