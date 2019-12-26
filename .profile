@@ -26,7 +26,6 @@ fi
 export FZF_DEFAULT_OPTS=""
 export LYNX_CFG="$HOME/.config/lynx/config"
 export WWW_HOME="gopher://gopher.black"
-export XDG_CONFIG_HOME="$HOME/.config"
 
 # path vars
 export SYNCTHING_PATH="$HOME/.syncthing"
@@ -49,7 +48,8 @@ export TRACK_DIR="$SYNCTHING_PATH/track"
 export TZ="Atlantic/Reykjavik"
 
 # XDG
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
 
 # colors
 export TERM=screen-256color
@@ -169,7 +169,7 @@ alias vimr='vim -u DEFAULTS -U NONE -i NONE'
 alias gs="git status"
 
 # tmux
-alias tmux='tmux -u2'
+alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias t='tmux attach || tmux new'
 
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'

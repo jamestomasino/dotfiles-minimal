@@ -17,3 +17,14 @@ Make targets:
         install   - adds dotfiles to system and inits vim plug
         uninstall - removes dotfiles from system
 ```
+
+## TODO
+
+Some configuration files are still stored at the top level and do not respect `XDG_CONFIG_HOME` or even a hard-coded `~/.config`. Several of these have active issues to correct that.
+
+- [.agignore](https://github.com/ggreer/the_silver_searcher/issues/1020)
+- [.ctags](https://github.com/universal-ctags/ctags/issues/89)
+- .curlrc - no public issue logged. Perhaps it's in a mailing list?
+- [.scimrc](https://github.com/andmarti1424/sc-im/issues/358<Paste>)
+- [.tmux.conf](https://github.com/tmux/tmux/issues/142) - obstinately refuse to add the 3 lines of code necessary to support XDG. **Fixing with an alias**
+- [.vimrc](https://github.com/vim/vim/issues/2655) - refuses to support. Suggests using neovim (which we do)
