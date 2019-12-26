@@ -50,9 +50,8 @@ export TZ="Atlantic/Reykjavik"
 
 # colors
 export TERM=screen-256color
-USER_COLOR="$(tput setaf 222 0 0)"; export DIRECTORY_COLOR
+DIRECTORY_COLOR="$(tput setaf 222 0 0)"; export DIRECTORY_COLOR
 PROMPT_COLOR="$(tput setaf 226 0 0)"; export PROMPT_COLOR
-AT_COLOR="$(tput setaf 240 0 0)"; export AT_COLOR
 HOST_COLOR="$(tput setaf 213 0 0)"; export HOST_COLOR
 RESET_COLOR="$(tput sgr0)"; export RESET_COLOR
 
@@ -209,4 +208,5 @@ fi
 
 USER=$(id -un)
 HOSTNAME=$(uname -n)
-PS1="${USER_COLOR}${USER}${RESET_COLOR}${AT_COLOR}@${RESET_COLOR}${HOST_COLOR}${HOSTNAME}${RESET_COLOR}${PROMPT_COLOR}-> ${RESET_COLOR}"
+export PS1='${DIRECTORY_COLOR}$(pwd)${RESET_COLOR}
+${HOST_COLOR}${HOSTNAME}${RESET_COLOR}${PROMPT_COLOR}-> ${RESET_COLOR}'
