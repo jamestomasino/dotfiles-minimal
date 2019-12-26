@@ -100,23 +100,24 @@ _gen_fzf_default_opts
 export PAGER=less
 
 # path
+path() { [ -d "$1" ] && PATH="${PATH}${PATH:+:}${1}"; }
 PATH=/bin
-PATH=${PATH}:/sbin
-PATH=${PATH}:/usr/bin
-PATH=${PATH}:/usr/sbin
-PATH=${PATH}:/usr/games
-PATH=${PATH}:/usr/pkg/bin
-PATH=${PATH}:/usr/local/sbin
-PATH=${PATH}:/usr/local/bin
-PATH=${PATH}:/usr/X11/bin
-PATH=${PATH}:/opt/local/bin
-PATH=${PATH}:/opt/local/sbin
-PATH=${PATH}:${HOME}/bin
-PATH=${PATH}:${HOME}/.yarn/bin
-PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
-PATH=${PATH}:${HOME}/.node/bin
-PATH=${PATH}:${HOME}/.local/bin
-PATH=${PATH}:${HOME}/.fzf/bin
+path "/sbin"
+path "/usr/bin"
+path "/usr/sbin"
+path "/usr/games"
+path "/usr/pkg/bin"
+path "/usr/local/sbin"
+path "/usr/local/bin"
+path "/usr/X11/bin"
+path "/opt/local/bin"
+path "/opt/local/sbin"
+path "${HOME}/bin"
+path "${HOME}/.yarn/bin"
+path "${HOME}/.config/yarn/global/node_modules/.bin"
+path "${HOME}/.node/bin"
+path "${HOME}/.local/bin"
+path "${HOME}/.fzf/bin"
 
 # PROMPT COMMANDS
 PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
