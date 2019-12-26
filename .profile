@@ -24,7 +24,7 @@ if command -v ag > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
 fi
 export FZF_DEFAULT_OPTS=""
-export LYNX_CFG="$HOME/.lynxrc"
+export LYNX_CFG="$HOME/.config/lynx/config"
 export WWW_HOME="gopher://gopher.black"
 export XDG_CONFIG_HOME="$HOME/.config"
 
