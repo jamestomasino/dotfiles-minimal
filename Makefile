@@ -1,6 +1,6 @@
 help:
 	@printf "Make targets:\\n"
-	@printf "\tinstall   - adds dotfiles to system and inits vim\\n"
+	@printf "\tinstall   - adds dotfiles to system and inits vim plug\\n"
 	@printf "\tuninstall - removes dotfiles from system\\n"
 
 install:
