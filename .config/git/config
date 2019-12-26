@@ -15,7 +15,6 @@
 
 [core]
   whitespace = trailing-space, space-before-tab, cr-at-eol
-  excludesfile = ~/.gitignore_global
   editor = 'vim'
   eol = native
   autocrlf = input
