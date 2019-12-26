@@ -25,6 +25,7 @@ if command -v ag > /dev/null 2>&1; then
 fi
 export FZF_DEFAULT_OPTS=""
 export LYNX_CFG="$HOME/.config/lynx/config"
+export CURL_HOME="$HOME/.config/curl"
 export WWW_HOME="gopher://gopher.black"
 
 # path vars
