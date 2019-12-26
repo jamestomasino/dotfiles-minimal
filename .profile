@@ -15,7 +15,7 @@ export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTIGNORE="clear:keybase*"
 if command -v dircolors > /dev/null 2>&1; then
-  eval "$(dircolors -b "./.ls_colors")"
+  eval "$(dircolors -b "$HOME/.ls_colors")"
 else
   export LSCOLORS=gxfxcxdxbxggedabagacad
 fi
