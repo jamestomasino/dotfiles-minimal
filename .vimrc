@@ -45,7 +45,7 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! InitDirs()
-    let l:parent = $HOME
+    let l:parent = $XDG_CACHE_HOME
     let l:prefix = 'vim'
     let l:dir_list = {
                 \ 'backup': 'backupdir',
@@ -56,7 +56,7 @@ function! InitDirs()
         let l:dir_list['undo'] = 'undodir'
     endif
 
-    let l:common_dir = l:parent . '/.' . l:prefix
+    let l:common_dir = l:parent . '/' . l:prefix
 
     for [l:dirname, l:settingname] in items(l:dir_list)
         let l:directory = l:common_dir . l:dirname . '/'

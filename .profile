@@ -48,6 +48,9 @@ export TRACK_DIR="$SYNCTHING_PATH/track"
 # system
 export TZ="Atlantic/Reykjavik"
 
+# XDG
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-${HOME}/.cache}"
+
 # colors
 export TERM=screen-256color
 DIRECTORY_COLOR="$(tput setaf 222 0 0)"; export DIRECTORY_COLOR
