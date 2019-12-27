@@ -1,7 +1,6 @@
 #!/bin/sh
 soma() {
   if [ -z "$1" ]; then
-
     tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
     if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then
       rm "$tempfile"
