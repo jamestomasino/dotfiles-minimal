@@ -1,9 +1,8 @@
 #!/bin/sh
-colors() {
-  c=0; while test $c -lt 255; do
-    echo "$(tput setaf ${c} 0 0)tput setaf ${c} 0 0"
-    c=$((c + 1))
-  done
+c=0; while test $c -lt 255; do
+  echo "$(tput setaf ${c} 0 0)tput setaf ${c} 0 0"
+  c=$((c + 1))
+done
 
 echo "
 $(tput setaf 226 0 0)tput setab {num}  $(tput sgr0)– Set a background color using ANSI escape
@@ -21,4 +20,3 @@ $(tput setaf 226 0 0)tput rev          $(tput sgr0)– Turn on reverse mode
 $(tput setaf 226 0 0)tput smso         $(tput sgr0)– Enter standout mode (bold on rxvt)
 $(tput setaf 226 0 0)tput rmso         $(tput sgr0)– Exit standout mode
 $(tput setaf 226 0 0)tput sgr0         $(tput sgr0)– Turn off all attributes"
-}

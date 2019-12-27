@@ -18,6 +18,18 @@ install:
 					fi; \
 				done; \
 				cd ..; \
+			elif [ "$$x" = "bin" ]; then \
+				cd bin; \
+				mkdir -p "$$HOME/bin"; \
+				for y in *; do \
+					if [ -e "$$HOME/bin/$$y" ]; then \
+						printf "File Exists, Skipping: %s\\n" "$$HOME/bin/$$y"; \
+					else \
+						ln -s "${CURDIR}${.CURDIR}/bin/$$y" "$$HOME/bin/$$y"; \
+						printf "Linking: %s%s/bin/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y"; \
+					fi; \
+				done; \
+				cd ..; \
 			else \
 				if [ -e "$$HOME/$$x" ]; then \
 					printf "File Exists, Skipping: %s\\n" "$$HOME/$$x"; \
@@ -44,6 +56,14 @@ uninstall:
 					rm "$$HOME/.config/$$y"; \
 					printf "Removing: %s\\n" "$$HOME/.config/$$y"; \
 				done; \
+				cd ..; \
+			elif [ "$$x" = "bin" ]; then \
+				cd bin; \
+				for y in *; do \
+					rm "$$HOME/bin/$$y"; \
+					printf "Removing: %s\\n" "$$HOME/bin/$$y"; \
+				done; \
+				cd ..; \
 			else \
 				rm "$$HOME/$$x"; \
 				printf "Removing: %s\\n" "$$HOME/$$x"; \

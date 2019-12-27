@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Swap 2 filenames around, if they exist
+TMPFILE=$(mktemp -t "swap.XXXXXXX")
+[ $# -ne 2 ] && printf "swap: 2 arguments needed\\n" && return 1
+[ ! -e "$1" ] && printf "swap: %s does not exist\\n" "$1" && return 1
+[ ! -e "$2" ] && printf "swap: %s does not exist\\n" "$2" && return 1
+mv "$1" "$TMPFILE"
+mv "$2" "$1"
+mv "$TMPFILE" "$2"
