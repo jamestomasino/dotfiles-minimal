@@ -10,6 +10,11 @@ _cd_track() {
   random=$(hexdump -n 2 -e '/2 "%u"' /dev/urandom)
   tempfile="$datafile.$random"
 
+  if [ ! -f "$datafile" ]; then
+    mkdir -p "$(basename "$datafile")"
+    touch "$datafile"
+  fi
+
   while read -r line; do
     [ -d "${line%%\|*}" ] && echo "$line"
   done < "$datafile" | awk -v path="$p" -v now="$(date +%s)" -F"|" '
