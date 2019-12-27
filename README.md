@@ -18,6 +18,16 @@ Make targets:
         uninstall - removes dotfiles from system
 ```
 
+## Folders
+
+Some folders behave in a special way.
+
+`.config` - This folder often holds a number of dotfiles of a private nature. Rather than store them all in git I choose to keep only a few that are universally applicable. Any dotfiles in this folder are linked individually into `$HOME/.config` so as to avoid overwriting private ones.
+
+`.functions` - This folder contains scripts that are all sourced upon shell start. Each file contains a shell function that will be available. They are named the same as the functions they hold.
+
+`bin` - Some scripts need not be shell functions (and add overhead to the shell). These scripts are linked individually into `$HOME/bin` to avoid overwriting private ones. This folder is included in the `PATH` environment variable.
+
 ## TODO
 
 Some configuration files are still stored at the top level and do not respect `XDG_CONFIG_HOME` or even a hard-coded `~/.config`. Several of these have active issues to correct that.
