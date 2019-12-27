@@ -15,7 +15,15 @@ substr() {
 }
 
 _z() {
-    local datafile="$XDG_CACHE_HOME/z.dat"
+    datafile=""
+    fnd=""
+    opt=""
+    list=""
+    typ=""
+    last=""
+    lcd=""
+
+    datafile="$XDG_CACHE_HOME/z.dat"
 
     # bail if we don't own ~/.z (we're another user but our ENV is still set)
     [ -f "$datafile" ] && [ ! -O "$datafile" ] && return
@@ -23,17 +31,17 @@ _z() {
       # list/go
       while [ "$1" ]; do 
         case "$1" in
-          --) 
+          --)
             while [ "$1" ]; do
               shift
-              local fnd="$fnd${fnd:+ }$1"
+              fnd="$fnd${fnd:+ }$1"
             done
             ;;
-          -*) local opt=${1:1};
+          -*) opt="$(substr 2 -1 "$1")"
               while [ "$opt" ]; do
-                case "${opt:0:1}" in
+                case "$(substr 1 1 "$opt")" in
                   c)
-                    local fnd="^$PWD $fnd"
+                    fnd="^$PWD $fnd"
                     ;;
                   h) 
                     echo "${_Z_CMD:-z} [-chlrtx] args" >&2
@@ -43,25 +51,25 @@ _z() {
                     sed -i -e "\:^${PWD}|.*:d" "$datafile"
                     ;;
                   l) 
-                    local list=1
+                    list=1
                     ;;
                   r)
-                    local typ="rank"
+                    typ="rank"
                     ;;
                   t) 
-                    local typ="recent"
+                    typ="recent"
                     ;;
                 esac
-                opt=${opt:1}
+                opt="$(substr 2 -1 "$opt")"
               done
               ;;
-           *) local fnd="$fnd${fnd:+ }$1";;
+           *) fnd="$fnd${fnd:+ }$1";;
         esac
-        local last=$1
+        last=$1
         shift
       done
 
-      ( [ -n "$fnd" ] && [ "$fnd" != "^$PWD " ] ) || local list=1
+      ( [ -n "$fnd" ] && [ "$fnd" != "^$PWD " ] ) || list=1
 
       # if we hit enter on a completion just go there
       case "$last" in
@@ -74,8 +82,7 @@ _z() {
       # no file yet
       [ -f "$datafile" ] || return
 
-      local cd
-      cd="$(while read -r line; do
+      lcd="$(while read -r line; do
           [ -d "${line%%\|*}" ] && echo "$line"
       done < "$datafile" | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
           function frecent(rank, time) {
@@ -146,7 +153,7 @@ _z() {
           }
       ')"
   [ $? -gt 0 ] && return
-  [ "$cd" ] && cd "$cd" || return
+  [ "$lcd" ] && cd "$lcd" || return
 }
 
 z() {
