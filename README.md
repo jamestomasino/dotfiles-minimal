@@ -4,7 +4,7 @@ My previous [dotfiles](https://github.com/jamestomasino/dotfiles) collection has
 
 This repository is a reboot. I've stripped out a lot, but kept most of the more useful features that I take advantage of day-by-day. These dotfiles are designed to run with `/bin/sh` or `dash` as the interactive shell. While I may still run `bash` on some machines for tab-completion, this set should prove more portable.
 
-Installation requires only Make, and will work on BSD or GNU systems. Some of the advanced functions, like `z` for directory hopping, may not work on NetBSD or some other obscure flavors, but the majority of the features will persist.
+Installation requires only Make, and will work on BSD or GNU systems.
 
 ## Usage
 
