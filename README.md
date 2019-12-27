@@ -18,23 +18,23 @@ Make targets:
         uninstall - removes dotfiles from system
 ```
 
-## Folders
+## Linking strategy
 
-Some folders behave in a special way.
+`.config/` - This folder often holds a number of dotfiles of a private nature. Rather than store them all in git I choose to keep only the few that are universally applicable. Any dotfiles in this folder are linked individually into `$HOME/.config/` so as to avoid overwriting private ones.
 
-`.config` - This folder often holds a number of dotfiles of a private nature. Rather than store them all in git I choose to keep only a few that are universally applicable. Any dotfiles in this folder are linked individually into `$HOME/.config` so as to avoid overwriting private ones.
+`.functions/` - This folder contains scripts that are all sourced upon shell start. Each file contains a shell function that will be available. They are named the same as the functions they hold.
 
-`.functions` - This folder contains scripts that are all sourced upon shell start. Each file contains a shell function that will be available. They are named the same as the functions they hold.
+`bin/` - Some scripts need not be shell functions (and add overhead to the shell). These scripts are linked individually into `$HOME/bin/` to avoid overwriting private ones. This folder is included in the `PATH` environment variable.
 
-`bin` - Some scripts need not be shell functions (and add overhead to the shell). These scripts are linked individually into `$HOME/bin` to avoid overwriting private ones. This folder is included in the `PATH` environment variable.
+All other files or folders are linked directly to `$HOME`.
 
-## TODO
+## Top-level dotfiles
 
 Some configuration files are still stored at the top level and do not respect `XDG_CONFIG_HOME` or even a hard-coded `~/.config`. Several of these have active issues to correct that.
 
 - [.agignore](https://github.com/ggreer/the_silver_searcher/issues/1020)
 - [.ctags](https://github.com/universal-ctags/ctags/issues/89)
-- ~~.curlrc~~ - no public issue logged. **Using CURL_HOME env to fix it**
 - [.scimrc](https://github.com/andmarti1424/sc-im/issues/358<Paste>)
+- [.vimrc](https://github.com/vim/vim/issues/2655) - refuses to support. Suggests using neovim (which we do where available)
+- ~~.curlrc~~ - no public issue logged. **Using CURL_HOME env to fix it**
 - [~~.tmux.conf~~](https://github.com/tmux/tmux/issues/142) - obstinately refuse to add the 3 lines of code necessary to support XDG. **Fixing with an alias**
-- [.vimrc](https://github.com/vim/vim/issues/2655) - refuses to support. Suggests using neovim (which we do)
