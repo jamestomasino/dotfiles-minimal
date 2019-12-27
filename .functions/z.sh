@@ -2,39 +2,81 @@
     echo "ERROR: z.sh's datafile ($XDG_CACHE_HOME/z.dat}) is a directory."
 }
 
+substr() {
+  index="$1"
+  len="$2"
+  shift
+  shift
+  if [ "$len" = "-1" ]; then
+    printf "%s" "$@" | awk -v i="$index" '{print substr($0, i);}'
+  else
+    printf "%s" "$@" | awk -v i="$index" -v l="$len" '{print substr($0, i, l);}'
+  fi
+}
+
 _z() {
     local datafile="$XDG_CACHE_HOME/z.dat"
 
     # bail if we don't own ~/.z (we're another user but our ENV is still set)
-    [ -f "$datafile" -a ! -O "$datafile" ] && return
+    [ -f "$datafile" ] && [ ! -O "$datafile" ] && return
 
       # list/go
-      while [ "$1" ]; do case "$1" in
-          --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
-          -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
-                  c) local fnd="^$PWD $fnd";;
-                  h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
-                  x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
-                  l) local list=1;;
-                  r) local typ="rank";;
-                  t) local typ="recent";;
-              esac; opt=${opt:1}; done;;
+      while [ "$1" ]; do 
+        case "$1" in
+          --) 
+            while [ "$1" ]; do
+              shift
+              local fnd="$fnd${fnd:+ }$1"
+            done
+            ;;
+          -*) local opt=${1:1};
+              while [ "$opt" ]; do
+                case "${opt:0:1}" in
+                  c)
+                    local fnd="^$PWD $fnd"
+                    ;;
+                  h) 
+                    echo "${_Z_CMD:-z} [-chlrtx] args" >&2
+                    return
+                    ;;
+                  x)
+                    sed -i -e "\:^${PWD}|.*:d" "$datafile"
+                    ;;
+                  l) 
+                    local list=1
+                    ;;
+                  r)
+                    local typ="rank"
+                    ;;
+                  t) 
+                    local typ="recent"
+                    ;;
+                esac
+                opt=${opt:1}
+              done
+              ;;
            *) local fnd="$fnd${fnd:+ }$1";;
-      esac; local last=$1; shift; done
-      [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
+        esac
+        local last=$1
+        shift
+      done
+
+      ( [ -n "$fnd" ] && [ "$fnd" != "^$PWD " ] ) || local list=1
 
       # if we hit enter on a completion just go there
       case "$last" in
-          # completions will always start with /
-          /*) [ -z "$list" -a -d "$last" ] && cd "$last" && return;;
+        # completions will always start with /
+        /*)
+          [ -z "$list" ] && [ -d "$last" ] && cd "$last" && return
+          ;;
       esac
 
       # no file yet
       [ -f "$datafile" ] || return
 
       local cd
-      cd="$(while read line; do
-          [ -d "${line%%\|*}" ] && echo $line
+      cd="$(while read -r line; do
+          [ -d "${line%%\|*}" ] && echo "$line"
       done < "$datafile" | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
           function frecent(rank, time) {
               # relate frequency and time
@@ -103,14 +145,14 @@ _z() {
               }
           }
       ')"
-    [ $? -gt 0 ] && return
-    [ "$cd" ] && cd "$cd"
+  [ $? -gt 0 ] && return
+  [ "$cd" ] && cd "$cd" || return
 }
 
 z() {
   if command -v fzf > /dev/null; then
     if [ -z "$*" ]; then
-      cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
+      cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')" || return
     else
       _z "$@"
     fi
