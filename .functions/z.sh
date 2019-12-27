@@ -1,10 +1,9 @@
-[ -d "${_Z_DATA:-$HOME/.z}" ] && {
-    echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
+[ -d "$XDG_CACHE_HOME/z.dat" ] && {
+    echo "ERROR: z.sh's datafile ($XDG_CACHE_HOME/z.dat}) is a directory."
 }
 
 _z() {
-
-    local datafile="${_Z_DATA:-$HOME/.z}"
+    local datafile="$XDG_CACHE_HOME/z.dat"
 
     # bail if we don't own ~/.z (we're another user but our ENV is still set)
     [ -f "$datafile" -a ! -O "$datafile" ] && return
