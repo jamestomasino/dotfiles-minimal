@@ -5,7 +5,7 @@ help:
 
 install:
 	@for x in * .*; do \
-		if [ "$$x" != ".git" ] && [ "$$x" != "." ] && [ "$$x" != ".." ]; then \
+		if [ "$$x" != ".git" ] && [ "$$x" != "." ] && [ "$$x" != ".." ] && [ "$$x" != "Makefile" ]; then \
 			if [ "$$x" = ".config" ]; then \
 				cd .config; \
 				mkdir -p "$$HOME/.config"; \
@@ -49,7 +49,7 @@ install:
 
 uninstall:
 	@for x in * .*; do \
-		if [ "$$x" != ".git" ] && [ "$$x" != "." ] && [ "$$x" != ".." ]; then \
+		if [ "$$x" != ".git" ] && [ "$$x" != "." ] && [ "$$x" != ".." ] && [ "$$x" != "Makefile" ]; then \
 			if [ "$$x" = ".config" ]; then \
 				cd .config; \
 				for y in *; do \
