@@ -54,6 +54,6 @@ _cd() {
   _cd_track
 }
 alias cd="_cd"
-if hash complete 2>/dev/null; then
+if complete >/dev/null 2>&1; then
   complete -d cd
 fi
