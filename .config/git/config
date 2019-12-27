@@ -191,4 +191,4 @@
   # Poor man's force-gpg-sign-tags
   tag = tag -s
 
-  mkrepo = "!github-newrepo $1"
+  mkrepo = "!github_newrepo $1"

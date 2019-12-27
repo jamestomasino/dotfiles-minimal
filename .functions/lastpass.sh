@@ -1,6 +1,6 @@
 #!/bin/sh
 lastpass() {
-  if command -v lpass > /dev/null; then
+  if command -v lpass > /dev/null 2>&1; then
     while ! lpass status -q; do
       if [ -z "${LASTPASS_USER}" ]; then
         printf "Lastpass Username: "
@@ -10,10 +10,10 @@ lastpass() {
         lpass login --trust "${LASTPASS_USER}"
       fi
     done
-    if command -v fzf > /dev/null; then
+    if command -v fzf > /dev/null 2>&1; then
       lpass show -c --password "$(lpass ls | fzf | awk '{print $(NF)}' | sed 's/\]//g')"
     else
-      lpass show -c --password "$(lpass $1)"
+      lpass show -c --password "$(lpass "$1")"
     fi
   fi
 }
