@@ -14,8 +14,8 @@ if [ -z "$1" ]; then
     --select-1 \
     --exit-0 < "$tempfile")"
   if [ -n "$station" ]; then
-    mplayer -playlist "http://somafm.com/${station}.pls"
+    mplayer -playlist "https://somafm.com/${station}.pls"
   fi
 else
-  mplayer -playlist "http://somafm.com/${1}.pls"
+  mplayer -playlist "https://somafm.com/${1}.pls"
 fi
