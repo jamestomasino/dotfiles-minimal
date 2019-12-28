@@ -135,6 +135,7 @@ set -o vi
 # Load functions
 if [ -d "${HOME}/.functions" ]; then
   for f in "${HOME}/.functions/"*; do
+    # shellcheck source=/dev/null
     . "$f"
   done
 fi
@@ -199,7 +200,10 @@ if [ -d "${HOME}/perl5" ]; then
   export PERL_LOCAL_LIB_ROOT="/home/tomasino/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
   export PERL_MB_OPT="--install_base 'home/tomasino/perl5'"
   export PERL_MM_OPT="INSTALL_BASE=/home/tomasino/perl5"
-  [ -f "$HOME/perl5/perlbrew/etc/bashrc" ] && . "$HOME/perl5/perlbrew/etc/bashrc"
+  if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]; then 
+    # shellcheck source=/dev/null
+    . "$HOME/perl5/perlbrew/etc/bashrc"
+  fi
 fi
 
 # android sdk
