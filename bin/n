@@ -1,25 +1,38 @@
 #!/bin/sh
 
+fetch() {
+  find "${NOTE_DIR}" -name "*.md" | \
+  sed -e "s|${NOTE_DIR}/||" | \
+  sed -e 's/\.md$//' | \
+  fzf \
+  --multi \
+  --select-1 \
+  --exit-0
+}
+
 # Note taking function and command completion
   : "${NOTE_DIR:?'NOTE_DIR ENV Var not set'}"
 if [ -d "${NOTE_DIR}" ]; then
   if [ $# -eq 0 ]; then
-    file=$(find "${NOTE_DIR}" -name "*.md" | \
-      sed -e "s|${NOTE_DIR}/||" | \
-      sed -e 's/\.md$//' | \
-      fzf \
-      --multi \
-      --select-1 \
-      --exit-0)
-    [ -n "$file" ] && \
-      ${EDITOR:-vim} "${NOTE_DIR}/${file}.md"
+    file=$(fetch)
+    [ -n "$file" ] && ${EDITOR:-vim} "${NOTE_DIR}/${file}.md"
   else
     case "$1" in
       "-d")
-        rm "${NOTE_DIR}"/"$2".md
+        if [ -n "$2" ]; then
+          rm "${NOTE_DIR}"/"$2".md
+        else
+          file=$(fetch)
+          [ -n "$file" ] && rm "${NOTE_DIR}/${file}.md"
+        fi
         ;;
       "-r")
-        cat "${NOTE_DIR}"/"$2".md
+        if [ -n "$2" ]; then
+          cat "${NOTE_DIR}"/"$2".md
+        else
+          file=$(fetch)
+          [ -n "$file" ] && cat "${NOTE_DIR}/${file}.md"
+        fi
         ;;
       *)
         ${EDITOR:-vim} "${NOTE_DIR}"/"$*".md
