@@ -11,7 +11,7 @@ fetch() {
 }
 
 # Note taking function and command completion
-  : "${NOTE_DIR:?'NOTE_DIR ENV Var not set'}"
+: "${NOTE_DIR:?'NOTE_DIR env var not set'}"
 if [ -d "${NOTE_DIR}" ]; then
   if [ $# -eq 0 ]; then
     file=$(fetch)
