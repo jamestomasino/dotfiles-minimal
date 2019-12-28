@@ -35,6 +35,7 @@ if [ -d "${NOTE_DIR}" ]; then
         fi
         ;;
       *)
+        mkdir -p "$(dirname "${NOTE_DIR}/${*}.md")"
         ${EDITOR:-vim} "${NOTE_DIR}"/"$*".md
         ;;
     esac
