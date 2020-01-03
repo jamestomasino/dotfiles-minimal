@@ -10,3 +10,7 @@ color article            default   default
 highlight article "^(Title):.*$" blue default
 highlight article "https?://[^ ]+" red default
 highlight article "\\[image\\ [0-9]+\\]" green default
+
+# killfile
+# ignore-article "*" "title =~ \"Gentoo\""
+# ignore-article "http://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
