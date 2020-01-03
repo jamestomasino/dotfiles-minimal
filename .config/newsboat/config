@@ -1,3 +1,8 @@
+# general settings
+auto-reload yes
+max-items 50
+
+# solarized
 color background         default   default
 color listnormal         default   default
 color listnormal_unread  default   default
@@ -14,3 +19,16 @@ highlight article "\\[image\\ [0-9]+\\]" green default
 # killfile
 # ignore-article "*" "title =~ \"Gentoo\""
 # ignore-article "http://synflood.at/blog/index.php?/feeds/index.rss2" "title =~ \"newsboat\""
+
+# unbind keys
+unbind-key ENTER
+unbind-key j
+unbind-key k
+unbind-key J
+unbind-key K
+
+# bind keys - vim style
+bind-key j down
+bind-key k up
+bind-key l open
+bind-key h quit
