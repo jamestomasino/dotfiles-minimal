@@ -157,7 +157,6 @@ alias grep='grep --color=auto'
 alias mkdir='mkdir -p'
 
 # utils
-alias imgsz='sips -g pixelWidth -g pixelHeight'
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 alias utc='date -u +%H:%M:%S'
