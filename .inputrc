@@ -1,3 +1,4 @@
+set horizontal-scroll-mode off
 set completion-ignore-case on
 set bell-style none
 set editing-mode vi
@@ -15,6 +16,12 @@ set enable-bracketed-paste on
 # through commands (i.e. more intelligent Up/Down-arrow behavior)
 "\e[B": history-search-forward
 "\e[A": history-search-backward
+"\eOA": history-search-forward
+"\eOB": history-search-backward
+
+# Home & End Keys
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
 
 $if mode=vi
   set keymap vi-command
