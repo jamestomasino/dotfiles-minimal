@@ -47,6 +47,8 @@ export TRACK_DIR="$SYNCTHING_PATH/track"
 
 # system
 export TZ="Atlantic/Reykjavik"
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -54,11 +56,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 # colors
 export TERM=screen-256color
-DIRECTORY_COLOR="$(tput setaf 222 0 0)"; export DIRECTORY_COLOR
-PROMPT_COLOR="$(tput setaf 226 0 0)"; export PROMPT_COLOR
-HOST_COLOR="$(tput setaf 213 0 0)"; export HOST_COLOR
-RESET_COLOR="$(tput sgr0)"; export RESET_COLOR
-
 # less and man colors
 LESS_TERMCAP_mb=$(tput bold; tput setaf 2 0 0); export LESS_TERMCAP_mb
 LESS_TERMCAP_md=$(tput bold; tput setaf 6 0 0); export LESS_TERMCAP_md
@@ -216,7 +213,37 @@ if [ -d "${HOME}/sdk/" ]; then
   PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
 fi
 
+# gets true shell executable name
+getTrueShellExeName() {
+  local trueExe nextTarget 2>/dev/null # ignore error in shells without `local`
+  # Determine the shell executable filename.
+  trueExe=$(ps -o comm= $$) || return 1
+  # Strip a leading "-", as added e.g. by OSX for login shells.
+  [ "${trueExe#-}" = "$trueExe" ] || trueExe=${trueExe#-}
+  # Determine full executable path.
+  [ "${trueExe#/}" != "$trueExe" ] || trueExe=$([ -n "$ZSH_VERSION" ] && which -p "$trueExe" || which "$trueExe")
+  # If the executable is a symlink, resolve it to its *ultimate*
+  # target. 
+  while nextTarget=$(readlink "$trueExe"); do trueExe=$nextTarget; done
+  # Output the executable name only.
+  printf '%s\n' "$(basename "$trueExe")"
+}
+
+# use color in prompt if not dash. Color works there, but screws up line wrapping
 USER=$(id -un)
 HOSTNAME=$(uname -n)
-export PS1='${DIRECTORY_COLOR}$(pwd)${RESET_COLOR}
-${HOST_COLOR}${HOSTNAME}${RESET_COLOR}${PROMPT_COLOR}-> ${RESET_COLOR}'
+if [ "$(getTrueShellExeName)" = "dash" ]; then
+  PS1="[${HOSTNAME}] " # [hostname]
+  PS1=${PS1}'$(basename $(pwd)) ' # workingdir
+  PS1=${PS1}"-> " # ->
+else
+  DIRECTORY_COLOR="\001$(tput setaf 222 0 0)\002";
+  PROMPT_COLOR="\001$(tput setaf 226 0 0)\002";
+  HOST_COLOR="\001$(tput setaf 213 0 0)\002"
+  RESET_COLOR="\001$(tput sgr0)\002"
+  PS1="$HOST_COLOR[${HOSTNAME}] " # [hostname]
+  PS1=${PS1}"${DIRECTORY_COLOR}\w" # workingdir
+  PS1=${PS1}"\n$PROMPT_COLOR->$RESET_COLOR " # ->
+  unset DIRECTORY_COLOR PROMPT_COLOR HOST_COLO RESET_COLOR
+fi
+export PS1
