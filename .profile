@@ -197,14 +197,14 @@ if [ -d "${HOME}/perl5" ]; then
   export PERL_LOCAL_LIB_ROOT="/home/tomasino/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
   export PERL_MB_OPT="--install_base 'home/tomasino/perl5'"
   export PERL_MM_OPT="INSTALL_BASE=/home/tomasino/perl5"
-  if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]; then 
+  if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]; then
     # shellcheck source=/dev/null
     . "$HOME/perl5/perlbrew/etc/bashrc"
   fi
 fi
 
 # android sdk
-if [ -d "${HOME}/sdk/" ]; then  
+if [ -d "${HOME}/sdk/" ]; then
   export ANDROID_HOME="$HOME/sdk"
   PATH=${PATH}:${HOME}/sdk/tools
   PATH=${PATH}:${HOME}/sdk/tools/bin
@@ -222,7 +222,7 @@ getTrueShellExeName() {
   # Determine full executable path.
   [ "${trueExe#/}" != "$trueExe" ] || trueExe=$([ -n "$ZSH_VERSION" ] && which -p "$trueExe" || which "$trueExe")
   # If the executable is a symlink, resolve it to its *ultimate*
-  # target. 
+  # target.
   while nextTarget=$(readlink "$trueExe"); do trueExe=$nextTarget; done
   # Output the executable name only.
   printf '%s\n' "$(basename "$trueExe")"
@@ -237,12 +237,20 @@ if [ "$(getTrueShellExeName)" = "dash" ]; then
   PS1=${PS1}"-> " # ->
 else
   DIRECTORY_COLOR="\001$(tput setaf 222 0 0)\002";
-  PROMPT_COLOR="\001$(tput setaf 226 0 0)\002";
+  PIPE_COLOR="\001$(tput setaf 87 0 0)\002";
+  PROMPT_COLOR="\001$(tput setaf 10 0 0)\002";
   HOST_COLOR="\001$(tput setaf 213 0 0)\002"
   RESET_COLOR="\001$(tput sgr0)\002"
-  PS1="$HOST_COLOR[${HOSTNAME}] " # [hostname]
+  PS1="${HOST_COLOR}${HOSTNAME}" # [hostname]
+  PS1=${PS1}"${PIPE_COLOR}|" # [hostname]
   PS1=${PS1}"${DIRECTORY_COLOR}\w" # workingdir
   PS1=${PS1}"\n$PROMPT_COLOR->$RESET_COLOR " # ->
   unset DIRECTORY_COLOR PROMPT_COLOR HOST_COLO RESET_COLOR
 fi
 export PS1
+
+# Load local system overrides
+if [ -f "$HOME/.profile_local" ]; then
+  # shellcheck source=/dev/null
+  . "$HOME/.profile_local"
+fi
