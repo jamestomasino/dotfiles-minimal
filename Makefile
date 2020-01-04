@@ -13,7 +13,7 @@ install:
 					if [ -e "$$HOME/.config/$$y" ]; then \
 						printf "File Exists, Skipping: %s\\n" "$$HOME/.config/$$y"; \
 					else \
-						ln -s "${CURDIR}${.CURDIR}/.config/$$y" "$$HOME/.config/$$y"; \
+						ln -sfn "${CURDIR}${.CURDIR}/.config/$$y" "$$HOME/.config/$$y"; \
 						printf "Linking: %s%s/.config/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y"; \
 					fi; \
 				done; \
@@ -25,7 +25,7 @@ install:
 					if [ -e "$$HOME/bin/$$y" ]; then \
 						printf "File Exists, Skipping: %s\\n" "$$HOME/bin/$$y"; \
 					else \
-						ln -s "${CURDIR}${.CURDIR}/bin/$$y" "$$HOME/bin/$$y"; \
+						ln -sfn "${CURDIR}${.CURDIR}/bin/$$y" "$$HOME/bin/$$y"; \
 						printf "Linking: %s%s/bin/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y"; \
 					fi; \
 				done; \
@@ -34,7 +34,7 @@ install:
 				if [ -e "$$HOME/$$x" ]; then \
 					printf "File Exists, Skipping: %s\\n" "$$HOME/$$x"; \
 				else \
-					ln -s "${CURDIR}${.CURDIR}/$$x" "$$HOME/$$x"; \
+					ln -sfn "${CURDIR}${.CURDIR}/$$x" "$$HOME/$$x"; \
 					printf "Linking: %s%s/%s\\n" "${CURDIR}" "${.CURDIR}" "$$x"; \
 				fi; \
 			fi; \
