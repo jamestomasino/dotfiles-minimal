@@ -231,7 +231,8 @@ getTrueShellExeName() {
 # use color in prompt if not dash. Color works there, but screws up line wrapping
 USER=$(id -un)
 HOSTNAME=$(uname -n)
-if [ "$(getTrueShellExeName)" = "dash" ]; then
+TRUESHELL=$(getTrueShellExeName)
+if [ -z "$TRUESHELL" ] || [ "$TRUESHELL" = "dash" ]; then
   PS1="[${HOSTNAME}] " # [hostname]
   PS1=${PS1}'$(basename $(pwd)) ' # workingdir
   PS1=${PS1}"-> " # ->
