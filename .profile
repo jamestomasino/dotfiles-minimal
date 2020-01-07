@@ -215,8 +215,10 @@ fi
 # use color in prompt if not dash. Color works there, but screws up line wrapping
 USER=$(id -un)
 HOSTNAME=$(uname -n)
-TS=$(printf "%s" "$0" 2>/dev/null)
-if [ -z "$TS" ] || [ "$TS" = "dash" ] || [ "$TS" = "/bin/sh" ] || [ "$TS" = "/bin/dash" ]; then
+# true shell (TS) name
+TS=$(ps -cp "$$" -o command="" 2>/dev/null)
+if [ -z "$TS" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; then
+  # dash/sh can't render colors properly in the prompt without breaking readline
   PS1="[${HOSTNAME}] " # [hostname]
   PS1=${PS1}'$(basename $(pwd)) ' # workingdir
   PS1=${PS1}"-> " # ->
