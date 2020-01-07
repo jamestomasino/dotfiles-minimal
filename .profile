@@ -212,27 +212,11 @@ if [ -d "${HOME}/sdk/" ]; then
   PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
 fi
 
-# gets true shell executable name
-getTrueShellExeName() {
-  local trueExe nextTarget 2>/dev/null # ignore error in shells without `local`
-  # Determine the shell executable filename.
-  trueExe=$(ps -o comm= $$) || return 1
-  # Strip a leading "-", as added e.g. by OSX for login shells.
-  [ "${trueExe#-}" = "$trueExe" ] || trueExe=${trueExe#-}
-  # Determine full executable path.
-  [ "${trueExe#/}" != "$trueExe" ] || trueExe=$([ -n "$ZSH_VERSION" ] && which -p "$trueExe" || which "$trueExe")
-  # If the executable is a symlink, resolve it to its *ultimate*
-  # target.
-  while nextTarget=$(readlink "$trueExe"); do trueExe=$nextTarget; done
-  # Output the executable name only.
-  printf '%s\n' "$(basename "$trueExe")"
-}
-
 # use color in prompt if not dash. Color works there, but screws up line wrapping
 USER=$(id -un)
 HOSTNAME=$(uname -n)
-TRUESHELL=$(getTrueShellExeName)
-if [ -z "$TRUESHELL" ] || [ "$TRUESHELL" = "dash" ]; then
+TS=$(printf "%s" "$0" 2>/dev/null)
+if [ -z "$TS" ] || [ "$TS" = "dash" ] || [ "$TS" = "/bin/sh" ] || [ "$TS" = "/bin/dash" ]; then
   PS1="[${HOSTNAME}] " # [hostname]
   PS1=${PS1}'$(basename $(pwd)) ' # workingdir
   PS1=${PS1}"-> " # ->
