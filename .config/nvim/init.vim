@@ -22,7 +22,6 @@ Plug 'junegunn/limelight.vim'             " Highlights only active paragraph
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
 Plug 'reedes/vim-lexical'                 " Better spellcheck mappings
 Plug 'reedes/vim-litecorrect'             " Better autocorrections
-Plug 'reedes/vim-textobj-sentence'        " Treat sentences as text objects
 Plug 'reedes/vim-wordy'                   " Weasel words and passive voice
 Plug 'nelstrom/vim-markdown-folding'      " Smart folding for markdown
 
@@ -39,7 +38,7 @@ Plug 'dense-analysis/ale'                 " linting
 Plug 'othree/yajs.vim'                    " javascript syntax
 Plug 'othree/es.next.syntax.vim'          " es.next support
 Plug 'posva/vim-vue'                      " vue specific syntax support
-Plug 'https://github.com/jamestomasino/vim-conceal' " conceal formatting for js/py
+Plug 'jamestomasino/vim-conceal' " conceal formatting for js/py
 Plug 'leafgarland/typescript-vim'         " typescript syntax
 Plug 'junegunn/vim-easy-align'            " align code on characters
 Plug 'ollykel/v-vim'                      " v programming language
@@ -136,6 +135,15 @@ if has('autocmd')
         autocmd filetype gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
     augroup END
 
+    augroup type_html
+        autocmd!
+        autocmd filetype html setlocal shiftwidth=2
+        autocmd filetype html setlocal softtabstop=2
+        autocmd filetype html setlocal tabstop=2
+        autocmd filetype html setlocal noexpandtab
+        autocmd filetype html setlocal foldmethod=syntax
+    augroup END
+
     augroup type_javascript
         autocmd!
         autocmd filetype javascript setlocal shiftwidth=2
@@ -162,6 +170,14 @@ if has('autocmd')
         autocmd filetype haskell let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
         autocmd filetype haskell let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
         autocmd filetype haskell let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
+    augroup END
+
+    augroup type_css
+        autocmd!
+        autocmd filetype css,scss setlocal noexpandtab
+        autocmd filetype css,scss setlocal softtabstop=2
+        autocmd filetype css,scss setlocal shiftwidth=2
+        autocmd filetype css,scss setlocal tabstop=2
     augroup END
 
     augroup type_python
@@ -277,6 +293,7 @@ let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
 let b:ale_linters = {'javascript': ['eslint']}
 let b:ale_linters = {'scss': ['stylelint']}
 let g:ale_linters = {'vue': ['eslint', 'vls']}
+let g:ale_linters = {'html': ['alex', 'fecs', 'html-beautify', 'HTMLHint', 'prettier', 'tidy']}
 let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
 let b:ale_fixers = {'scss': ['stylelint']}
 let g:ale_fix_on_save = 1
