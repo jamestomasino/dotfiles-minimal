@@ -2,7 +2,7 @@
 
 BEGIN {
 	FS = "\t"
-	RS = "\r\n"
+	RS = "\n" # techincally \r\n, but servers mess this up
 	OFS = " "
 	ORS = "\n"
 	links = ""
@@ -10,13 +10,14 @@ BEGIN {
 }
 
 {
+	gsub(/\r/,"") # handle trailing windows line endings from GOOD servers
 	type=substr($1,1,1)
 	label=substr($1,2)
 	path=$2
 	server=$3
 	port=$4
 
-	if ( $0 == "." ) {} # end of file, don't display
+	if ( type == "." ) {} # end of file, don't display
 	else if ( type == "i" ) # label only
 	{
 		print label
