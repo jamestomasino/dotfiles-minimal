@@ -144,6 +144,15 @@ if has('autocmd')
         autocmd filetype html setlocal foldmethod=syntax
     augroup END
 
+    augroup type_awk
+        autocmd!
+        autocmd filetype awk setlocal shiftwidth=2
+        autocmd filetype awk setlocal softtabstop=2
+        autocmd filetype awk setlocal tabstop=2
+        autocmd filetype awk setlocal noexpandtab
+        autocmd filetype awk setlocal foldmethod=syntax
+    augroup END
+
     augroup type_javascript
         autocmd!
         autocmd filetype javascript setlocal shiftwidth=2
