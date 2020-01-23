@@ -36,7 +36,7 @@ BEGIN {
 		gsub(/^\[[0-9]+\][^\ ]+?\ /,"",label)
 		printf("[%02d]", linknum)
 		printf(" %s\n", label)
-		links = links sprintf("[%02d] telnet://%s/%s%s:%s\n",linknum, server, type, path, port)
+		links = links sprintf("[%02d] telnet://%s:%s/%s%s\n",linknum, server, port, type, path)
 		linknum++
 	}
 	else # any other gopher type
@@ -44,7 +44,7 @@ BEGIN {
 		gsub(/^\[[0-9]+\][^\ ]+?\ /,"",label)
 		printf("[%02d]", linknum)
 		printf(" %s\n", label)
-		links = links sprintf("[%02d] gopher://%s/%s%s:%s\n",linknum, server, type, path, port)
+		links = links sprintf("[%02d] gopher://%s:%s/%s%s\n",linknum, server, port, type, path)
 		linknum++
 	}
 }
