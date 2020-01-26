@@ -386,8 +386,8 @@ nnoremap <Leader>gm :PencilHard<CR>:set tw=66<CR>
 xnoremap <Enter> <Plug>(EasyAlign)
 " }}}
 
-" Insert Date/Timestamp for notes {{{
-nnoremap <Leader>gs :pu! =strftime('%Y-%m-%d %H:%M')<cr>A<space>
+" Insert Date for notes {{{
+nnoremap <Leader>gs :pu! =strftime('%Y-%m-%d')<cr>A<space>
 " }}}
 
 " Move blocks up and down {{{
