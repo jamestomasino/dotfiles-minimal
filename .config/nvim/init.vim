@@ -42,6 +42,7 @@ Plug 'jamestomasino/vim-conceal' " conceal formatting for js/py
 Plug 'leafgarland/typescript-vim'         " typescript syntax
 Plug 'junegunn/vim-easy-align'            " align code on characters
 Plug 'ollykel/v-vim'                      " v programming language
+Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
 
 call plug#end()
 
@@ -118,6 +119,11 @@ endfunction
 if has('autocmd')
 
     autocmd BufReadPost * if @% !~# '\.git[\/\\]COMMIT_EDITMSG$' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+    augroup mjml
+        autocmd!
+        autocmd BufNewFile,BufRead *.mjml   set filetype=html
+    augroup END
 
     augroup fzf
         autocmd! FileType fzf
