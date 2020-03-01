@@ -1,3 +1,2 @@
-handler text/plain /usr/bin/fold -sw 80 "%s" | /usr/games/lolcat -f
 set color_menus true
 go gopher.black
