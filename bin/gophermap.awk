@@ -24,7 +24,7 @@ BEGIN {
 	}
 	else if ( type == "h") # html links
 	{
-		gsub(/^\[[0-9]+\][^\ ]+?\ /,"",label)
+		gsub(/^\[[0-9]+\][^ ]+? /,"",label)
 		printf("[%02d]", linknum)
 		printf(" %s\n", label)
 		url = substr(path, 5)
@@ -33,7 +33,7 @@ BEGIN {
 	}
 	else if ( type == "T") # telnet links
 	{
-		gsub(/^\[[0-9]+\][^\ ]+?\ /,"",label)
+		gsub(/^\[[0-9]+\][^ ]+? /,"",label)
 		printf("[%02d]", linknum)
 		printf(" %s\n", label)
 		links = links sprintf("[%02d] telnet://%s:%s/%s%s\n",linknum, server, port, type, path)
@@ -41,7 +41,7 @@ BEGIN {
 	}
 	else # any other gopher type
 	{
-		gsub(/^\[[0-9]+\][^\ ]+?\ /,"",label)
+		gsub(/^\[[0-9]+\][^ ]+? /,"",label)
 		printf("[%02d]", linknum)
 		printf(" %s\n", label)
 		links = links sprintf("[%02d] gopher://%s:%s/%s%s\n",linknum, server, port, type, path)
