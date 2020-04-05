@@ -1,0 +1,2 @@
+#!/bin/sh
+youtube-dl -o- "$1" 2> /dev/null | mplayer - > /dev/null 2> /dev/null
