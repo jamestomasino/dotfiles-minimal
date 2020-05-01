@@ -1,0 +1,21 @@
+[general]
+start_url = "gopher://gopher.black"
+
+[colors]
+h1 = "cyan"
+h2 = "e10000"
+h3 = "chartreuse"
+list = "#C71585"
+text = "#e9e9e9"
+background = "#333333"
+
+[characters]
+h1 = "# "
+h2 = "## "
+h3 = "### "
+list = "- "
+
+[monospace]
+gemini=false
+gopher=true
+finger=true
