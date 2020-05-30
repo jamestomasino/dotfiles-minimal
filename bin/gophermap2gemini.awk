@@ -20,9 +20,25 @@ BEGIN {
 	if ( type == "." ) {} # end of file, don't display
 	else if ( type == "i" ) # label only
 	{
-		if (!(isFenced))  {
-			print "```"
-			isFenced=1
+		# check if type i line is a heading or list
+		if (label ~ /^#{1,3}[^#]/ ) {
+			# In a heading, end fence
+			if (isFenced)  {
+				print "```"
+				isFenced=0
+			}
+		} else if (label ~ /^\*[^\*]/) {
+			# In a bullet list, end fence
+			if (isFenced)  {
+				print "```"
+				isFenced=0
+			}
+		} else {
+			# not in special line, fence it
+			if (!(isFenced))  {
+				print "```"
+				isFenced=1
+			}
 		}
 		print label
 	}
