@@ -15,12 +15,11 @@ BEGIN {
 	path=$2
 	server=$3
 	port=$4
-	gsub(/\ /,"%20", path)
+	gsub(/\ /,"%20", path) # spaces in URLs work in gopher, but not gemini
 
 	if ( type == "." ) {} # end of file, don't display
-	else if ( type == "i" ) # label only
-	{
-		# check if type i line is a heading or list
+	else if ( type == "i" ) {
+		# print label only
 		if (label ~ /^#{1,3}[^#]/ ) {
 			# In a heading, end fence
 			if (isFenced)  {
@@ -41,27 +40,27 @@ BEGIN {
 			}
 		}
 		print label
-	}
-	else if ( type == "h") # html links
-	{
+	} else if ( type == "h") {
+		# html links
 		if (isFenced)  {
+			# end fences for links
 			print "```"
 			isFenced=0
 		}
 		url = substr(path, 5)
 		printf("=> %s %s\n", url, label)
-	}
-	else if ( type == "T") # telnet links
-	{
+	} else if ( type == "T") {
+		# telnet links
 		if (isFenced)  {
+			# end fences for links
 			print "```"
 			isFenced=0
 		}
 		printf("=> telnet://%s:%s/%s%s %s\n", server, port, type, path, label)
-	}
-	else # any other gopher type
-	{
+	} else {
+		# any other gopher type
 		if (isFenced)  {
+			# end fences for links
 			print "```"
 			isFenced=0
 		}
@@ -71,6 +70,7 @@ BEGIN {
 
 END {
 	if (isFenced)  {
+		# properly end fences if we're in one
 		print "```"
 	}
 }
