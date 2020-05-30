@@ -2,12 +2,12 @@
 start_url = "gemini://tilde.black"
 
 [colors]
-h1 = "#34e5eb"
-h2 = "#ebd534"
-h3 = "chartreuse"
-list = "#C71585"
-text = "#e9e9e9"
-background = "#333333"
+    h1 = "#08F6F8"
+    h2 = "#FF79D9"
+    h3 = "#FEFE55"
+    list = "#FEFDFE"
+    text = "#FEFDFE"
+    background = "#340F2F"
 
 [characters]
 h1 = "★ "
