@@ -232,6 +232,15 @@ if has('autocmd')
         autocmd filetype php setlocal tabstop=2
     augroup END
 
+    augroup gemini
+        autocmd!
+        autocmd filetype gemini,gmi call pencil#init()
+                    \ | call lexical#init()
+                    \ | call litecorrect#init()
+                    \ | setl spell spl=en_us fdl=4 noru nonu nornu
+                    \ | setl fdo+=search
+    augroup END
+
     augroup pencil
         autocmd!
         autocmd filetype markdown,mkd call pencil#init()
