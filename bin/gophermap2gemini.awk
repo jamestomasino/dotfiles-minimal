@@ -20,13 +20,13 @@ BEGIN {
 	if ( type == "." ) {} # end of file, don't display
 	else if ( type == "i" ) {
 		# print label only
-		if (label ~ /^#{1,3}[^#]/ ) {
+		if (label ~ /^#{1,3}\s/ ) {
 			# In a heading, end fence
 			if (isFenced)  {
 				print "```"
 				isFenced=0
 			}
-		} else if (label ~ /^\*[^\*]/) {
+		} else if (label ~ /^\*\s/) {
 			# In a bullet list, end fence
 			if (isFenced)  {
 				print "```"
