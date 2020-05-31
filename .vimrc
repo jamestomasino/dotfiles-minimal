@@ -179,6 +179,16 @@ if has('autocmd')
         autocmd FileType Rmd setlocal tabstop=4
     augroup END
 
+    augroup gemini
+        autocmd!
+        autocmd BufNewFile,BufRead *.gmi   set filetype=gemini
+        autocmd filetype gemini call pencil#init()
+                    \ | call lexical#init()
+                    \ | call litecorrect#init()
+                    \ | setl spell spl=en_us fdl=4 noru nonu nornu
+                    \ | setl fdo+=search
+    augroup END
+
     augroup pencil
         autocmd!
         autocmd FileType markdown,mkd call pencil#init()

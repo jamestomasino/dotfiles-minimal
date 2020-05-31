@@ -234,7 +234,8 @@ if has('autocmd')
 
     augroup gemini
         autocmd!
-        autocmd filetype gemini,gmi call pencil#init()
+        autocmd BufNewFile,BufRead *.gmi   set filetype=gemini
+        autocmd filetype gemini call pencil#init()
                     \ | call lexical#init()
                     \ | call litecorrect#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
