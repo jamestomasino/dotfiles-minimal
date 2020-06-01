@@ -15,7 +15,7 @@ BEGIN {
 	path=$2
 	server=$3
 	port=$4
-	gsub(/\ /,"%20", path) # spaces in URLs work in gopher, but not gemini
+	gsub(/ /,"%20", path) # spaces in URLs work in gopher, but not gemini
 
 	if ( type == "." ) {} # end of file, don't display
 	else if ( type == "i" ) {
