@@ -14,7 +14,7 @@ export HISTFILE="$HOME/.history"
 export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
-export HISTIGNORE="clear:keybase*"
+export HISTIGNORE="clear:keybase*:lssh"
 if command -v dircolors > /dev/null 2>&1; then
   eval "$(dircolors -b "$HOME/.config/ls_colors")"
 else

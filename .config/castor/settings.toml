@@ -9,6 +9,10 @@ start_url = "gemini://tilde.black"
     text = "#FEFDFE"
     background = "#340F2F"
 
+[colors.quote]
+    foreground="#949494"
+    background="#340F2F"
+
 [characters]
 h1 = "★ "
 h2 = "★ "
