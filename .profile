@@ -15,12 +15,10 @@ export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTIGNORE="clear:keybase*:lssh"
-if command -v dircolors > /dev/null 2>&1; then
-  eval "$(dircolors -b "$HOME/.config/ls_colors")"
-else
-  export LSCOLORS=gxfxcxdxbxggedabagacad
-fi
+
+export LSCOLORS=gxfxcxdxbxggedabagacad
 export CLICOLOR=1
+
 if command -v ag > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
 fi
@@ -57,6 +55,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 
 # colors
 export TERM=screen-256color
+
 # less and man colors
 LESS_TERMCAP_mb=$(tput bold; tput setaf 2 0 0); export LESS_TERMCAP_mb
 LESS_TERMCAP_md=$(tput bold; tput setaf 6 0 0); export LESS_TERMCAP_md
@@ -187,6 +186,11 @@ alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
 
 # javascript
 if command -v node > /dev/null 2>&1; then
+  NPM_PACKAGES="${HOME}/.npm-packages"
+  path "${NPM_PACKAGES}/bin"
+  # Preserve MANPATH if you already defined it somewhere in your config.
+  # Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
+  export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
   export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
   [ -d "$HOME/.yarn" ] && PATH=${PATH}:${HOME}/.yarn/bin
   [ -d "$HOME/.config/yarn" ] && PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
