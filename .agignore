@@ -1,3 +1,4 @@
 /.git/
 yarn.lock
 LICENSE
+node_modules/*
