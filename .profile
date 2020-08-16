@@ -121,6 +121,7 @@ path "${HOME}/.config/yarn/global/node_modules/.bin"
 path "${HOME}/.node/bin"
 path "${HOME}/.local/bin"
 path "${HOME}/.fzf/bin"
+path "${HOME}/.npm-packages/bin"
 
 # PROMPT COMMANDS
 PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
@@ -187,7 +188,6 @@ alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
 # javascript
 if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
-  path "${NPM_PACKAGES}/bin"
   # Preserve MANPATH if you already defined it somewhere in your config.
   # Otherwise, fall back to `manpath` so we can inherit from `/etc/manpath`.
   export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
