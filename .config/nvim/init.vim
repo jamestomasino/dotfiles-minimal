@@ -35,13 +35,7 @@ Plug 'tpope/vim-commentary'               " gcc to toggle comments
 Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
 Plug 'dense-analysis/ale'                 " linting
-Plug 'othree/yajs.vim'                    " javascript syntax
-Plug 'othree/es.next.syntax.vim'          " es.next support
-Plug 'posva/vim-vue'                      " vue specific syntax support
-Plug 'jamestomasino/vim-conceal' " conceal formatting for js/py
-Plug 'leafgarland/typescript-vim'         " typescript syntax
-Plug 'junegunn/vim-easy-align'            " align code on characters
-Plug 'ollykel/v-vim'                      " v programming language
+Plug 'jamestomasino/vim-conceal'          " conceal formatting for js/py
 Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
 
 call plug#end()
@@ -336,6 +330,8 @@ let g:LanguageClient_serverCommands = {
     \ 'sh': ['bash-language-server', 'start'],
     \ 'html': ['html-languageserver', '--stdio'],
     \ 'scss': ['css-languageserver --stdio'],
+    \ 'ada': ['ada_language_server'],
+    \ 'vue': ['vls']
     \ }
 nnoremap <F5> :call LanguageClient_contextMenu()<CR>
 nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
