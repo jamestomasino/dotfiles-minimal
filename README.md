@@ -34,7 +34,7 @@ Some configuration files are still stored at the top level and do not respect `X
 
 - [.agignore](https://github.com/ggreer/the_silver_searcher/issues/1020)
 - [.ctags](https://github.com/universal-ctags/ctags/issues/89)
-- [.scimrc](https://github.com/andmarti1424/sc-im/issues/358<Paste>)
+- [.scimrc](https://github.com/andmarti1424/sc-im/issues/358)
 - [.vimrc](https://github.com/vim/vim/issues/2655) - refuses to support. Suggests using neovim (which we do where available)
 - ~~.curlrc~~ - no public issue logged. **Using CURL_HOME env to fix it**
 - [~~.tmux.conf~~](https://github.com/tmux/tmux/issues/142) - obstinately refuse to add the 3 lines of code necessary to support XDG. **Fixing with an alias**
