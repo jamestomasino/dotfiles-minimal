@@ -98,6 +98,14 @@ function! Print()
     !rm %:r.ps
 endfunction
 
+function! AsciiMode()
+  syntax off
+  setlocal virtualedit=all
+  setlocal cc=80
+  hi ColorColumn ctermbg=8 guibg=8
+  autocmd BufWritePre * :%s/\s\+$//e
+endfunction
+
 function! LinterStatus() abort
    let l:counts = ale#statusline#Count(bufnr(''))
    return l:counts.total == 0 ? '' : printf(
