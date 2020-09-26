@@ -56,8 +56,8 @@ install:
 	@if [ ! -e "$$HOME/.local/share/nvim/site/autoload/plug.vim" ]; then \
 		curl -sfLo "$$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; \
 	fi
-	@if [ ! -e "$$HOME/.vim/autoload/plug.vim" ]; then \
-		curl -sfLo "$$HOME/.vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; \
+	@if [ ! -e "$$HOME/.local/share/vim/autoload/plug.vim" ]; then \
+		curl -sfLo "$$HOME/.local/share/vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; \
 	fi
 
 uninstall:

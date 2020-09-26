@@ -8,6 +8,7 @@ if command -v nvim > /dev/null 2>&1; then
   alias vim='nvim'
 else
   export EDITOR="vim"
+  export VIMINIT='source "$XDG_CONFIG_HOME/vim/vimrc"'
 fi
 
 export HISTFILE="$HOME/.history"
@@ -52,6 +53,8 @@ export LC_ALL="en_US.UTF-8"
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+
 # XDG Path Fixes
 export MPLAYER_HOME=$XDG_CONFIG_HOME/mplayer
 export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"

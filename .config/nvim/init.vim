@@ -4,7 +4,7 @@
 
 filetype off
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
 Plug 'embear/vim-localvimrc'
@@ -46,7 +46,7 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 function! InitDirs()
-    let l:parent = $XDG_CACHE_HOME
+    let l:parent = $XDG_DATA_HOME
     let l:prefix = 'vim'
     let l:dir_list = {
                 \ 'backup': 'backupdir',
