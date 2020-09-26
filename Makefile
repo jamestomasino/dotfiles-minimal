@@ -11,7 +11,20 @@ install:
 				mkdir -p "$$HOME/.config"; \
 				for y in *; do \
 					if [ -e "$$HOME/.config/$$y" ]; then \
-						printf "File Exists, Skipping: %s\\n" "$$HOME/.config/$$y"; \
+						if [ -L "$$HOME/.config/$$y" ]; then \
+							printf "Directory Link Exists, Skipping: %s\\n" "$$HOME/.config/$$y"; \
+						else \
+							cd "$$y"; \
+							for z in *; do \
+							if [ -e "$$HOME/.config/$$y/$$z" ]; then \
+									printf "File Link Exists, Skipping: %s\\n" "$$HOME/.config/$$y/$$z"; \
+								else \
+									ln -sfn "${CURDIR}${.CURDIR}/.config/$$y/$$z" "$$HOME/.config/$$y/$$z"; \
+									printf "Linking: %s%s/.config/%s/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y" "$$z"; \
+								fi; \
+							done; \
+							cd - > /dev/null; \
+						fi; \
 					else \
 						ln -sfn "${CURDIR}${.CURDIR}/.config/$$y" "$$HOME/.config/$$y"; \
 						printf "Linking: %s%s/.config/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y"; \
@@ -53,8 +66,20 @@ uninstall:
 			if [ "$$x" = ".config" ]; then \
 				cd .config; \
 				for y in *; do \
-					rm "$$HOME/.config/$$y"; \
-					printf "Removing: %s\\n" "$$HOME/.config/$$y"; \
+					if [ -e "$$HOME/.config/$$y" ]; then \
+						if [ -L "$$HOME/.config/$$y" ]; then \
+							unlink "$$HOME/.config/$$y"; \
+							printf "Removing: %s\\n" "$$HOME/.config/$$y"; \
+						else \
+							cd "$$HOME/.config/$$y"; \
+							for z in *; do \
+								if [ -L "$$HOME/.config/$$y/$$z" ]; then \
+									unlink "$$HOME/.config/$$y/$$z"; \
+									printf "Removing: %s\\n" "$$HOME/.config/$$y/$$z"; \
+								fi; \
+							done; \
+						fi; \
+					fi; \
 				done; \
 				cd ..; \
 			elif [ "$$x" = "bin" ]; then \

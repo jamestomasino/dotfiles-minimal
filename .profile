@@ -54,11 +54,10 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 # XDG Path Fixes
 export MPLAYER_HOME=$XDG_CONFIG_HOME/mplayer
-export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-export VIMDOTDIR="$XDG_CONFIG_HOME/vim"
 export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
 export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 
 # colors
 export TERM=screen-256color
