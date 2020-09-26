@@ -1,10 +1,11 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""" BUNDLES """""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
 
 filetype off
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
 Plug 'embear/vim-localvimrc'
