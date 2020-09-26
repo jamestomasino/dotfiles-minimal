@@ -52,6 +52,13 @@ export LC_ALL="en_US.UTF-8"
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
+# XDG Path Fixes
+export MPLAYER_HOME=$XDG_CONFIG_HOME/mplayer
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+export VIMDOTDIR="$XDG_CONFIG_HOME/vim"
+export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
+export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
+export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 
 # colors
 export TERM=screen-256color
@@ -177,10 +184,10 @@ alias t='tmux attach || tmux new'
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'
 
 # radio
-alias anonradio='mplayer http://anonradio.net:8000/anonradio'
-alias tilderadio='mplayer https://radio.tildeverse.org/radio/8000/radio.ogg'
-alias sleepbot='mplayer -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
-alias wrti="mplayer http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
+alias anonradio='mplayer -quiet http://anonradio.net:8000/anonradio'
+alias tilderadio='mplayer -quiet https://radio.tildeverse.org/radio/8000/radio.ogg'
+alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
+alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
 
 # youtube-dl to get music
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"

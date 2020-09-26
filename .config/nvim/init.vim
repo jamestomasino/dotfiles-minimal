@@ -37,6 +37,7 @@ Plug 'tpope/vim-fugitive'                 " git wrapper
 Plug 'dense-analysis/ale'                 " linting
 Plug 'jamestomasino/vim-conceal'          " conceal formatting for js/py
 Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
+Plug 'posva/vim-vue'                      " vue support beyond LSP
 
 call plug#end()
 
@@ -530,6 +531,11 @@ nnoremap <Leader>cN [c                  " prev conflict
 nnoremap <Leader>cc :diffupdate<CR>     " update diffs
 nnoremap <Leader>ch :diffget //2<CR>    " keep local contents (left)
 nnoremap <Leader>cl :diffget //3<CR>    " use merge contents (right)
+" }}}
+
+" Spelling actions {{{
+nnoremap <Leader>cs ]s                  " next misspelled word
+nnoremap <Leader>cS [s                  " prev misspelled word
 " }}}
 
 " command mode helpers {{{
