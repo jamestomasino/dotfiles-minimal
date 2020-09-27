@@ -359,7 +359,7 @@ endif
 " sets {{{
 set autoindent                  " Indent at the same level of the previous line
 set backspace=indent,eol,start  " Backspace for dummies
-set background=dark             " Use dark theme
+set background=light            " Use dark theme
 set backup                      " Backups are nice ...
 set clipboard^=unnamed,unnamedplus
 set colorcolumn=80
@@ -407,7 +407,7 @@ if has('nvim-0.1.5')            " True color in neovim wasn't added until 0.1.5
 endif
 
 let base16colorspace=256        " enable emulation of 256 colors before
-colorscheme PaperColor              " super sexy colorscheme
+colorscheme PaperColor          " super sexy colorscheme
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
