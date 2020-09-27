@@ -12,9 +12,10 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
 " Styling
-Plug 'reedes/vim-colors-pencil'           " A soft, pretty theme
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'NLKNguyen/papercolor-theme'         " A beautiful light theme
+Plug 'andreypopp/vim-colors-plain'
+Plug 'rakr/vim-one'
+Plug 'chriskempson/base16-vim'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -36,9 +37,13 @@ Plug 'tpope/vim-commentary'               " gcc to toggle comments
 Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
 Plug 'dense-analysis/ale'                 " linting
-Plug 'jamestomasino/vim-conceal'          " conceal formatting for js/py
 Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
-Plug 'posva/vim-vue'                      " vue support beyond LSP
+Plug 'leafgarland/typescript-vim'         " typescript syntax
+Plug 'othree/es.next.syntax.vim'          " es.next support
+Plug 'cakebaker/scss-syntax.vim'          " scss syntax
+Plug 'hail2u/vim-css3-syntax'             " css3 syntax
+Plug 'iloginow/vim-stylus'                " autocomplete additions
+Plug 'storyn26383/vim-vue'                " vue support beyond LSP
 
 call plug#end()
 
@@ -174,6 +179,7 @@ if has('autocmd')
 
     augroup type_vue
         autocmd!
+        let g:vue_disable_pre_processors=1
         autocmd filetype vue syntax sync fromstart
     augroup END
 
@@ -313,10 +319,6 @@ let g:localvimrc_ask=0
 let g:limelight_default_coefficient = 0.5
 " }}}
 
-" vue {{{
-let g:vue_disable_pre_processors=1
-" }}}
-
 " Ale {{{
 let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
 let b:ale_linters = {'javascript': ['eslint']}
@@ -356,6 +358,7 @@ endif
 " }}}
 
 " sets {{{
+colorscheme plain               " super sexy colorscheme
 set autoindent                  " Indent at the same level of the previous line
 set backspace=indent,eol,start  " Backspace for dummies
 set background=light            " Use dark theme
@@ -406,7 +409,6 @@ if has('nvim-0.1.5')            " True color in neovim wasn't added until 0.1.5
 endif
 
 let base16colorspace=256        " enable emulation of 256 colors before
-colorscheme PaperColor          " super sexy colorscheme
 if exists('+termguicolors')
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
