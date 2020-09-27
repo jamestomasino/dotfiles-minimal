@@ -1,8 +1,4 @@
-###############################################################################
-################################### environment ###############################
-###############################################################################
-
-# vars
+# vim
 if command -v nvim > /dev/null 2>&1; then
   export EDITOR="nvim"
   alias vim='nvim'
@@ -11,27 +7,68 @@ else
   export VIMINIT='source "$XDG_CONFIG_HOME/vim/vimrc"'
 fi
 
+# history
 export HISTFILE="$HOME/.history"
 export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
 export HISTIGNORE="clear:keybase*:lssh"
 
+# colors
 export LSCOLORS=gxfxcxdxbxggedabagacad
 export CLICOLOR=1
+export TERM=screen-256color
+LESS_TERMCAP_mb=$(tput bold; tput setaf 2 0 0); export LESS_TERMCAP_mb
+LESS_TERMCAP_md=$(tput bold; tput setaf 6 0 0); export LESS_TERMCAP_md
+LESS_TERMCAP_me=$(tput sgr0); export LESS_TERMCAP_me
+LESS_TERMCAP_so=$(tput bold; tput setaf 3 0 0; tput setab 4 0 0); export LESS_TERMCAP_so
+LESS_TERMCAP_se=$(tput rmso; tput sgr0); export LESS_TERMCAP_se
+LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7 0 0); export LESS_TERMCAP_us
+LESS_TERMCAP_ue=$(tput rmul; tput sgr0); export LESS_TERMCAP_ue
+LESS_TERMCAP_mr=$(tput rev); export LESS_TERMCAP_mr
+LESS_TERMCAP_mh=$(tput dim); export LESS_TERMCAP_mh
+LESS_TERMCAP_ZV=$(tput rsubm); export LESS_TERMCAP_ZV
+LESS_TERMCAP_ZW=$(tput rsupm); export LESS_TERMCAP_ZW
+export GROFF_NO_SGR=1;
 
+# search
 if command -v ag > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
 fi
-export FZF_DEFAULT_OPTS=""
+
+# fzf
+if command -v fzf > /dev/null 2>&1; then
+  export FZF_DEFAULT_OPTS=""
+  _gen_fzf_default_opts() {
+    # Base16 Tomorrow Night
+    color00='#1d1f21'
+    color01='#282a2e'
+    color04='#b4b7b4'
+    color06='#e0e0e0'
+    color0A='#f0c674'
+    color0C='#8abeb7'
+    color0D='#81a2be'
+    export FZF_DEFAULT_OPTS="
+    --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D
+    --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
+    --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
+    "
+  }
+  _gen_fzf_default_opts
+  if [ -f ~/.fzf.bash ]; then
+    # shellcheck source=/dev/null
+    . ~/.fzf.bash
+  fi
+fi
+
+# web
 export LYNX_CFG="$HOME/.config/lynx/config"
 export CURL_HOME="$HOME/.config/curl"
 export WWW_HOME="gopher://gopher.black"
 
-# path vars
+# sync
 export SYNCTHING_PATH="$HOME/.syncthing"
 export SSH_ENV="$HOME/.ssh/environment"
-export ANDROID_HOME="$HOME/sdk"
 
 # lastpass
 export LPASS_HOME="$HOME/.lpass"
@@ -61,55 +98,8 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 
-# colors
-export TERM=screen-256color
-
-# less and man colors
-LESS_TERMCAP_mb=$(tput bold; tput setaf 2 0 0); export LESS_TERMCAP_mb
-LESS_TERMCAP_md=$(tput bold; tput setaf 6 0 0); export LESS_TERMCAP_md
-LESS_TERMCAP_me=$(tput sgr0); export LESS_TERMCAP_me
-LESS_TERMCAP_so=$(tput bold; tput setaf 3 0 0; tput setab 4 0 0); export LESS_TERMCAP_so
-LESS_TERMCAP_se=$(tput rmso; tput sgr0); export LESS_TERMCAP_se
-LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 7 0 0); export LESS_TERMCAP_us
-LESS_TERMCAP_ue=$(tput rmul; tput sgr0); export LESS_TERMCAP_ue
-LESS_TERMCAP_mr=$(tput rev); export LESS_TERMCAP_mr
-LESS_TERMCAP_mh=$(tput dim); export LESS_TERMCAP_mh
-LESS_TERMCAP_ZV=$(tput rsubm); export LESS_TERMCAP_ZV
-LESS_TERMCAP_ZW=$(tput rsupm); export LESS_TERMCAP_ZW
-export GROFF_NO_SGR=1;
-
-# Base16 Tomorrow Night
-_gen_fzf_default_opts() {
-  color00='#1d1f21'
-  color01='#282a2e'
-#  color02='#373b41'
-#  color03='#969896'
-  color04='#b4b7b4'
-#  color05='#c5c8c6'
-  color06='#e0e0e0'
-#  color07='#ffffff'
-#  color08='#cc6666'
-#  color09='#de935f'
-  color0A='#f0c674'
-#  color0B='#b5bd68'
-  color0C='#8abeb7'
-  color0D='#81a2be'
-#  color0E='#b294bb'
-#  color0F='#a3685a'
-
-  export FZF_DEFAULT_OPTS="
-  --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D
-  --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
-  --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
-  "
-}
-_gen_fzf_default_opts
-
 # less settings
 export PAGER=less
-
-# PROMPT COMMANDS
-PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
 
 # umask liberal
 umask 0022
@@ -130,8 +120,14 @@ if command -v colorls > /dev/null 2>&1; then
   alias ls='colorls -G'
   unset LSCOLORS
 else
+  if command -v dircolors > /dev/null 2>&1; then
+    eval "$(dircolors -b "$HOME/.config/ls_colors")"
+  else
+    export LSCOLORS=gxfxcxdxbxggedabagacad
+  fi
   alias ls='ls --color'
 fi
+
 alias lsd='ls -Gl | grep "^d"'
 alias cd..="cd .."
 alias ..="cd .."
@@ -139,36 +135,24 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
-
-# aliases to default commands with certain switches
 alias grep='grep --color=auto'
 alias mkdir='mkdir -p'
-
-# utils
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 alias utc='date -u +%H:%M:%S'
-
-# vim
 alias vimr='vim -u DEFAULTS -U NONE -i NONE'
-
-# git
 alias gs="git status"
-
-# tmux
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias t='tmux attach || tmux new'
-
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'
-
-# radio
 alias anonradio='mplayer -quiet http://anonradio.net:8000/anonradio'
 alias tilderadio='mplayer -quiet https://radio.tildeverse.org/radio/8000/radio.ogg'
 alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
 alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
-
-# youtube-dl to get music
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
+
+# PROMPT COMMANDS
+PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
 
 # use color in prompt if not dash. Color works there, but screws up line wrapping
 USER=$(id -un)
@@ -194,11 +178,61 @@ else
 fi
 export PS1
 
-# Force run bashrc, even if this isn't bash
-if [ -f "$HOME/.bashrc" ]; then
-  # shellcheck source=/dev/null
-  . "$HOME/.bashrc"
+# system path
+path() { [ -d "$1" ] && PATH="${PATH}${PATH:+:}${1}"; }
+PATH=/bin
+path "/sbin"
+path "/usr/bin"
+path "/usr/sbin"
+path "/usr/games"
+path "/usr/pkg/bin"
+path "/usr/local/sbin"
+path "/usr/local/bin"
+path "/usr/X11/bin"
+path "/opt/local/bin"
+path "/opt/local/sbin"
+path "/snap/bin"
+path "/tilde/bin"
+path "${HOME}/bin"
+path "${HOME}/.yarn/bin"
+path "${HOME}/.config/yarn/global/node_modules/.bin"
+path "${HOME}/.node/bin"
+path "${HOME}/.local/bin"
+path "${HOME}/.fzf/bin"
+path "${HOME}/.npm-packages/bin"
+
+# javascript
+if command -v node > /dev/null 2>&1; then
+  NPM_PACKAGES="${HOME}/.npm-packages"
+  export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
+  export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+  [ -d "$HOME/.yarn" ] && PATH=${PATH}:${HOME}/.yarn/bin
+  [ -d "$HOME/.config/yarn" ] && PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
+  [ -d "$HOME/.node" ] && PATH=${PATH}:${HOME}/.node/bin
 fi
+
+# perl 5
+if [ -d "${HOME}/perl5" ]; then
+  PATH=${PATH}:${HOME}/perl5/bin
+  export PERL5LIB="/home/tomasino/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+  export PERL_LOCAL_LIB_ROOT="/home/tomasino/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+  export PERL_MB_OPT="--install_base 'home/tomasino/perl5'"
+  export PERL_MM_OPT="INSTALL_BASE=/home/tomasino/perl5"
+  if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]; then
+    # shellcheck source=/dev/null
+    . "$HOME/perl5/perlbrew/etc/bashrc"
+  fi
+fi
+
+# android sdk
+if [ -d "${HOME}/sdk/" ]; then
+  export ANDROID_HOME="$HOME/sdk"
+  PATH=${PATH}:${HOME}/sdk/tools
+  PATH=${PATH}:${HOME}/sdk/tools/bin
+  PATH=${PATH}:${HOME}/sdk/platform-tools
+  PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
+fi
+
 # Load local system overrides
 if [ -f "$HOME/.profile_local" ]; then
   # shellcheck source=/dev/null
