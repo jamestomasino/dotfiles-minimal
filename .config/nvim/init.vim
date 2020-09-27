@@ -14,6 +14,8 @@ Plug 'junegunn/fzf.vim'
 " Styling
 Plug 'reedes/vim-colors-pencil'           " A soft, pretty theme
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
+Plug 'sonph/onehalf', {'rtp': 'vim/'}
+Plug 'NLKNguyen/papercolor-theme'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -405,7 +407,12 @@ if has('nvim-0.1.5')            " True color in neovim wasn't added until 0.1.5
 endif
 
 let base16colorspace=256        " enable emulation of 256 colors before
-colorscheme pencil              " super sexy colorscheme
+colorscheme PaperColor              " super sexy colorscheme
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 
 " }}}
 
