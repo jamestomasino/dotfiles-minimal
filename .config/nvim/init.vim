@@ -13,9 +13,7 @@ Plug 'junegunn/fzf.vim'
 
 " Styling
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'andreypopp/vim-colors-plain'
-Plug 'rakr/vim-one'
-Plug 'chriskempson/base16-vim'
+Plug 'andreypopp/vim-colors-plain'        " A plain ol' theme
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -554,6 +552,13 @@ cnoremap cd. lcd %:p:h
 " clear search results {{{
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 " }}}
+
+" Enable true color 启用终端24位色
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""" LOCAL OVERRIDES """""""""""""""""""""""""""""""""""
