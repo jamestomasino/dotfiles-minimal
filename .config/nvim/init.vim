@@ -14,8 +14,7 @@ Plug 'junegunn/fzf.vim'
 " Styling
 Plug 'reedes/vim-colors-pencil'           " A soft, pretty theme
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'sonph/onehalf', {'rtp': 'vim/'}
-Plug 'NLKNguyen/papercolor-theme'
+Plug 'NLKNguyen/papercolor-theme'         " A beautiful light theme
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
