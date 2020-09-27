@@ -402,12 +402,8 @@ set wildmenu
 set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
 set winminheight=0              " Windows can be 0 line high
 
-if has('nvim-0.1.5')            " True color in neovim wasn't added until 0.1.5
-    set termguicolors
-endif
-
-let base16colorspace=256        " enable emulation of 256 colors before
 if exists('+termguicolors')
+  set termguicolors
   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
@@ -552,13 +548,6 @@ cnoremap cd. lcd %:p:h
 " clear search results {{{
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 " }}}
-
-" Enable true color 启用终端24位色
-if exists('+termguicolors')
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-  set termguicolors
-endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""" LOCAL OVERRIDES """""""""""""""""""""""""""""""""""
