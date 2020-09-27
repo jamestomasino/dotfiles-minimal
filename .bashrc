@@ -53,3 +53,4 @@ if [ -d "${HOME}/sdk/" ]; then
   PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
 fi
 
+[ -f ~/.fzf.bash ] && . ~/.fzf.bash
