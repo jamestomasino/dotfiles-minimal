@@ -3780,21 +3780,21 @@ SYSLOG_REQUESTED_URLS:FALSE
 #   brightblue    brightmagenta  brightcyan    white
 
 # plain text
-COLOR:0:lightgray:black
+COLOR:0:black:white
 # links
-COLOR:1:brightcyan:black
+COLOR:1:blue:white
 # address bar
-COLOR:2:yellow:black
+COLOR:2:white:black
 # unknown
 COLOR:3:white:black
 # unknown
 COLOR:4:white:black
 # form fields
-COLOR:5:brown:black
+COLOR:5:brown:white
 # active link
-COLOR:6:brightred:black
+COLOR:6:brightred:white
 # unknown
-COLOR:7:green:black
+COLOR:7:green:white
 
 # let's tackle cookies while here (we accept them all)...
 
