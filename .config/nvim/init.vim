@@ -19,12 +19,7 @@ Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
 Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
-Plug 'junegunn/limelight.vim'             " Highlights only active paragraph
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
-Plug 'reedes/vim-lexical'                 " Better spellcheck mappings
-Plug 'reedes/vim-litecorrect'             " Better autocorrections
-Plug 'reedes/vim-wordy'                   " Weasel words and passive voice
-Plug 'nelstrom/vim-markdown-folding'      " Smart folding for markdown
 
 " Development Tools
 Plug 'autozimu/LanguageClient-neovim', {
@@ -246,8 +241,6 @@ if has('autocmd')
         autocmd!
         autocmd BufNewFile,BufRead *.gmi   set filetype=gemini
         autocmd filetype gemini call pencil#init()
-                    \ | call lexical#init()
-                    \ | call litecorrect#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
                     \ | setl fdo+=search
     augroup END
@@ -255,8 +248,6 @@ if has('autocmd')
     augroup pencil
         autocmd!
         autocmd filetype markdown,mkd call pencil#init()
-                    \ | call lexical#init()
-                    \ | call litecorrect#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
                     \ | setl fdo+=search
     augroup END
@@ -315,10 +306,6 @@ let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
 " }}}
 
-" Limelight {{{
-let g:limelight_default_coefficient = 0.5
-" }}}
-
 " Ale {{{
 let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
 let b:ale_linters = {'javascript': ['eslint']}
@@ -345,9 +332,10 @@ let g:LanguageClient_serverCommands = {
     \ 'ada': ['ada_language_server'],
     \ 'vue': ['vls']
     \ }
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nmap <F5> <Plug>(lcn-menu)
+nmap <silent>K <Plug>(lcn-hover)
+nmap <silent> gd <Plug>(lcn-definition)
+nmap <silent> <F2> <Plug>(lcn-rename)
 " }}}
 
 " ag support {{{
@@ -562,4 +550,3 @@ if filereadable(expand('~/.vimrc.local'))
 endif
 
 " vim: set sw=4 sts=4 et tw=78 nospell:
-
