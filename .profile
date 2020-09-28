@@ -120,11 +120,7 @@ if command -v colorls > /dev/null 2>&1; then
   alias ls='colorls -G'
   unset LSCOLORS
 else
-  if command -v dircolors > /dev/null 2>&1; then
-    eval "$(dircolors -b "$HOME/.config/ls_colors")"
-  else
-    export LSCOLORS=gxfxcxdxbxggedabagacad
-  fi
+  export LSCOLORS=gxfxcxdxbxggedabagacad
   alias ls='ls --color'
 fi
 

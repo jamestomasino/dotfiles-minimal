@@ -14,6 +14,7 @@ Plug 'junegunn/fzf.vim'
 " Styling
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
 Plug 'andreypopp/vim-colors-plain'        " A plain ol' theme
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -356,10 +357,10 @@ endif
 " }}}
 
 " sets {{{
-colorscheme plain               " super sexy colorscheme
 set autoindent                  " Indent at the same level of the previous line
 set backspace=indent,eol,start  " Backspace for dummies
 set background=light            " Use dark theme
+set t_Co=256
 set backup                      " Backups are nice ...
 set clipboard^=unnamed,unnamedplus
 set colorcolumn=80
@@ -408,6 +409,8 @@ if exists('+termguicolors')
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 endif
+
+colorscheme tempus_totus
 
 " }}}
 
