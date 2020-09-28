@@ -138,6 +138,7 @@ alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_H
 alias utc='date -u +%H:%M:%S'
 alias vimr='vim -u DEFAULTS -U NONE -i NONE'
 alias gs="git status"
+alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias t='tmux attach || tmux new'
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'
