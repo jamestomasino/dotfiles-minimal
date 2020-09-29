@@ -20,13 +20,9 @@ Make targets:
 
 ## Linking strategy
 
-`.config/` - This folder often holds a number of dotfiles of a private nature. Rather than store them all in git I choose to keep only the few that are universally applicable. Any dotfiles in this folder are linked individually into `$HOME/.config/` so as to avoid overwriting private ones.
+The install process will run through this repository up to 3 levels deep looking for individual files. It will link any files into the home directory on an individual file-by-file basis. If the corresponding folder doesn't exist yet, it will be created. The purpose of going file-by-file is to avoid linking any directories and accidentally scooping up other files that may be added there over time.
 
-`.functions/` - This folder contains scripts that are all sourced upon shell start. Each file contains a shell function that will be available. They are named the same as the functions they hold.
-
-`bin/` - Some scripts need not be shell functions (and add overhead to the shell). These scripts are linked individually into `$HOME/bin/` to avoid overwriting private ones. This folder is included in the `PATH` environment variable.
-
-All other files or folders are linked directly to `$HOME`.
+Over time it is a goal of this repository to move as many of these dotfiles as possible out of the top-level to avoid polluting the home folder.
 
 ## Top-level dotfiles
 
