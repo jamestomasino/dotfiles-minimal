@@ -8,15 +8,8 @@ Installation requires only Make, and will work on BSD or GNU systems.
 
 ## Usage
 
-Use `make` to see a list of options:
-
-```sh
-$ make
-
-Make targets:
-        install   - adds dotfiles to system and inits vim plug
-        uninstall - removes dotfiles from system
-```
+* Install with `install.sh`.
+* Uninstall with `uninstall.sh`.
 
 ## Linking strategy
 
