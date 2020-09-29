@@ -1,8 +1,4 @@
 SHELL=/usr/bin/env bash -O extglob -c
-CONFIG="config"
-XDG_DEST=".config"
-BIN="bin"
-BIN_DEST="bin"
 
 help:
 	@printf "Make targets:\\n"
@@ -13,38 +9,29 @@ install:
 	@shopt -s dotglob; \
 	for x in *; do \
 		if [ "$$x" != ".git" ] && [ "$$x" != "." ] && [ "$$x" != ".." ] && [ "$$x" != "Makefile" ] && [ "$$x" != "README.md" ]; then \
-			if [ "$$x" = "$(CONFIG)" ]; then \
-				cd $(CONFIG); \
-				mkdir -p "$$HOME/$(CONFIG)"; \
+			if [ -d "$$x" ]; then \
+				cd "$$x"; \
+				mkdir -p "$$HOME/$$x"; \
 				for y in *; do \
-					if [ -f "${CURDIR}${.CURDIR}/$(CONFIG)/$$y" ]; then \
-						ln -sfn "${CURDIR}${.CURDIR}/$(CONFIG)/$$y" "$$HOME/$(XDG_DEST)/$$y"; \
-					else \
-						if [ ! -e "$$HOME/$(XDG_DEST)/$$y" ]; then \
-							mkdir -p "$$HOME/$(XDG_DEST)/$$y"; \
-						fi; \
+					if [ -d "${CURDIR}${.CURDIR}/$$x/$$y" ]; then \
 						cd "$$y"; \
+						mkdir -p "$$HOME/$$x/$$y"; \
 						for z in *; do \
-						if [ -e "$$HOME/$(XDG_DEST)/$$y/$$z" ]; then \
-								printf "File Link Exists, Skipping: %s\\n" "$$HOME/$(XDG_DEST)/$$y/$$z"; \
+							if [ -e "$$HOME/$$x/$$y/$$z" ]; then \
+								printf "File Exists, Skipping: %s\\n" "$$HOME/$$x/$$y/$$z"; \
 							else \
-								ln -sfn "${CURDIR}${.CURDIR}/$(CONFIG)/$$y/$$z" "$$HOME/$(XDG_DEST)/$$y/$$z"; \
-								printf "Linking: %s%s/$(CONFIG)/%s/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y" "$$z"; \
+								ln -sfn "${CURDIR}${.CURDIR}/$$x/$$y/$$z" "$$HOME/$$x/$$y/$$z"; \
+								printf "Linking: %s/%s/%s/%s\\n" "${CURDIR}${.CURDIR}" "$$x" "$$y" "$$z"; \
 							fi; \
 						done; \
-						cd - > /dev/null; \
-					fi; \
-				done; \
-				cd ..; \
-			elif [ "$$x" = "$(BIN)" ]; then \
-				cd $(BIN_DEST); \
-				mkdir -p "$$HOME/$(BIN_DEST)"; \
-				for y in *; do \
-					if [ -e "$$HOME/$(BIN_DEST)/$$y" ]; then \
-						printf "File Exists, Skipping: %s\\n" "$$HOME/$(BIN_DEST)/$$y"; \
+						cd ..; \
 					else \
-						ln -sfn "${CURDIR}${.CURDIR}/$($(BIN_DEST))/$$y" "$$HOME/$(BIN_DEST)/$$y"; \
-						printf "Linking: %s%s/$(BIN)/%s\\n" "${CURDIR}" "${.CURDIR}" "$$y"; \
+						if [ -e "$$HOME/$$x/$$y" ]; then \
+							printf "File Exists, Skipping: %s\\n" "$$HOME/$$x/$$y"; \
+						else \
+							ln -sfn "${CURDIR}${.CURDIR}/$$x/$$y" "$$HOME/$$x/$$y"; \
+							printf "Linking: %s%s/%s/%s\\n" "${CURDIR}" "${.CURDIR}" "$$x" "$$y"; \
+						fi; \
 					fi; \
 				done; \
 				cd ..; \
@@ -67,31 +54,25 @@ install:
 
 uninstall:
 	@shopt -s dotglob; \
-	for x in * .*; do \
+	for x in *; do \
 		if [ "$$x" != ".git" ] && [ "$$x" != "." ] && [ "$$x" != ".." ] && [ "$$x" != "Makefile" ] && [ "$$x" != "README.md" ]; then \
-			if [ "$$x" = "$(CONFIG)" ]; then \
-				cd $(CONFIG); \
+			if [ -d "$$x" ]; then \
+				cd "$$x"; \
 				for y in *; do \
-					if [ -L "$$HOME/$(XDG_DEST)/$$y" ]; then \
-						unlink "$$HOME/$(XDG_DEST)/$$y"; \
-					elif [ -d "$$HOME/$(XDG_DEST)/$$y" ]; then \
+					if [ -d "${CURDIR}${.CURDIR}/$$x/$$y" ]; then \
 						cd "$$y"; \
 						for z in *; do \
-							if [ -L "$$HOME/$(XDG_DEST)/$$y/$$z" ]; then \
-								unlink "$$HOME/$(XDG_DEST)/$$y/$$z"; \
-								printf "Removing: %s\\n" "$$HOME/$(XDG_DEST)/$$y/$$z"; \
+							if [ -L "$$HOME/$$x/$$y/$$z" ]; then \
+								unlink "$$HOME/$$x/$$y/$$z"; \
+								printf "Removing: %s\\n" "$$HOME/$$x/$$y/$$z"; \
 							fi; \
 						done; \
-						cd - > /dev/null; \
-					fi; \
-				done; \
-				cd ..; \
-			elif [ "$$x" = "$(BIN)" ]; then \
-				cd $(BIN_DEST); \
-				for y in *; do \
-					if [ -L "$$HOME/$(BIN_DEST)/$$y" ]; then \
-						unlink "$$HOME/$(BIN_DEST)/$$y"; \
-						printf "Removing: %s\\n" "$$HOME/$(BIN_DEST)/$$y"; \
+						cd ..; \
+					else \
+						if [ -L "$$HOME/$$x/$$y" ]; then \
+							unlink "$$HOME/$$x/$$y"; \
+							printf "Removing: %s\\n" "$$HOME/$$x/$$y"; \
+						fi; \
 					fi; \
 				done; \
 				cd ..; \
