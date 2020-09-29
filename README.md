@@ -11,7 +11,7 @@ This repository is a reboot. I've stripped out a lot, but kept most of the more 
 
 ## Linking strategy
 
-The install process will run through this repository up to 3 levels deep looking for individual files. It will link any files into the home directory on an individual file-by-file basis. If the corresponding folder doesn't exist yet, it will be created. The purpose of going file-by-file is to avoid linking any directories and accidentally scooping up other files that may be added there over time.
+The install process will run through this repository recursively looking for individual files. It will link any files into the home directory on an individual file-by-file basis. If the corresponding folder doesn't exist yet, it will be created. The purpose of going file-by-file is to avoid linking any directories and accidentally scooping up other files that may be added there over time.
 
 Over time it is a goal of this repository to move as many of these dotfiles as possible out of the top-level to avoid polluting the home folder.
 

@@ -4,42 +4,38 @@ shopt -s dotglob
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+tryfiles () {
+  local path="$1"
+  if [ -d "${HOME}/${path}" ]; then
+    cd "${DIR}/${path}"
+    mkdir -p "${HOME}/${path}"
+    for f in *; do
+      local newpath="${path}/${f}"
+      if [ -d "${DIR}/${newpath}" ]; then
+        tryfiles "${newpath}"
+      else
+        if [ -e "${HOME}/${newpath}" ]; then
+          printf "File Exists, Skipping: %s\\n" "${HOME}/${newpath}"
+        else
+          ln -sfn "${DIR}/${newpath}" "${HOME}/${newpath}"
+          printf "Linking: %s/%s\\n" "${DIR}" "${newpath}"
+        fi
+      fi
+    done
+    cd ..
+  else
+    if [ -e "${HOME}/${path}" ]; then
+      printf "File Exists, Skipping: %s\\n" "${HOME}/${path}"
+    else
+      ln -sfn "${DIR}/${path}" "$HOME/${path}"
+      printf "Linking: %s/%s\\n" "${DIR}" "${path}"
+    fi
+  fi
+}
+
 for x in *; do
   if [ "$x" != ".git" ] && [ "$x" != "." ] && [ "$x" != ".." ] && [ "$x" != "install.sh" ]&& [ "$x" != "uninstall.sh" ] && [ "$x" != "README.md" ]; then
-    if [ -d "$x" ]; then
-      cd "$x"
-      mkdir -p "$HOME/$x"
-      for y in *; do
-        if [ -d "${DIR}/$x/$y" ]; then
-          cd "$y"
-          mkdir -p "$HOME/$x/$y"
-          for z in *; do
-            if [ -e "$HOME/$x/$y/$z" ]; then
-              printf "File Exists, Skipping: %s\\n" "$HOME/$x/$y/$z"
-            else
-              ln -sfn "${DIR}/$x/$y/$z" "$HOME/$x/$y/$z"
-              printf "Linking: %s/%s/%s/%s\\n" "${DIR}" "$x" "$y" "$z"
-            fi
-          done
-          cd ..
-        else
-          if [ -e "$HOME/$x/$y" ]; then
-            printf "File Exists, Skipping: %s\\n" "$HOME/$x/$y"
-          else
-            ln -sfn "${DIR}/$x/$y" "$HOME/$x/$y"
-            printf "Linking: %s/%s/%s\\n" "${DIR}" "$x" "$y"
-          fi
-        fi
-      done
-      cd ..
-    else
-      if [ -e "$HOME/$x" ]; then
-        printf "File Exists, Skipping: %s\\n" "$HOME/$x"
-      else
-        ln -sfn "${DIR}/$x" "$HOME/$x"
-        printf "Linking: %s/%s\\n" "${DIR}" "$x"
-      fi
-    fi
+    tryfiles "$x"
   fi
 done
 
