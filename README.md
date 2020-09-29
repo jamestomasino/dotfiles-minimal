@@ -9,6 +9,15 @@ This repository is a reboot. I've stripped out a lot, but kept most of the more 
 * Install with `install.sh`.
 * Uninstall with `uninstall.sh`.
 
+## Non-login environment
+
+Since everything is shoved into .profile there's nothing set up path-wise for non-login script execution, like cronjobs. I add the following to my user cron if I need the environment populated:
+
+```
+SHELL=/bin/bash
+BASH_ENV="/home/tomasino/.profile"
+```
+
 ## Linking strategy
 
 The install process will run through this repository recursively looking for individual files. It will link any files into the home directory on an individual file-by-file basis. If the corresponding folder doesn't exist yet, it will be created. The purpose of going file-by-file is to avoid linking any directories and accidentally scooping up other files that may be added there over time.
