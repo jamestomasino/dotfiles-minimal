@@ -32,6 +32,3 @@ Some configuration files are still stored at the top level and do not respect `X
 - [.ctags](https://github.com/universal-ctags/ctags/issues/89)
 - [.scimrc](https://github.com/andmarti1424/sc-im/issues/358)
 - [.calc_history](https://github.com/lcn2/calc/issues/9)
-- ~~.vimrc~~ - fixed with a combo of env vars and config changes
-- ~~.curlrc~~ - no public issue logged. **Using CURL_HOME env to fix it**
-- [~~.tmux.conf~~](https://github.com/tmux/tmux/issues/142) - obstinately refuse to add the 3 lines of code necessary to support XDG. **Fixing with an alias**
