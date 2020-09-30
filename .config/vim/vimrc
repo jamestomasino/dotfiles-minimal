@@ -1,7 +1,12 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""" BUNDLES """""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_CONFIG_HOME/vim/after,$VIM,$VIMRUNTIME
+set undodir=$XDG_DATA_HOME/vim/undo
+set directory=$XDG_DATA_HOME/vim/swap
+set backupdir=$XDG_DATA_HOME/vim/backup
+set viewdir=$XDG_DATA_HOME/vim/view
+set viminfo+='1000,n$XDG_DATA_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
 
 filetype off
 
@@ -13,32 +18,20 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 " Styling
-Plug 'reedes/vim-colors-pencil'
-Plug 'NLKNguyen/papercolor-theme'         " A beautiful light theme
+Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
+Plug 'andreypopp/vim-colors-plain'        " A plain ol' theme
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
 Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
-Plug 'junegunn/limelight.vim'             " Highlights only active paragraph
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
-Plug 'reedes/vim-lexical'                 " Better spellcheck mappings
-Plug 'reedes/vim-litecorrect'             " Better autocorrections
-Plug 'reedes/vim-textobj-sentence'        " Treat sentences as text objects
-Plug 'reedes/vim-wordy'                   " Weasel words and passive voice
-Plug 'nelstrom/vim-markdown-folding'      " Smart folding for markdown
 
 " Development Tools
 Plug 'tpope/vim-commentary'               " gcc to toggle comments
 Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
 Plug 'dense-analysis/ale'                 " linting
-Plug 'othree/yajs.vim'                    " javascript syntax
-Plug 'othree/es.next.syntax.vim'          " es.next support
-Plug 'posva/vim-vue'                      " vue specific syntax support
-Plug 'https://github.com/jamestomasino/vim-conceal.git' " conceal formatting for js/py
-Plug 'terryma/vim-multiple-cursors'       " multiple cursor support
-Plug 'junegunn/vim-easy-align'            " <Enter> to visually align
-Plug 'ollykel/v-vim'                      " v programming language
 
 call plug#end()
 
@@ -90,15 +83,16 @@ endfunction
 
 function! CleverTab()
     if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-        return "\<Tab>"
+        return '\<Tab>'
     else
-        return "\<C-N>"
+        return '\<C-N>'
     endif
 endfunction
 
 function! MyHighlights() abort
     highlight clear SignColumn      " SignColumn should match background
     highlight clear LineNr          " Current line number row will have same background color in relative mode
+    highlight clear CursorLineNR    " disable color block on curretn line
 endfunction
 
 
@@ -138,20 +132,6 @@ if has('autocmd')
         autocmd FileType vue syntax sync fromstart
     augroup END
 
-    augroup type_haskell
-        autocmd!
-        autocmd FileType haskell compiler ghc
-        autocmd FileType haskell setlocal shiftwidth=2
-        autocmd FileType haskell setlocal expandtab
-        autocmd FileType haskell let g:haskell_enable_quantification = 1   " to enable highlighting of `forall`
-        autocmd FileType haskell let g:haskell_enable_recursivedo = 1      " to enable highlighting of `mdo` and `rec`
-        autocmd FileType haskell let g:haskell_enable_arrowsyntax = 1      " to enable highlighting of `proc`
-        autocmd FileType haskell let g:haskell_enable_pattern_synonyms = 1 " to enable highlighting of `pattern`
-        autocmd FileType haskell let g:haskell_enable_typeroles = 1        " to enable highlighting of type roles
-        autocmd FileType haskell let g:haskell_enable_static_pointers = 1  " to enable highlighting of `static`
-        autocmd FileType haskell let g:haskell_backpack = 1                " to enable highlighting of backpack keywords
-    augroup END
-
     augroup type_python
         autocmd!
         autocmd FileType python setlocal expandtab
@@ -185,8 +165,6 @@ if has('autocmd')
         autocmd!
         autocmd BufNewFile,BufRead *.gmi   set filetype=gemini
         autocmd filetype gemini call pencil#init()
-                    \ | call lexical#init()
-                    \ | call litecorrect#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
                     \ | setl fdo+=search
     augroup END
@@ -194,8 +172,6 @@ if has('autocmd')
     augroup pencil
         autocmd!
         autocmd FileType markdown,mkd call pencil#init()
-                    \ | call lexical#init()
-                    \ | call litecorrect#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
                     \ | setl fdo+=search
     augroup END
@@ -254,19 +230,11 @@ let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
 " }}}
 
-" Limelight {{{
-let g:limelight_default_coefficient = 0.5
-" }}}
-
 " ag support {{{
-if executable("ag")
+if executable('ag')
     set grepprg=ag\ --ignore\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
-" }}}
-
-" vue {{{
-let g:vue_disable_pre_processors=1
 " }}}
 
 " Ale {{{
@@ -320,8 +288,7 @@ set wildmenu
 set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
 set winminheight=0              " Windows can be 0 line high
 
-colorscheme PaperColor
-" }}}
+colorscheme tempus_totus
 
 " conditional settings {{{
 if has('persistent_undo')
@@ -336,20 +303,20 @@ if has('statusline')
     set laststatus=2
 
     set statusline=
-    set statusline+=%#Search#\ %n\ 
+    set statusline+=%#Search#\ %n\
     set statusline+=%#PmenuSel#
     set statusline+=%#CursorLine#
-    set statusline+=\ %f\ 
+    set statusline+=\ %f\
     set statusline+=%h%m%r%w
     set statusline+=%=
-    set statusline+=\ %y\ 
+    set statusline+=\ %y\
     set statusline+=%#Menu#
     set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-    set statusline+=\ [%{&fileformat}\]\ 
+    set statusline+=\ [%{&fileformat}\]\
     set statusline+=%#PmenuSel#
     set statusline+=\ %p%%
     set statusline+=\ %l:%c
-    set statusline+=\ 
+    set statusline+=\
 endif
 " }}}
 

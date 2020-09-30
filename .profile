@@ -1,12 +1,3 @@
-# vim
-if command -v nvim > /dev/null 2>&1; then
-  export EDITOR="nvim"
-  alias vim='nvim'
-else
-  export EDITOR="vim"
-  export VIMINIT='source "$XDG_CONFIG_HOME/vim/vimrc"'
-fi
-
 # history
 export HISTFILE="$HOME/.history"
 export HISTCONTRAL=ignoredups
@@ -97,6 +88,15 @@ export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
 export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
+
+# vim
+if command -v nvim > /dev/null 2>&1; then
+  export EDITOR="nvim"
+  alias vim='nvim'
+else
+  export EDITOR="vim"
+  export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+fi
 
 # less settings
 export PAGER=less
