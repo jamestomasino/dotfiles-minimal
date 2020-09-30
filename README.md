@@ -9,6 +9,12 @@ This repository is a reboot. I've stripped out a lot, but kept most of the more 
 * Install with `install.sh`.
 * Uninstall with `uninstall.sh`.
 
+Optionally you can force a remote deployment over rsync. This will not set up symlinks, but rather copy the files to the remote host.
+
+```bash
+./install push <remote_server_connection_string>
+```
+
 ## Non-login environment
 
 Since everything is shoved into .profile there's nothing set up path-wise for non-login script execution, like cronjobs. I add the following to my user cron if I need the environment populated:
