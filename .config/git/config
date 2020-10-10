@@ -18,12 +18,20 @@
   editor = 'vim'
   eol = native
   autocrlf = input
-  pager = less -r
   compression = 9
   bigFileThreshold = 20m
   ignorecase = false
   packedGitLimit = 256m
   packedGitWindowSize = 256m
+  pager = delta
+
+[delta]
+  syntax-theme = Monokai Extended Light
+  side-by-side = true
+  colorMoved = default
+
+[interactive]
+  diffFilter = delta --color-only
 
 [pack]
   threads = 1
@@ -39,19 +47,6 @@
   branch = auto
   interactive = auto
   ui = auto
-
-[pager]
-  diff = diff-so-fancy | less --tabs=4 -RFX
-  show = diff-so-fancy | less --tabs=4 -RFX
-
-[diff]
-  tool = vimdiff
-  renames = copies
-  mnemonicprefix = true
-  algorithm = patience
-
-[difftool]
-  prompt = false
 
 [merge]
   stat = true
@@ -93,30 +88,10 @@
   local = yellow
   remote = green
 
-[color "diff"]
-  meta = yellow
-  frag = magenta bold
-  plain = white bold
-  old = red bold
-  new = green bold
-  commit = yellow bold
-  func = green dim
-  whitespace = red reverse
-
 [color "status"]
   added = yellow
   changed = green
   untracked = cyan
-
-[color "diff-highlight"]
-  oldNormal = red bold
-  oldHighlight = red bold 52
-  newNormal = green bold
-  newHighlight = green bold 22
-
-[diff-so-fancy]
-  markEmptyLines = false
-  changeHunkIndicators = false
 
 [http "https://git.gsw.agency"]
   sslVerify = false

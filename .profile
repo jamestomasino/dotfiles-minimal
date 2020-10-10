@@ -63,7 +63,7 @@ export SSH_ENV="$HOME/.ssh/environment"
 
 # lastpass
 export LPASS_HOME="$HOME/.lpass"
-export LPASS_DISABLE_PINENTRY=0
+export LPASS_DISABLE_PINENTRY=1
 export SSH_KEY_LOCATIONS="${HOME}/.ssh/ ${HOME}/.spideroak/Documents/Keys/personal/ssh/ ${HOME}/.spideroak/Documents/Keys/work/ssh/"
 
 # personal app storage paths
