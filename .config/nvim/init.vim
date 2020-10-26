@@ -13,8 +13,7 @@ Plug 'junegunn/fzf.vim'
 
 " Styling
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'andreypopp/vim-colors-plain'        " A plain ol' theme
-Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
+Plug 'https://github.com/reedes/vim-colors-pencil'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -348,7 +347,7 @@ endif
 " sets {{{
 set autoindent                  " Indent at the same level of the previous line
 set backspace=indent,eol,start  " Backspace for dummies
-set background=light            " Use dark theme
+set background=dark             " Use dark theme
 set t_Co=256
 set backup                      " Backups are nice ...
 set clipboard^=unnamed,unnamedplus
@@ -399,7 +398,7 @@ if exists('+termguicolors')
   set termguicolors
 endif
 
-colorscheme tempus_totus
+colorscheme pencil
 
 " }}}
 
