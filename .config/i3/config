@@ -22,7 +22,7 @@ set $right l
 floating_modifier Mod4
 
 # start a terminal
-bindsym Mod4+Return exec alacritty
+bindsym Mod4+Return exec kitty
 
 # kill focused window
 bindsym Mod4+Shift+w kill
