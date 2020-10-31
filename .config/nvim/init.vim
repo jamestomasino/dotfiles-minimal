@@ -290,6 +290,9 @@ let g:pencil#conceallevel = 3
 let g:pencil#concealcursor = 'c'
 let g:pencil#softDetectSample = 20
 let g:pencil#softDetectThreshold = 130
+let g:pencil_terminal_italics = 1
+let g:pencil_gutter_color = 1
+let g:pencil_neutral_code_bg = 0
 " }}}
 
 " GitGutter Customization {{{
