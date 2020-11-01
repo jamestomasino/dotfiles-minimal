@@ -3780,19 +3780,19 @@ SYSLOG_REQUESTED_URLS:FALSE
 #   brightblue    brightmagenta  brightcyan    white
 
 # plain text
-COLOR:0:black:white
+COLOR:0:white:black
 # links
-COLOR:1:blue:white
+COLOR:1:brightblue:black
 # address bar
-COLOR:2:white:black
+COLOR:2:yellow:black
 # unknown
-COLOR:3:white:black
+COLOR:3:black:white
 # unknown
-COLOR:4:white:black
+COLOR:4:black:white
 # form fields
 COLOR:5:brown:white
 # active link
-COLOR:6:brightred:white
+COLOR:6:black:brightred
 # unknown
 COLOR:7:green:white
 
