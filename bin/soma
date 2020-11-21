@@ -1,3 +1,6 @@
+PLAYER=mplayer
+XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+
 #!/bin/sh
 if [ -z "$1" ]; then
   tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
@@ -14,8 +17,8 @@ if [ -z "$1" ]; then
     --select-1 \
     --exit-0 < "$tempfile")"
   if [ -n "$station" ]; then
-    mplayer -playlist "https://somafm.com/${station}.pls"
+    ${PLAYER} -playlist "https://somafm.com/${station}.pls"
   fi
 else
-  mplayer -playlist "https://somafm.com/${1}.pls"
+  ${PLAYER} -playlist "https://somafm.com/${1}.pls"
 fi
