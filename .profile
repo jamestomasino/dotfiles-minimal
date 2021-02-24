@@ -88,6 +88,7 @@ export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
 export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
+export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 
 # vim
 if command -v nvim > /dev/null 2>&1; then
@@ -223,11 +224,11 @@ fi
 
 # android sdk
 if [ -d "${HOME}/sdk/" ]; then
-  export ANDROID_HOME="$HOME/sdk"
-  PATH=${PATH}:${HOME}/sdk/tools
-  PATH=${PATH}:${HOME}/sdk/tools/bin
-  PATH=${PATH}:${HOME}/sdk/platform-tools
-  PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
+  export ANDROID_HOME="/usr/lib/android-sdk"
+  PATH=${PATH}:${ANDROID_HOME}/tools
+  PATH=${PATH}:${ANDROID_HOME}/tools/bin
+  PATH=${PATH}:${ANDROID_HOME}/platform-tools
+  PATH=${PATH}:${ANDROID_HOME}/build-tools/25.0.3
 fi
 
 # Load local system overrides
