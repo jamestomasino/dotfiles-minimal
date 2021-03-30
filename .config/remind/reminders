@@ -1,0 +1,2 @@
+SET HOME getenv("HOME")
+include [HOME]/.syncthing/remind/

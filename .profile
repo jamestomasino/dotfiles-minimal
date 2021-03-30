@@ -89,6 +89,7 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
+export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 
 # vim
 if command -v nvim > /dev/null 2>&1; then
