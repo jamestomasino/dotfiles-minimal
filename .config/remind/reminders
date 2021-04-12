@@ -1,2 +1,142 @@
+IF version() < "03.00.19"
+   ERRMSG This file requires at least version 03.00.19 of Remind.%
+   ERRMSG This version is version [version()].
+   EXIT
+ENDIF
+
+SET Sunday    0
+SET Monday    1
+SET Tuesday   2
+SET Wednesday 3
+SET Thursday  4
+SET Friday    5
+SET Saturday  6
+
+SET Sun 0
+SET Mon 1
+SET Tue 2
+SET Wed 3
+SET Thu 4
+SET Fri 5
+SET Sat 6
+
+SET Jan 1
+SET Feb 2
+SET Mar 3
+SET Apr 4
+SET May 5
+SET Jun 6
+SET Jul 7
+SET Aug 8
+SET Sep 9
+SET Oct 10
+SET Nov 11
+SET Dec 12
+
+SET January   1
+SET February  2
+SET March     3
+SET April     4
+SET May       5
+SET June      6
+SET July      7
+SET August    8
+SET September 9
+SET October   10
+SET November  11
+SET December  12
+
+SET Quote CHAR(34)
+
+SET  Week_1		 1
+SET  Week_2		 8
+SET  Week_3		15
+SET  Week_4		22
+FSET _last(mo)		"1 " + MON((mo%12)+1)+" --7"
+FSET All_Week_1()	day(TRIGDATE()) <=  7
+FSET All_Week_2()	day(TRIGDATE()) >=  8 && day(TRIGDATE()) <= 15
+FSET All_Week_3()	day(TRIGDATE()) >= 16 && day(TRIGDATE()) <= 22
+FSET All_Week_4()	day(TRIGDATE()) >= 23 && day(TRIGDATE()) <= 29
+FSET All_Week_5()	day(TRIGDATE()) >= 30
+
+FSET _trig()		TRIGGER(TRIGDATE())
+
+FSET _back(days)	TRIGGER(TODAY()-days)
+
+IF OSTYPE() == "MSDOS"
+    # Eastern Standard Time
+    SET TimeZone -300
+
+    # Use --8 rather than --7 because we want the last day BEFORE
+    # the time switch occurs.
+    REM Sun 1 May --8 SATISFY 1
+    SET BegDst TRIGDATE()
+
+    REM Sun 1 Nov --8 SATISFY 1
+    SET EndDst TRIGDATE()
+
+    SET $CalcUTC 0
+
+    # Check out the following IF statement and figure out why it works!
+    IF EndDst < BegDst
+        # Daylight Savings Time
+        SET $MinsFromUTC TimeZone+60
+    ELSE
+        # Standard Time
+        SET $MinsFromUTC TimeZone
+    ENDIF
+ENDIF
+
+FSET _am_pm(tm)	IIF(tm<01:00, tm+12*60+"am", \
+                    tm<12:00, tm+"am", \
+                    tm<13:00, tm+"pm", \
+                              tm-12*60+"pm")
+
+FSET _no_lz(s) IIF(SUBSTR(s, 1, 1)=="0", SUBSTR(s, 2), s)
+
+FSET _light_len(date) MAX(SUNSET(date)-SUNRISE(date), 0)
+FSET _dark_len(date) 1440-_light_len(date)
+
+FSET _yr_num(yr)		ORD(YEAR(TRIGDATE()) - yr)
+FSET _mo_num(mo, yr)		ORD(12 * (YEAR(TRIGDATE()) - yr) + \
+					MONNUM(TRIGDATE()) - mo)
+
+SET SaveTrig $NumTrig
+SET easter EASTERDATE(YEAR(TODAY()))
+
+[trigger(moondate(0))] SPECIAL MOON 0
+[trigger(moondate(1))] SPECIAL MOON 1
+[trigger(moondate(2))] SPECIAL MOON 2
+[trigger(moondate(3))] SPECIAL MOON 3
+
+#REM PS Border Border 5 sub moveto \
+#	/SmallFont findfont 4 scalefont setfont \
+#	(Sunrise: [sunrise(trigdate())] Sunset: [sunset(trigdate())]) show
+
+FSET _DayOfYear(x) x-(date(year(x),1,1) - 1)
+#REM PS BoxWidth 3 mul 4 div Border 5 sub moveto \
+#	/SmallFont findfont 4 scalefont setfont \
+#	([_DayOfYear(today())]([365+isleap(today())-_DayOfYear(today())])) show
+
+SET Esc   CHAR(27)
+
+SET Nrm   Esc + "[0m"
+SET Blk   Esc + "[0;30m"
+SET Red   Esc + "[0;31m"
+SET Grn   Esc + "[0;32m"
+SET Ylw   Esc + "[0;33m"
+SET Blu   Esc + "[0;34m"
+SET Mag   Esc + "[0;35m"
+SET Cyn   Esc + "[0;36m"
+SET Wht   Esc + "[0;37m"
+SET Gry   Esc + "[30;1m"
+SET BrRed Esc + "[31;1m"
+SET BrGrn Esc + "[32;1m"
+SET BrYlw Esc + "[33;1m"
+SET BrBlu Esc + "[34;1m"
+SET BrMag Esc + "[35;1m"
+SET BrCyn Esc + "[36;1m"
+SET BrWht Esc + "[37;1m"
+
 SET HOME getenv("HOME")
 include [HOME]/.syncthing/remind/
