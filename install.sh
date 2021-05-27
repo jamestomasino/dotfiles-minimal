@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+# allow globs to see dotfiles
 shopt -s dotglob
 
+# get reference to script directory as starting point
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+# suppress echos from pushd and popd for clean output
 pushd () {
   command pushd "$@" > /dev/null
 }
@@ -12,6 +15,9 @@ popd () {
   command popd > /dev/null
 }
 
+# recursive loop over files, creating mirrored directories and linking
+# only files. Avoids accidentally adding new files to dotfiles repo
+# if they are created and inserted into a symlinked directory later
 tryfiles () {
   local path="$1"
   if [ -d "${DIR}/${path}" ]; then
@@ -39,10 +45,12 @@ for x in *; do
   fi
 done
 
+# neovim Plug plugin manager requires one manual curl
 if [ ! -e "$HOME/.local/share/nvim/site/autoload/plug.vim" ]; then
   curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
 
+# vim Plug plugin manager requires one manual curl
 if [ ! -e "$HOME/.config/vim/autoload/plug.vim" ]; then
   curl -sfLo "$HOME/.config/vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 fi
