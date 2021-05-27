@@ -4,6 +4,14 @@ shopt -s dotglob
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+pushd () {
+  command pushd "$@" > /dev/null
+}
+
+popd () {
+  command popd > /dev/null
+}
+
 tryfiles () {
   local path="$1"
   if [ -d "${DIR}/${path}" ]; then
