@@ -30,4 +30,3 @@ Some configuration files are still stored at the top level and do not respect `X
 
 - [.agignore](https://github.com/ggreer/the_silver_searcher/issues/1020)
 - [.ctags](https://github.com/universal-ctags/ctags/issues/89)
-- [.scimrc](https://github.com/andmarti1424/sc-im/issues/358)
