@@ -8,12 +8,15 @@ call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
 Plug 'embear/vim-localvimrc'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 
 " Styling
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'https://github.com/reedes/vim-colors-pencil'
+Plug 'sainnhe/sonokai'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/playground'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -21,21 +24,14 @@ Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
 
 " Development Tools
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }                                   " Language Server Protocol
-Plug 'neitanod/vim-clevertab'             " simple tab chains
+Plug 'neovim/nvim-lspconfig'
+Plug 'kabouzeid/nvim-lspinstall'
+Plug 'hrsh7th/nvim-compe'
+Plug 'glepnir/lspsaga.nvim'
 Plug 'tpope/vim-commentary'               " gcc to toggle comments
 Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
-Plug 'dense-analysis/ale'                 " linting
 Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
-Plug 'leafgarland/typescript-vim'         " typescript syntax
-Plug 'othree/es.next.syntax.vim'          " es.next support
-Plug 'cakebaker/scss-syntax.vim'          " scss syntax
-Plug 'hail2u/vim-css3-syntax'             " css3 syntax
-Plug 'iloginow/vim-stylus'                " autocomplete additions
 Plug 'storyn26383/vim-vue'                " vue support beyond LSP
 
 call plug#end()
@@ -107,14 +103,6 @@ function! AsciiMode()
   autocmd BufWritePre * :%s/\s\+$//e
 endfunction
 
-function! LinterStatus() abort
-   let l:counts = ale#statusline#Count(bufnr(''))
-   return l:counts.total == 0 ? '' : printf(
-   \ ' %d ',
-   \ l:counts.total
-   \)
-endfunction
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""" AUTOCMD """""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -126,11 +114,6 @@ if has('autocmd')
     augroup mjml
         autocmd!
         autocmd BufNewFile,BufRead *.mjml   set filetype=html
-    augroup END
-
-    augroup fzf
-        autocmd! FileType fzf
-        autocmd  FileType fzf set laststatus=0 noshowmode noruler | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
     augroup END
 
     augroup func_whitespace
@@ -169,6 +152,8 @@ if has('autocmd')
         autocmd filetype javascript setlocal tabstop=2
         autocmd filetype javascript setlocal expandtab
         autocmd filetype javascript setlocal foldmethod=syntax
+        autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)
+        autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)
     augroup END
 
     augroup type_vue
@@ -274,7 +259,6 @@ set encoding=utf-8
 scriptencoding utf-8
 " }}}
 
-
 " Indent Guides {{{
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
@@ -295,49 +279,9 @@ let g:pencil_gutter_color = 1
 let g:pencil_neutral_code_bg = 0
 " }}}
 
-" GitGutter Customization {{{
-let g:gitgutter_sign_added = '●'
-let g:gitgutter_sign_modified = '●'
-let g:gitgutter_sign_modified_first_line = '●'
-let g:gitgutter_sign_removed = '●'
-let g:gitgutter_sign_removed_first_line = '●'
-" }}}
-
 " Local vimrc loading {{{
 let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
-" }}}
-
-" Ale {{{
-let g:ale_linter_aliases = {'vue': ['vue', 'javascript']}
-let b:ale_linters = {'javascript': ['eslint']}
-let b:ale_linters = {'scss': ['stylelint']}
-let g:ale_linters = {'vue': ['eslint', 'vls']}
-let g:ale_linters = {'html': ['alex', 'fecs', 'html-beautify', 'HTMLHint', 'prettier', 'tidy']}
-let g:ale_fixers = {'*': ['remove_trailing_lines', 'trim_whitespace']}
-let b:ale_fixers = {'scss': ['stylelint']}
-let g:ale_fix_on_save = 1
-let g:ale_lint_on_text_changed = 'always'
-let g:ale_lint_delay = 1000
-let g:ale_sign_error = '×'
-let g:ale_sign_warning = '-'
-" }}}
-
-" LSP {{{
-let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['tcp://127.0.0.1:2089'],
-    \ 'python': ['pyls'],
-    \ 'sh': ['bash-language-server', 'start'],
-    \ 'html': ['html-languageserver', '--stdio'],
-    \ 'scss': ['css-languageserver --stdio'],
-    \ 'ada': ['ada_language_server'],
-    \ 'vue': ['vls']
-    \ }
-nmap <F5> <Plug>(lcn-menu)
-nmap <silent>K <Plug>(lcn-hover)
-nmap <silent> gd <Plug>(lcn-definition)
-nmap <silent> <F2> <Plug>(lcn-rename)
 " }}}
 
 " ag support {{{
@@ -401,7 +345,7 @@ if exists('+termguicolors')
   set termguicolors
 endif
 
-colorscheme pencil
+colorscheme sonokai
 
 " }}}
 
@@ -421,8 +365,6 @@ set noshowmode
 set statusline=
 set statusline+=%0*\ %n\                                    " Buffer number
 set statusline+=%1*\ %<%F%m%r%h%w\                          " File path, modified, readonly, helpfile, preview
-set statusline+=%3*│                                        " Separator
-set statusline+=%5*%{LinterStatus()}
 set statusline+=%3*│                                        " Separator
 set statusline+=%=                                          " Right Side
 set statusline+=%2*%y                                       " FileType
@@ -459,20 +401,12 @@ set pastetoggle=<Leader>z
 " }}}
 
 " Buffers {{{
-nnoremap <Leader>a :Files<CR>
-nnoremap <Leader>A :GFiles<CR>
-nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>a <cmd>Telescope find_files<cr>
+nnoremap <Leader>b <cmd>Telescope buffers<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <Leader>s :b#<CR>
 nnoremap <leader>w :bd<CR>
-" }}}
-
-" TabChain {{{
-inoremap <silent><tab> <c-r>=CleverTab#Complete('start')<cr>
-                      \<c-r>=CleverTab#Complete('tab')<cr>
-                      \<c-r>=CleverTab#Complete('omni')<cr>
-                      \<c-r>=CleverTab#Complete('keyword')<cr>
-                      \<c-r>=CleverTab#Complete('stop')<cr>
-inoremap <silent><s-tab> <c-r>=CleverTab#Complete('prev')<cr>
 " }}}
 
 " Make {{{
@@ -542,6 +476,26 @@ cnoremap cd. lcd %:p:h
 " clear search results {{{
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 " }}}
+
+" LSP config
+luafile ~/.config/nvim/lspconfig.lua
+luafile ~/.config/nvim/lsaga.lua
+luafile ~/.config/nvim/compe-config.lua
+luafile ~/.config/nvim/eslint.lua
+
+nnoremap <silent>K :Lspsaga hover_doc<CR>
+nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
+nnoremap <silent> <C-b> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>
+nnoremap <silent><leader>gr :Lspsaga rename<CR>
+nnoremap <silent><leader>ca :Lspsaga code_action<CR>
+vnoremap <silent><leader>ca :<C-U>Lspsaga range_code_action<CR>
+nnoremap <silent><leader>gd :Lspsaga preview_definition<CR>
+nnoremap <silent>gd <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent>gD <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent>gi <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent><C-n> :Lspsaga diagnostic_jump_next<CR>
+nnoremap <silent><C-p> :Lspsaga diagnostic_jump_prev<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""" LOCAL OVERRIDES """""""""""""""""""""""""""""""""""
