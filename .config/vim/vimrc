@@ -215,20 +215,20 @@ if has('statusline')
     set laststatus=2
 
     set statusline=
-    set statusline+=%#Search#\ %n\
-    set statusline+=%#PmenuSel#
+    set statusline+=%#Search#\ %n
+    set statusline+=\ %#PmenuSel#
     set statusline+=%#CursorLine#
-    set statusline+=\ %f\
-    set statusline+=%h%m%r%w
+    set statusline+=\ %f
+    set statusline+=\ %h%m%r%w
     set statusline+=%=
-    set statusline+=\ %y\
-    set statusline+=%#Menu#
+    set statusline+=\ %y
+    set statusline+=\ %#Menu#
     set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-    set statusline+=\ [%{&fileformat}\]\
-    set statusline+=%#PmenuSel#
+    set statusline+=\ [%{&fileformat}\]
+    set statusline+=\ %#PmenuSel#
     set statusline+=\ %p%%
     set statusline+=\ %l:%c
-    set statusline+=\
+    set statusline+=\ 
 endif
 " }}}
 
