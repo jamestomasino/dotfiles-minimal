@@ -482,10 +482,6 @@ nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
 " LSP config
 lua require('init')
-" luafile ~/.config/nvim/init.lua
-" luafile ~/.config/nvim/lspconfig.lua
-" luafile ~/.config/nvim/lsaga.lua
-" luafile ~/.config/nvim/compe-config.lua
 
 nnoremap <silent>K :Lspsaga hover_doc<CR>
 nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
@@ -501,7 +497,7 @@ nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent><C-n> :Lspsaga diagnostic_jump_next<CR>
 nnoremap <silent><C-p> :Lspsaga diagnostic_jump_prev<CR>
 nnoremap <silent><leader>t :Lspsaga open_floaterm<CR>
-tnoremap <silent><leader>T <C-\><C-n>:Lspsaga close_floaterm<CR>
+nnoremap <silent><leader>T <C-\><C-n>:Lspsaga close_floaterm<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""" LOCAL OVERRIDES """""""""""""""""""""""""""""""""""
