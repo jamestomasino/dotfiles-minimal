@@ -481,9 +481,11 @@ nnoremap <silent> <Leader>/ :nohlsearch<CR>
 " }}}
 
 " LSP config
-luafile ~/.config/nvim/lspconfig.lua
-luafile ~/.config/nvim/lsaga.lua
-luafile ~/.config/nvim/compe-config.lua
+lua require('init')
+" luafile ~/.config/nvim/init.lua
+" luafile ~/.config/nvim/lspconfig.lua
+" luafile ~/.config/nvim/lsaga.lua
+" luafile ~/.config/nvim/compe-config.lua
 
 nnoremap <silent>K :Lspsaga hover_doc<CR>
 nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
