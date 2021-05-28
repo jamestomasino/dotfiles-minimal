@@ -199,6 +199,7 @@ path "${HOME}/.node/bin"
 path "${HOME}/.local/bin"
 path "${HOME}/.fzf/bin"
 path "${HOME}/.npm-packages/bin"
+path "${HOME}/go/bin"
 
 # javascript
 if command -v node > /dev/null 2>&1; then

@@ -1,27 +1,15 @@
 local lsp_config = require('lspconfig')
 local on_attach = require('lsp.on_attach')
 local eslint = require('lsp.efm.eslint')
-local prettier = require('lsp.efm.prettier')
-
 local efm_config = os.getenv('HOME') .. '/.config/nvim/lua/lsp/efm/config.yaml'
 local efm_log_dir = '/tmp/'
-local efm_root_markers = { 'package.json', '.git/', '.zshrc' }
+local efm_root_markers = { 'package.json', '.git/' }
 local efm_languages = {
-  yaml = { prettier },
-  json = { prettier },
-  markdown = { prettier },
-  javascript = { eslint, prettier },
-  javascriptreact = { eslint, prettier },
-  typescript = { eslint, prettier },
-  typescriptreact = { eslint, prettier },
-  css = { prettier },
-  scss = { prettier },
-  sass = { prettier },
-  less = { prettier },
-  json = { prettier },
-  graphql = { prettier },
-  vue = { eslint, prettier },
-  html = { prettier }
+  javascript = { eslint },
+  javascriptreact = { eslint },
+  typescript = { eslint },
+  typescriptreact = { eslint },
+  vue = { eslint },
 }
 
 lsp_config.efm.setup({
@@ -32,7 +20,8 @@ lsp_config.efm.setup({
     "-logfile",
     efm_log_dir .. "efm.log"
   },
-  filetype = {
+  filetypes = {
+    'vue',
     'javascript',
     'javascriptreact',
     'typescript',

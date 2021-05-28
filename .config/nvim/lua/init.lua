@@ -17,6 +17,11 @@ fn.sign_define("LspDiagnosticsSignWarning", { text = "▲", numhl = "LspDiagnost
 fn.sign_define("LspDiagnosticsSignInformation", { text = "⁈", numhl = "LspDiagnosticsDefaultInformation" })
 fn.sign_define("LspDiagnosticsSignHint", { text = "⯁", numhl = "LspDiagnosticsDefaultHint" })
 
+-- Load Saga
+local saga = require 'lspsaga'
+saga.init_lsp_saga()
+
+require('lsp.compe')
 require('lsp.bash')
 require('lsp.css')
 require('lsp.efm')
