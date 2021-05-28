@@ -1,4 +1,3 @@
--- keymaps
 local on_attach = function(client, bufnr)
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
@@ -26,7 +25,7 @@ local lua_settings = {
     },
     diagnostics = {
       -- Get the language server to recognize the `vim` global
-      globals = {'vim', 'util'},
+      globals = {'vim'},
     },
     workspace = {
       -- Make the server aware of Neovim runtime files
@@ -63,9 +62,30 @@ local function setup_servers()
   end
 end
 
-setup_servers()
+local eslint = {
+  lintCommand = "./node_modules/.bin/eslint -f unix --stdin --stdin-filename ${INPUT}",
+  lintIgnoreExitCode = true,
+  lintStdin = true
+}
+
+-- EFM
+require'lspconfig'.efm.setup {
+  --cmd = {"efm-langserver", "-q"}, -- the `-q` prevents the  readng std in, printing stdout message
+  init_options = {documentFormatting = true},
+  filetypes = {"javascript", "typescript"},
+  root_dir = function(fname) return vim.lsp.util.root_pattern("tsconfig.json")(fname) or
+    vim.lsp.util.root_pattern(".eslintrc.js", ".git")(fname);
+  end,
+  settings = {
+    rootMarkers = {".eslintrc.js", ".git/"},
+    languages = {
+      typescript = {eslint}
+    }
+  }
+}
 
 -- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
+setup_servers()
 require'lspinstall'.post_install_hook = function ()
   setup_servers() -- reload installed servers
   vim.cmd("bufdo e") -- this triggers the FileType autocmd that starts the server

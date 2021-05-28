@@ -8,15 +8,22 @@ call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
 Plug 'embear/vim-localvimrc'
+
+" lsp
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'kabouzeid/nvim-lspinstall'
+Plug 'hrsh7th/nvim-compe'
+Plug 'glepnir/lspsaga.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Styling
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
 Plug 'sainnhe/sonokai'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'nvim-treesitter/playground'
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -24,10 +31,6 @@ Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
 
 " Development Tools
-Plug 'neovim/nvim-lspconfig'
-Plug 'kabouzeid/nvim-lspinstall'
-Plug 'hrsh7th/nvim-compe'
-Plug 'glepnir/lspsaga.nvim'
 Plug 'tpope/vim-commentary'               " gcc to toggle comments
 Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
@@ -481,8 +484,6 @@ nnoremap <silent> <Leader>/ :nohlsearch<CR>
 luafile ~/.config/nvim/lspconfig.lua
 luafile ~/.config/nvim/lsaga.lua
 luafile ~/.config/nvim/compe-config.lua
-luafile ~/.config/nvim/diagnosticls.lua
-luafile ~/.config/nvim/efm.lua
 
 nnoremap <silent>K :Lspsaga hover_doc<CR>
 nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
@@ -497,6 +498,8 @@ nnoremap <silent>gi <cmd>lua vim.lsp.buf.implementation()<CR>
 nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent><C-n> :Lspsaga diagnostic_jump_next<CR>
 nnoremap <silent><C-p> :Lspsaga diagnostic_jump_prev<CR>
+nnoremap <silent><leader>t :Lspsaga open_floaterm<CR>
+tnoremap <silent><leader>T <C-\><C-n>:Lspsaga close_floaterm<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""" LOCAL OVERRIDES """""""""""""""""""""""""""""""""""
