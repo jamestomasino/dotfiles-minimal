@@ -9,8 +9,14 @@ call plug#begin('$XDG_DATA_HOME/vim/plugged')
 " Global
 Plug 'embear/vim-localvimrc'
 
-" LSP
+" Telescope
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-github.nvim'
+Plug 'nvim-telescope/telescope-symbols.nvim'
+
+" LSP
 Plug 'neovim/nvim-lspconfig'
 Plug 'kabouzeid/nvim-lspinstall'
 Plug 'hrsh7th/nvim-compe'
@@ -18,6 +24,7 @@ Plug 'glepnir/lspsaga.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Styling
+Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
 Plug 'sainnhe/sonokai'
 
 " Writing/Authoring Tools
@@ -31,6 +38,10 @@ Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
 Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
 Plug 'storyn26383/vim-vue'                " vue support beyond LSP
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'fhill2/telescope-ultisnips.nvim'
+
 
 call plug#end()
 
@@ -399,7 +410,8 @@ set pastetoggle=<Leader>z
 " }}}
 
 " Buffers {{{
-nnoremap <Leader>a <cmd>Telescope find_files<cr>
+nnoremap <Leader>a <cmd>Telescope git_files<cr>
+nnoremap <Leader>A <cmd>Telescope find_files<cr>
 nnoremap <Leader>b <cmd>Telescope buffers<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
@@ -475,9 +487,30 @@ cnoremap cd. lcd %:p:h
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
 " }}}
 
-" LSP config
-lua require('init')
+" telescope {{{
+lua << EOF
+local actions = require('telescope.actions')
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<esc>"] = actions.close
+      },
+    },
+  }
+}
+require('telescope').load_extension('gh')
+require('telescope').load_extension('ultisnips')
+EOF
+nnoremap <silent><leader>ghi :Telescope gh issues<CR>
+nnoremap <silent><leader>ghp :Telescope gh pull_request<CR>
+nnoremap <silent><leader>S :Telescope symbols<CR>
+nnoremap <silent><leader>u :Telescope ultisnips ultisnips<CR>
+let g:UltiSnipsExpandTrigger="<tab>"
+" }}}
 
+" LSP config {{{
+lua require('init')
 nnoremap <silent>K :Lspsaga hover_doc<CR>
 nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<CR>
 nnoremap <silent> <C-b> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<CR>
@@ -492,7 +525,8 @@ nnoremap <silent>gr <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent><C-n> :Lspsaga diagnostic_jump_next<CR>
 nnoremap <silent><C-p> :Lspsaga diagnostic_jump_prev<CR>
 nnoremap <silent><leader>t :Lspsaga open_floaterm<CR>
-nnoremap <silent><leader>T <C-\><C-n>:Lspsaga close_floaterm<CR>
+tnoremap <silent><leader>T <C-\><C-n>:Lspsaga close_floaterm<CR>
+" }}}
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""" LOCAL OVERRIDES """""""""""""""""""""""""""""""""""
