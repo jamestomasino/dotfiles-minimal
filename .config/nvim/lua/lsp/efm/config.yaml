@@ -4,3 +4,4 @@ log-level: 4
 root-markers:
   - .git/
   - package.json
+
