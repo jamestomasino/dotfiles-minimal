@@ -9,12 +9,8 @@ call plug#begin('$XDG_DATA_HOME/vim/plugged')
 " Global
 Plug 'embear/vim-localvimrc'
 
-" lsp
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
+" LSP
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'kabouzeid/nvim-lspinstall'
 Plug 'hrsh7th/nvim-compe'
@@ -22,7 +18,6 @@ Plug 'glepnir/lspsaga.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Styling
-Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
 Plug 'sainnhe/sonokai'
 
 " Writing/Authoring Tools
