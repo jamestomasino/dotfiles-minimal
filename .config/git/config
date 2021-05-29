@@ -3,6 +3,16 @@
   email = james@tomasino.org
   signingkey = 09DDD7DF
 
+[sendemail]
+  smtpserver = mail.messagingengine.com
+  smtpuser = james@tomasino.org
+  smtpencryption = tls
+  smtpserverport = 587
+  annotate = yes
+
+[credential]
+  helper = 'cache --timeout 3600'
+
 [github]
   user = jamestomasino
 
