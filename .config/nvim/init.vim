@@ -25,7 +25,8 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Styling
 Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'sainnhe/sonokai'
+Plug 'sainnhe/sonokai'                    " theme supports treesitter
+Plug 'Yggdroot/indentLine'                " vertical lines for indentlines
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -236,6 +237,17 @@ if has('autocmd')
         autocmd filetype gemini call pencil#init()
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
                     \ | setl fdo+=search
+        autocmd filetype gemini let g:indentLine_enabled = 0
+    augroup END
+
+    augroup text
+        autocmd!
+        autocmd filetype text let g:indentLine_enabled = 0
+    augroup END
+
+    augroup markdown
+        autocmd!
+        autocmd filetype markdown let g:indentLine_enabled = 0
     augroup END
 
     augroup pencil
@@ -272,6 +284,7 @@ scriptencoding utf-8
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 0
+let g:indentLine_char = '|'
 " }}}
 
 " Pencil / Writing Controls {{{
