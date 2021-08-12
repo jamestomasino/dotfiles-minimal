@@ -31,6 +31,15 @@ BEGIN {
 		links = links sprintf("[%02d] %s\n",linknum, url)
 		linknum++
 	}
+        else if ( type == "w") # html links
+        {
+                gsub(/^\[[0-9]+\][^ ]+? /,"",label)
+                printf("[%02d]", linknum)
+                printf(" %s\n", label)
+                url = path
+                links = links sprintf("[%02d] %s\n",linknum, url)
+                linknum++
+        }
 	else if ( type == "T") # telnet links
 	{
 		gsub(/^\[[0-9]+\][^ ]+? /,"",label)

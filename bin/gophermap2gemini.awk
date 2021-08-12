@@ -49,6 +49,15 @@ BEGIN {
 		}
 		url = substr(path, 5)
 		printf("=> %s %s\n", url, label)
+	} else if ( type == "w") {
+		# html links
+		if (isFenced)  {
+			# end fences for links
+			print "```"
+			isFenced=0
+		}
+		url = path
+		printf("=> %s %s\n", url, label)
 	} else if ( type == "T") {
 		# telnet links
 		if (isFenced)  {
