@@ -138,7 +138,7 @@ alias mkdir='mkdir -p'
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 alias utc='date -u +%H:%M:%S'
-alias vimr='vim -u DEFAULTS -U NONE -i NONE'
+alias vimr='vim -u NONE -U NONE -i NONE'
 alias gs="git status"
 alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
@@ -158,7 +158,7 @@ USER=$(id -un)
 HOSTNAME=$(uname -n)
 # true shell (TS) name
 TS=$(ps -cp "$$" -o command="" 2>/dev/null)
-if [ -z "$TS" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; then
+if [ -z "$TS" ] || [ "$TS" = "" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; then
   # dash/sh can't render colors properly in the prompt without breaking readline
   PS1="[${HOSTNAME}] " # [hostname]
   PS1=${PS1}'$(basename $(pwd)) ' # workingdir

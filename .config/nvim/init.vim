@@ -4,7 +4,7 @@
 
 filetype off
 
-call plug#begin('$XDG_DATA_HOME/vim/plugged')
+call plug#begin('$XDG_DATA_HOME/nvim/plugged')
 
 " Global
 Plug 'embear/vim-localvimrc'
@@ -39,10 +39,6 @@ Plug 'airblade/vim-gitgutter'             " git changes
 Plug 'tpope/vim-fugitive'                 " git wrapper
 Plug 'zaid/vim-rec'                       " GNU Recutils syntax highlighting
 Plug 'storyn26383/vim-vue'                " vue support beyond LSP
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'fhill2/telescope-ultisnips.nvim'
-
 
 call plug#end()
 
@@ -204,7 +200,7 @@ if has('autocmd')
 
     augroup type_json
         autocmd!
-        autocmd filetype json setlocal equalprg=python3\ -m\ json.tool
+        autocmd filetype json set conceallevel=0
     augroup END
 
     augroup type_make
@@ -513,13 +509,10 @@ require('telescope').setup{
   }
 }
 require('telescope').load_extension('gh')
-require('telescope').load_extension('ultisnips')
 EOF
 nnoremap <silent><leader>ghi :Telescope gh issues<CR>
 nnoremap <silent><leader>ghp :Telescope gh pull_request<CR>
 nnoremap <silent><leader>S :Telescope symbols<CR>
-nnoremap <silent><leader>u :Telescope ultisnips ultisnips<CR>
-let g:UltiSnipsExpandTrigger="<tab>"
 " }}}
 
 " LSP config {{{
