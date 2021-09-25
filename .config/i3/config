@@ -121,7 +121,7 @@ bindsym Mod4+Shift+r restart
 bindsym Mod4+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 # Lock screen
-bindsym Mod4+Shift+z exec "xautolock -locknow &> /dev/null"
+bindsym Mod4+Shift+z exec "i3lock -n"
 
 # Play chime for CYOA
 bindsym Mod4+c exec "play /home/tomasino/sync/syncthing/syncthing/cyoa/choice.mp3"
