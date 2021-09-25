@@ -88,6 +88,8 @@ export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
 export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
+export CALCHISTFILE=$XDG_DATA_HOME/calc_history
+export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 
 # vim
 if command -v nvim > /dev/null 2>&1; then
@@ -136,7 +138,7 @@ alias mkdir='mkdir -p'
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 alias utc='date -u +%H:%M:%S'
-alias vimr='vim -u DEFAULTS -U NONE -i NONE'
+alias vimr='vim -u NONE -U NONE -i NONE'
 alias gs="git status"
 alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
@@ -147,6 +149,7 @@ alias tilderadio='mplayer -quiet https://radio.tildeverse.org/radio/8000/radio.o
 alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
 alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
+alias getplaylist="youtube-dl -x --audio-quality 0 --audio-format mp3 --yes-playlist"
 
 # PROMPT COMMANDS
 PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
@@ -156,7 +159,7 @@ USER=$(id -un)
 HOSTNAME=$(uname -n)
 # true shell (TS) name
 TS=$(ps -cp "$$" -o command="" 2>/dev/null)
-if [ -z "$TS" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; then
+if [ -z "$TS" ] || [ "$TS" = "" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; then
   # dash/sh can't render colors properly in the prompt without breaking readline
   PS1="[${HOSTNAME}] " # [hostname]
   PS1=${PS1}'$(basename $(pwd)) ' # workingdir
@@ -197,6 +200,7 @@ path "${HOME}/.node/bin"
 path "${HOME}/.local/bin"
 path "${HOME}/.fzf/bin"
 path "${HOME}/.npm-packages/bin"
+path "${HOME}/go/bin"
 
 # javascript
 if command -v node > /dev/null 2>&1; then
@@ -223,11 +227,11 @@ fi
 
 # android sdk
 if [ -d "${HOME}/sdk/" ]; then
-  export ANDROID_HOME="$HOME/sdk"
-  PATH=${PATH}:${HOME}/sdk/tools
-  PATH=${PATH}:${HOME}/sdk/tools/bin
-  PATH=${PATH}:${HOME}/sdk/platform-tools
-  PATH=${PATH}:${HOME}/sdk/build-tools/25.0.3
+  export ANDROID_HOME="/usr/lib/android-sdk"
+  PATH=${PATH}:${ANDROID_HOME}/tools
+  PATH=${PATH}:${ANDROID_HOME}/tools/bin
+  PATH=${PATH}:${ANDROID_HOME}/platform-tools
+  PATH=${PATH}:${ANDROID_HOME}/build-tools/25.0.3
 fi
 
 # Load local system overrides

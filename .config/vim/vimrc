@@ -17,21 +17,13 @@ Plug 'embear/vim-localvimrc'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-" Styling
-Plug 'pgdouyon/vim-yin-yang'              " A minimalist b+w theme
-Plug 'andreypopp/vim-colors-plain'        " A plain ol' theme
-Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
-
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
 Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
 
-" Development Tools
-Plug 'tpope/vim-commentary'               " gcc to toggle comments
-Plug 'airblade/vim-gitgutter'             " git changes
-Plug 'tpope/vim-fugitive'                 " git wrapper
-Plug 'dense-analysis/ale'                 " linting
+" Styling
+Plug 'romainl/Apprentice'                 " color scheme
 
 call plug#end()
 
@@ -118,57 +110,6 @@ if has('autocmd')
         autocmd FileType gitcommit au! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
     augroup END
 
-    augroup type_javascript
-        autocmd!
-        autocmd FileType javascript setlocal shiftwidth=2
-        autocmd FileType javascript setlocal softtabstop=2
-        autocmd FileType javascript setlocal tabstop=2
-        autocmd FileType javascript setlocal expandtab
-        autocmd FileType javascript setlocal foldmethod=syntax
-    augroup END
-
-    augroup type_vue
-        autocmd!
-        autocmd FileType vue syntax sync fromstart
-    augroup END
-
-    augroup type_python
-        autocmd!
-        autocmd FileType python setlocal expandtab
-        autocmd FileType python setlocal softtabstop=4
-        autocmd FileType python setlocal shiftwidth=4
-        autocmd FileType python setlocal tabstop=4
-    augroup END
-
-    augroup type_json
-        autocmd!
-        autocmd FileType json setlocal equalprg=python\ -m\ json.tool
-    augroup END
-
-    augroup type_make
-        autocmd!
-        autocmd FileType make setlocal noexpandtab
-        autocmd FileType make setlocal softtabstop=4
-        autocmd FileType make setlocal shiftwidth=4
-        autocmd FileType make setlocal tabstop=4
-    augroup END
-
-    augroup bundle_rmarkdown
-        autocmd!
-        autocmd FileType Rmd setlocal expandtab
-        autocmd FileType Rmd setlocal softtabstop=4
-        autocmd FileType Rmd setlocal shiftwidth=4
-        autocmd FileType Rmd setlocal tabstop=4
-    augroup END
-
-    augroup gemini
-        autocmd!
-        autocmd BufNewFile,BufRead *.gmi   set filetype=gemini
-        autocmd filetype gemini call pencil#init()
-                    \ | setl spell spl=en_us fdl=4 noru nonu nornu
-                    \ | setl fdo+=search
-    augroup END
-
     augroup pencil
         autocmd!
         autocmd FileType markdown,mkd call pencil#init()
@@ -237,12 +178,6 @@ if executable('ag')
 endif
 " }}}
 
-" Ale {{{
-let b:ale_linters = {'javascript': ['eslint','prettier']}
-let g:ale_javascript_prettier_options = '--single-quote --trailing-comma es5'
-let g:ale_javascript_prettier_use_local_config = 1
-" }}}
-
 " sets {{{
 set autoindent                  " Indent at the same level of the previous line
 set backspace=indent,eol,start  " Backspace for dummies
@@ -288,7 +223,7 @@ set wildmenu
 set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
 set winminheight=0              " Windows can be 0 line high
 
-colorscheme tempus_totus
+colorscheme apprentice
 
 " conditional settings {{{
 if has('persistent_undo')
@@ -303,20 +238,20 @@ if has('statusline')
     set laststatus=2
 
     set statusline=
-    set statusline+=%#Search#\ %n\
-    set statusline+=%#PmenuSel#
+    set statusline+=%#Search#\ %n
+    set statusline+=\ %#PmenuSel#
     set statusline+=%#CursorLine#
-    set statusline+=\ %f\
-    set statusline+=%h%m%r%w
+    set statusline+=\ %f
+    set statusline+=\ %h%m%r%w
     set statusline+=%=
-    set statusline+=\ %y\
-    set statusline+=%#Menu#
+    set statusline+=\ %y
+    set statusline+=\ %#Menu#
     set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-    set statusline+=\ [%{&fileformat}\]\
-    set statusline+=%#PmenuSel#
+    set statusline+=\ [%{&fileformat}\]
+    set statusline+=\ %#PmenuSel#
     set statusline+=\ %p%%
     set statusline+=\ %l:%c
-    set statusline+=\
+    set statusline+=\ 
 endif
 " }}}
 
@@ -359,10 +294,6 @@ nnoremap <Leader>m :make<cr>
 " Gophermap mappings {{{
 nnoremap <Leader>gl :PencilOff<CR>:set tw=9999<CR>
 nnoremap <Leader>gm :PencilHard<CR>:set tw=66<CR>
-" }}}
-
-" Plugin mappings {{{
-xnoremap <Enter> <Plug>(EasyAlign)
 " }}}
 
 " Insert Date for notes {{{

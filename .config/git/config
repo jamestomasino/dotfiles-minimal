@@ -3,11 +3,24 @@
   email = james@tomasino.org
   signingkey = 09DDD7DF
 
+[sendemail]
+  smtpserver = mail.messagingengine.com
+  smtpuser = james@tomasino.org
+  smtpencryption = tls
+  smtpserverport = 587
+  annotate = yes
+
+[credential]
+  helper = 'cache --timeout 3600'
+
 [github]
   user = jamestomasino
 
 [gpg]
   program = gpg
+
+[init]
+  defaultBranch = main
 
 [tag]
   gpgsign = true
@@ -26,7 +39,7 @@
   pager = delta
 
 [delta]
-  syntax-theme = Monokai Extended Light
+  syntax-theme = Monokai Extended
   side-by-side = true
   colorMoved = default
 
@@ -59,7 +72,7 @@
   prompt = false
 
 [mergetool "fugitive"]
-  cmd = vim -f -c "Gvdiff" "$MERGED"
+  cmd = vim -f -c \"Gvdiffsplit!\" \"$MERGED\"
 
 [branch]
   autosetupmerge = true
@@ -92,6 +105,12 @@
   added = yellow
   changed = green
   untracked = cyan
+
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 
 [http "https://git.gsw.agency"]
   sslVerify = false
@@ -159,10 +178,3 @@
 
   # Poor man's force-gpg-sign-tags
   tag = tag -s
-
-  mkrepo = "!github-newrepo $1"
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true

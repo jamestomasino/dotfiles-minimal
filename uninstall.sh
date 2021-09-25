@@ -2,24 +2,31 @@
 
 shopt -s dotglob
 
+# get reference to script directory as starting point
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# suppress echos from pushd and popd for clean output
+pushd () {
+  command pushd "$@" > /dev/null
+}
+
+popd () {
+  command popd > /dev/null
+}
 
 tryfiles () {
   local path="$1"
-  if [ -d "${HOME}/${path}" ]; then
-    cd "${DIR}/${path}"
+  if [ -d "${DIR}/${path}" ]; then
+    pushd "${DIR}/${path}" || return
     for f in *; do
       local newpath="${path}/${f}"
-      if [ -d "${HOME}/${newpath}" ]; then
-        tryfiles "${newpath}"
-      else
-        if [ -L "${HOME}/${newpath}" ]; then
-          unlink "${HOME}/${newpath}"
-          printf "Removing: %s\\n" "${HOME}/${newpath}"
-        fi
-      fi
+      tryfiles "${newpath}"
     done
-    cd ..
+    popd || return
+    if [ -z "$(ls -A "${HOME}/${path}")" ]; then
+      rmdir "${HOME}/${path}"
+      printf "Removing empty directory: %s\\n" "${HOME}/${path}"
+    fi
   else
     if [ -L "${HOME}/${path}" ]; then
       unlink "${HOME}/${path}"

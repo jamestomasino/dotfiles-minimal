@@ -3786,13 +3786,13 @@ COLOR:1:brightcyan:black
 # address bar
 COLOR:2:lightgray:black
 # unknown
-COLOR:3:white:black
+COLOR:3:black:white
 # unknown
-COLOR:4:white:black
+COLOR:4:black:white
 # form fields
 COLOR:5:yellow:black
 # active link
-COLOR:6:brightred:black
+COLOR:6:black:brightred
 # unknown
 COLOR:7:green:black
 
