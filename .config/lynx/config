@@ -3782,19 +3782,19 @@ SYSLOG_REQUESTED_URLS:FALSE
 # plain text
 COLOR:0:white:black
 # links
-COLOR:1:brightblue:black
+COLOR:1:brightcyan:black
 # address bar
-COLOR:2:yellow:black
+COLOR:2:lightgray:black
 # unknown
 COLOR:3:black:white
 # unknown
 COLOR:4:black:white
 # form fields
-COLOR:5:brown:white
+COLOR:5:yellow:black
 # active link
 COLOR:6:black:brightred
 # unknown
-COLOR:7:green:white
+COLOR:7:green:black
 
 # let's tackle cookies while here (we accept them all)...
 
