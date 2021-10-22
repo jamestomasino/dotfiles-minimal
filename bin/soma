@@ -1,4 +1,4 @@
-PLAYER=mplayer
+PLAYER=mpv
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 
 #!/bin/sh
@@ -9,7 +9,7 @@ if [ -z "$1" ]; then
   fi
 
   if [ ! -f "$tempfile" ]; then
-    curl -s https://somafm.com/listen/ | awk -F '[<>]' '/MP3:/ { print $4 }' | awk -F '"' '{print $2}' | tr -d \\/ | sed 's|.pls$||' > "$tempfile"
+    curl -s https://somafm.com/listen/ | awk -F '[<>]' '/MP3:/ { print $6 }' | awk -F '"' '{print $2}' | tr -d \\/ | sed 's|.pls$||' > "$tempfile"
   fi
 
   station="$(fzf \
@@ -17,8 +17,8 @@ if [ -z "$1" ]; then
     --select-1 \
     --exit-0 < "$tempfile")"
   if [ -n "$station" ]; then
-    ${PLAYER} -playlist "https://somafm.com/${station}.pls"
+    ${PLAYER} "https://somafm.com/${station}.pls"
   fi
 else
-  ${PLAYER} -playlist "https://somafm.com/${1}.pls"
+  ${PLAYER} "https://somafm.com/${1}.pls"
 fi

@@ -145,7 +145,7 @@ alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias t='tmux attach || tmux new'
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'
 alias anonradio='mplayer -quiet http://anonradio.net:8000/anonradio'
-alias tilderadio='mplayer -quiet https://radio.tildeverse.org/radio/8000/radio.ogg'
+alias tilderadio='mplayer -quiet https://azuracast.tilderadio.org/radio/8000/320k.ogg'
 alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
 alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
