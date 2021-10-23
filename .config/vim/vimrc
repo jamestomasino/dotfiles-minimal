@@ -81,14 +81,6 @@ function! StripTrailingWhitespace()
     endif
 endfunction
 
-function! CleverTab()
-    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-        return '\<Tab>'
-    else
-        return '\<C-N>'
-    endif
-endfunction
-
 function! MyHighlights() abort
     highlight clear SignColumn      " SignColumn should match background
     highlight clear LineNr          " Current line number row will have same background color in relative mode
@@ -150,8 +142,6 @@ if has('autocmd')
         autocmd filetype javascript setlocal tabstop=2
         autocmd filetype javascript setlocal expandtab
         autocmd filetype javascript setlocal foldmethod=syntax
-        autocmd BufWritePre *.js lua vim.lsp.buf.formatting_sync(nil, 100)
-        autocmd BufWritePre *.jsx lua vim.lsp.buf.formatting_sync(nil, 100)
     augroup END
 
     augroup type_vue
@@ -388,10 +378,6 @@ nnoremap <Leader>A :GFiles<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>s :b#<cr>
 nnoremap <leader>w :bd<cr>
-" }}}
-
-" Tab Completion {{{
-inoremap <Tab> <c-r>=CleverTab()<CR>
 " }}}
 
 " Make {{{
