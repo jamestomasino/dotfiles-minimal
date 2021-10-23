@@ -13,9 +13,10 @@ filetype off
 call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
-Plug 'embear/vim-localvimrc'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'embear/vim-localvimrc'              " override vimrc per repo
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " install fzf
+Plug 'junegunn/fzf.vim'                   " fzf vim integration
+Plug 'ervandew/supertab'                  " more natural tab-completion
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
@@ -26,12 +27,12 @@ Plug 'junegunn/goyo.vim'                  " Full screen writing mode
 Plug 'romainl/Apprentice'                 " color scheme
 
 " Development Tools
-Plug 'tpope/vim-commentary'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'storyn26383/vim-vue'
-Plug 'sheerun/vim-polyglot'
-Plug 'dense-analysis/ale'
+Plug 'tpope/vim-commentary'               " easy comment toggling
+Plug 'airblade/vim-gitgutter'             " pretty git sidebar
+Plug 'tpope/vim-fugitive'                 " git integration
+Plug 'storyn26383/vim-vue'                " extra syntax support for vue
+Plug 'sheerun/vim-polyglot'               " syntax for everything
+Plug 'dense-analysis/ale'                 " linting for everything
 
 call plug#end()
 
@@ -233,8 +234,8 @@ let b:match_ignorecase = 1
 " miscelanious settings {{{
 filetype plugin indent on       " Automatically detect file types.
 syntax on                       " Syntax highlighting
-set encoding=utf-8
-scriptencoding utf-8
+set encoding=utf-8              " utf-8 all the things
+scriptencoding utf-8            " utf-8 all the things
 " }}}
 
 
@@ -255,14 +256,6 @@ let g:pencil#softDetectSample = 20
 let g:pencil#softDetectThreshold = 130
 " }}}
 
-" GitGutter Customization {{{
-let g:gitgutter_sign_added = '●'
-let g:gitgutter_sign_modified = '●'
-let g:gitgutter_sign_modified_first_line = '●'
-let g:gitgutter_sign_removed = '●'
-let g:gitgutter_sign_removed_first_line = '●'
-" }}}
-
 " Local vimrc loading {{{
 let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
@@ -278,23 +271,23 @@ endif
 " sets {{{
 set autoindent                  " Indent at the same level of the previous line
 set backspace=indent,eol,start  " Backspace for dummies
-set background=light             " use dark theme
+set background=light            " Use dark theme
 set backup                      " Backups are nice ...
-set clipboard^=unnamed,unnamedplus
-set colorcolumn=80
+set clipboard^=unnamed,unnamedplus " use system clipboard(s)
+set colorcolumn=80,120          " Highlight 80 columns and 140 for wide
 set cursorline                  " Highlight current line
-set expandtab
-set fileencoding=utf-8
-set foldlevelstart=20
-set foldmethod=manual
+set expandtab                   " Spaces by default
+set fileencoding=utf-8          " utf-8 all the things
+set foldlevelstart=20           " Start with everything open
+set foldmethod=manual           " Define folds manually as we go
 set hidden                      " Allow buffer switching without saving
 set history=1000                " Store a ton of history (default is 20)
 set hlsearch                    " Highlight search terms
 set ignorecase                  " Case insensitive search
 set incsearch                   " Find as you type search
-set lazyredraw
+set lazyredraw                  " save energy and processing power
 set linespace=0                 " No extra spaces between rows
-set list
+set list                        " Display invisible characters defined below
 set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace
 set mouse=                      " Automatically disable mouse usage
 set mousehide                   " Hide the mouse cursor while typing
@@ -304,23 +297,23 @@ set nowrap                      " Do not wrap long lines
 set relativenumber number       " Use relative line numbers
 set scrolljump=5                " Lines to scroll when cursor leaves screen
 set scrolloff=3                 " Minimum lines to keep above and below cursor
-set shiftwidth=2
+set shiftwidth=2                " Default spacing
 set shortmess+=aoOtTI           " Abbrev. of messages (avoids 'hit enter')
 set showmatch                   " Show matching brackets/parenthesis
 set showmode                    " Display the current mode
-set softtabstop=2
+set softtabstop=2               " Default spacing
 set splitbelow                  " Puts new split windows to the bottom of the current
 set splitright                  " Puts new vsplit windows to the right of the current
 set tabpagemax=15               " Only show 15 tabs
-set tags=./tags,tags;$HOME
+set tags=./tags,tags;$HOME      " Set location for tags files
 set viewoptions=folds,options,cursor,unix,slash " Better Unix / Windows compatibility
 set virtualedit=onemore         " Allow for cursor beyond last character
 set whichwrap=b,s,h,l,<,>,[,]   " Backspace and cursor keys wrap too
-set wildmenu
+set wildmenu                    " Use multiple completion lists as below
 set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
 set winminheight=0              " Windows can be 0 line high
 
-colorscheme apprentice
+colorscheme apprentice          " Enable color scheme
 
 " conditional settings {{{
 if has('persistent_undo')
@@ -381,7 +374,7 @@ nnoremap <leader>w :bd<cr>
 " }}}
 
 " Make {{{
-nnoremap <Leader>m :make<cr>
+nnoremap <Leader>m :make<space>
 " }}}
 
 " Gophermap mappings {{{
