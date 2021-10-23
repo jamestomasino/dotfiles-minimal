@@ -92,13 +92,8 @@ export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 
 # vim
-if command -v nvim > /dev/null 2>&1; then
-  export EDITOR="nvim"
-  alias vim='nvim'
-else
-  export EDITOR="vim"
-  export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-fi
+export EDITOR="vim"
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 
 # less settings
 export PAGER=less
