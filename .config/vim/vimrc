@@ -88,6 +88,21 @@ function! StripTrailingWhitespace()
     endif
 endfunction
 
+function! Print()
+    let &printheader = " "
+    hardcopy > %:r.ps
+    !ps2pdf %:r.ps
+    !rm %:r.ps
+endfunction
+
+function! AsciiMode()
+  syntax off
+  setlocal virtualedit=all
+  setlocal cc=80
+  hi ColorColumn ctermbg=8 guibg=8
+  autocmd BufWritePre * :%s/\s\+$//e
+endfunction
+
 function! MyHighlights() abort
     highlight clear SignColumn      " SignColumn should match background
     highlight clear LineNr          " Current line number row will have same background color in relative mode
