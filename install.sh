@@ -44,19 +44,3 @@ for x in *; do
     tryfiles "$x"
   fi
 done
-
-# neovim Plug plugin manager requires one manual curl
-if [ ! -e "$HOME/.local/share/nvim/site/autoload/plug.vim" ]; then
-  curl -sfLo "$HOME/.local/share/nvim/site/autoload/plug.vim" --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# vim Plug plugin manager requires one manual curl
-if [ ! -e "$HOME/.config/vim/autoload/plug.vim" ]; then
-  curl -sfLo "$HOME/.config/vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-fi
-
-# install fzf if it's not already installed
-if [ ! -d "$HOME/.fzf" ]; then
-  git clone --depth 1 https://github.com/junegunn/fzf.git $HOME/.fzf
-  $HOME/.fzf/install
-fi
