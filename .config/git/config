@@ -21,6 +21,7 @@
 
 [init]
   defaultBranch = main
+	templatedir = ~/config/git/template
 
 [tag]
   gpgsign = true

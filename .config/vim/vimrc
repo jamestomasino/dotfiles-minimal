@@ -31,6 +31,7 @@ Plug 'junegunn/goyo.vim'                  " Full screen writing mode
 
 " Styling
 Plug 'romainl/Apprentice'                 " color scheme
+Plug 'itchyny/landscape.vim'              " color scheme
 
 " Development Tools
 Plug 'tpope/vim-commentary'               " easy comment toggling
@@ -42,6 +43,7 @@ Plug 'dense-analysis/ale'                 " linting for everything
 Plug 'jonsmithers/vim-html-template-literals' " special support for template lit
 Plug 'pangloss/vim-javascript'            " explicit js syntax help for ^
 Plug 'ludovicchabant/vim-gutentags'       " automate ctag generation
+Plug 'preservim/tagbar'
 
 call plug#end()
 
@@ -280,6 +282,10 @@ let g:pencil#softDetectSample = 20
 let g:pencil#softDetectThreshold = 130
 " }}}
 
+" Tagbar {{{
+nmap <F8> :TagbarToggle<CR>
+" }}}
+
 " Local vimrc loading {{{
 let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
@@ -337,7 +343,7 @@ set wildmenu                    " Use multiple completion lists as below
 set wildmode=list:longest,full  " Command <Tab> completion, list matches, then longest common part, then all.
 set winminheight=0              " Windows can be 0 line high
 
-colorscheme apprentice          " Enable color scheme
+colorscheme landscape           " Enable color scheme
 
 " conditional settings {{{
 if has('persistent_undo')

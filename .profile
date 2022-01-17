@@ -76,6 +76,7 @@ export TRACK_DIR="$SYNCTHING_PATH/track"
 export TZ="Atlantic/Reykjavik"
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
+export ZPOOL_VDEV_NAME_PATH=YES
 
 # XDG
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -200,6 +201,8 @@ path "${HOME}/.npm-packages/bin"
 path "${HOME}/go/bin"
 
 # javascript
+export NVM_DIR="$HOME/.local/share/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
   export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
@@ -236,3 +239,4 @@ if [ -f "$HOME/.profile_local" ]; then
   # shellcheck source=/dev/null
   . "$HOME/.profile_local"
 fi
+
