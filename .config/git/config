@@ -179,3 +179,6 @@
 
   # Poor man's force-gpg-sign-tags
   tag = tag -s
+
+  # force-run ctags hook
+	ctags = !.git/hooks/ctags

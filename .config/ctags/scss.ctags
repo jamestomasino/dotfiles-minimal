@@ -1,0 +1,3 @@
+--langdef=sass
+--langmap=sass:.scss
+--regex-sass=/@mixin[ ]*([^ ({]+)/\1/m,mixin/

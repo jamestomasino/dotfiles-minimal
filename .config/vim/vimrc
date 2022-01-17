@@ -42,7 +42,6 @@ Plug 'sheerun/vim-polyglot'               " syntax for everything
 Plug 'dense-analysis/ale'                 " linting for everything
 Plug 'jonsmithers/vim-html-template-literals' " special support for template lit
 Plug 'pangloss/vim-javascript'            " explicit js syntax help for ^
-Plug 'ludovicchabant/vim-gutentags'       " automate ctag generation
 Plug 'preservim/tagbar'
 
 call plug#end()

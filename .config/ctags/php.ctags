@@ -1,0 +1,5 @@
+--PHP-kinds=+cf-v
+--regex-PHP=/(abstract)?\s+class\s+([^ ]+)/\2/c,class,classes/
+--regex-PHP=/(static|abstract|public|protected|private)\s+function\s+(\&\s+)?([^ (]+)/\3/f,function,functions/
+--regex-PHP=/interface\s+([^ ]+)/\1/i,interface,interfaces/
+--regex-PHP=/\$([a-zA-Z_][a-zA-Z0-9_]*)/\1/v/
