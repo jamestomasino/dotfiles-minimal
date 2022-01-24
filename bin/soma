@@ -1,7 +1,7 @@
+#!/bin/sh
 PLAYER=mpv
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 
-#!/bin/sh
 if [ -z "$1" ]; then
   tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
   if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then

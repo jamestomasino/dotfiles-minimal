@@ -80,6 +80,7 @@
 
 [push]
   default = matching
+	followTags = true
 
 [fetch]
   prune = true
