@@ -2,3 +2,4 @@ cache=/home/tomasino/.cache/npm
 tmp=/run/user/1000/npm
 init-module=/home/tomasino/.config/npm/config/npm-init.js
 sign-git-tag=true
+//registry.npmjs.org/:_authToken=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
