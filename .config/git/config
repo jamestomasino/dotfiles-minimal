@@ -20,7 +20,7 @@
   program = gpg
 
 [init]
-  defaultBranch = main
+	defaultBranch = main
 	templatedir = ~/.config/git/template
 
 [tag]
