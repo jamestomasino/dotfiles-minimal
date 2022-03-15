@@ -26,3 +26,7 @@ function julian
 
   printf "%s%s\n" "$todayJd" "$timeJd"
 }
+function julianFormatted
+{
+  printf "%'.3f\n" "$(julian)"
+}
