@@ -142,6 +142,7 @@ alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias t='tmux attach || tmux new'
 alias beat='echo "x = (`date +%s` + 3600) % 86400; scale=3; x / 86.4" | bc'
+alias beatTAI='echo "x = (`date +%s`) % 86400; scale=3; x / 86.4" | bc'
 alias mil='echo "x = (`date +%s`) % 86400; scale=3; x / 86400" | bc'
 alias anonradio='mplayer -quiet http://anonradio.net:8000/anonradio'
 alias tilderadio='mplayer -quiet https://azuracast.tilderadio.org/radio/8000/320k.ogg'
