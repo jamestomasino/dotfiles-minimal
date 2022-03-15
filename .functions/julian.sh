@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function GetJulianDay # year, month, day
+function GetJulianDay
 {
   year=$1
   month=$2
