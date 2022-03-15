@@ -40,7 +40,7 @@ tryfiles () {
 
 # main loop, ignoring some key files
 for x in *; do
-  if [ "$x" != ".git" ] && [ "$x" != "." ] && [ "$x" != ".." ] && [ "$x" != "install.sh" ]&& [ "$x" != "uninstall.sh" ] && [ "$x" != "README.md" ]; then
+  if [ "$x" != ".git" ] &&[ "$x" != ".gitignore" ] && [ "$x" != "." ] && [ "$x" != ".." ] && [ "$x" != "install.sh" ]&& [ "$x" != "uninstall.sh" ] && [ "$x" != "README.md" ]; then
     tryfiles "$x"
   fi
 done
