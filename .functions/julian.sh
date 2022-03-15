@@ -11,7 +11,7 @@ function GetJulianDay # year, month, day
 
 function GetJulianTime
 {
-  mil="$(echo "x = ($(date +%s) - 43200 ) % 86400; scale=3; x / 86400" | bc)"
+  mil="$(echo "x = ($(date +%s) - 43200 ) % 86400; scale=5; x / 86400" | bc)"
   printf "%s" "$mil"
 }
 
