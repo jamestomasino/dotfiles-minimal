@@ -99,6 +99,12 @@ function! Print()
     !rm %:r.ps
 endfunction
 
+function Julian()
+    let l:time =strftime('%s')
+    let l:julian = printf('%.5f', l:time / 86400.0 + 2440587.5)
+    return l:julian
+endfunction
+
 function! AsciiMode()
   syntax off
   setlocal virtualedit=all
@@ -413,7 +419,8 @@ nnoremap <Leader>gm :PencilHard<CR>:set tw=66<CR>
 " }}}
 
 " Insert Date for notes {{{
-nnoremap <Leader>gs :pu! =strftime('%Y-%m-%d')<cr>A<space>
+nnoremap <Leader>ts :pu! =strftime('%Y-%m-%d')<cr>A<space>
+nnoremap <Leader>tj :pu! =Julian()<CR>A<space>
 " }}}
 
 " Move blocks up and down {{{
