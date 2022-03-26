@@ -21,7 +21,6 @@
 
 [init]
 	defaultBranch = main
-	templatedir = ~/.config/git/template
 
 [tag]
   gpgsign = true
@@ -180,6 +179,3 @@
 
   # Poor man's force-gpg-sign-tags
   tag = tag -s
-
-  # force-run ctags hook
-	ctags = !.git/hooks/ctags
