@@ -28,6 +28,7 @@ Plug 'ervandew/supertab'                  " more natural tab-completion
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
 Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
+Plug 'vimwiki/vimwiki'                    " Wiki
 
 " Styling
 Plug 'romainl/Apprentice'                 " color scheme
@@ -42,7 +43,6 @@ Plug 'sheerun/vim-polyglot'               " syntax for everything
 Plug 'dense-analysis/ale'                 " linting for everything
 Plug 'jonsmithers/vim-html-template-literals' " special support for template lit
 Plug 'pangloss/vim-javascript'            " explicit js syntax help for ^
-Plug 'preservim/tagbar'
 
 call plug#end()
 
@@ -205,14 +205,6 @@ if has('autocmd')
         autocmd filetype make setlocal tabstop=4
     augroup END
 
-    augroup bundle_rmarkdown
-        autocmd!
-        autocmd filetype Rmd setlocal expandtab
-        autocmd filetype Rmd setlocal softtabstop=4
-        autocmd filetype Rmd setlocal shiftwidth=4
-        autocmd filetype Rmd setlocal tabstop=4
-    augroup END
-
     augroup bundle_php
         autocmd!
         autocmd filetype php setlocal expandtab
@@ -289,6 +281,11 @@ nmap <F8> :TagbarToggle<CR>
 " Local vimrc loading {{{
 let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
+" }}}
+
+" VimWiki Config {{{
+let g:vimwiki_list = [{'path': '~/.syncthing/wiki/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_map_prefix = '<Leader>W'
 " }}}
 
 " ag support {{{
@@ -402,6 +399,8 @@ nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>s :b#<cr>
 nnoremap <leader>w :bd<cr>
 " }}}
+
+
 
 " Make {{{
 nnoremap <Leader>m :make<space>
