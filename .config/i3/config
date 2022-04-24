@@ -120,11 +120,11 @@ bindsym Mod4+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym Mod4+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
-# Lock screen
-bindsym Mod4+Shift+z exec "i3lock -n"
+# kill all on workspace
+bindsym Mod4+Shift+a focus parent,kill
 
-# Play chime for CYOA
-bindsym Mod4+c exec "play /home/tomasino/sync/syncthing/syncthing/cyoa/choice.mp3"
+# Lock screen
+bindsym Mod4+Shift+z exec "i3lock -n -e -c 000000"
 
 # Media Keys
 bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ '-5%'
