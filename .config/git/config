@@ -75,7 +75,7 @@
   cmd = vim -f -c \"Gvdiffsplit!\" \"$MERGED\"
 
 [branch]
-  autosetupmerge = true
+	autoSetupMerge = always
 
 [push]
   default = matching

@@ -28,7 +28,7 @@ Plug 'ervandew/supertab'                  " more natural tab-completion
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
 Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                  " Full screen writing mode
-Plug 'vimwiki/vimwiki'                    " Wiki
+Plug 'vimwiki/vimwiki', { 'branch' : 'dev' } " Wiki
 
 " Styling
 Plug 'romainl/Apprentice'                 " color scheme
