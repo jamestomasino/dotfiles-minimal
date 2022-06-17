@@ -106,6 +106,7 @@ assign [class="Firefox"] 4
 assign [class="Wire"] 5
 assign [class="Thunar File Manager"] 6
 assign [class="Dropbox"] 8
+assign [class="Signal"] 8
 
 # reload the configuration file
 bindsym Mod4+Shift+c reload
