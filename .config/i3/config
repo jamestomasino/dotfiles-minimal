@@ -107,6 +107,7 @@ assign [class="Wire"] 5
 assign [class="Thunar File Manager"] 6
 assign [class="Dropbox"] 8
 assign [class="Signal"] 8
+assign [class="pcloud"] 10
 
 # reload the configuration file
 bindsym Mod4+Shift+c reload
@@ -165,18 +166,20 @@ new_float pixel 2
 hide_edge_borders none
 font xft:Hack 8
 
-# Startup scripts
+# High DPI & Theming
 exec --no-startup-id /usr/libexec/gsd-xsettings
 exec_always --no-startup-id gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "[{'Gdk/WindowScalingFactor', <2>}, {'Xft/DPI', <196608>}, {'Xcursor/Size', <25000>}, {'Xcursor/size', <25000>}]"
 exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-size 25
 exec_always --no-startup-id xrdb -merge /home/tomasino/.Xresources
 exec_always --no-startup-id xrandr --dpi 220
 exec xrandr --dpi 220
+
+# Startup scripts
 exec --no-startup-id feh --bg-scale /home/tomasino/Pictures/background.jpg
-exec --no-startup-id nextcloud
-exec --no-startup-id SpiderOakONE
 exec --no-startup-id wire-desktop
-exec --no-startup-id i3-msg 'workspace 1; exec st -e /bin/bash --login'
+exec --no-startup-id dropbox start
+exec --no-startup-id pcloud
+exec --no-startup-id i3-msg 'workspace 1; exec kitty'
 
 ## Base16 Default Dark
 # Author: Chris Kempson (http://chriskempson.com)
