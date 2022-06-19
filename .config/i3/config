@@ -170,7 +170,8 @@ exec --no-startup-id /usr/libexec/gsd-xsettings
 exec_always --no-startup-id gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "[{'Gdk/WindowScalingFactor', <2>}, {'Xft/DPI', <196608>}, {'Xcursor/Size', <25000>}, {'Xcursor/size', <25000>}]"
 exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-size 25
 exec_always --no-startup-id xrdb -merge /home/tomasino/.Xresources
-exec_always --no-startup-id xrandr --dpi 192
+exec_always --no-startup-id xrandr --dpi 220
+exec xrandr --dpi 220
 exec --no-startup-id feh --bg-scale /home/tomasino/Pictures/background.jpg
 exec --no-startup-id nextcloud
 exec --no-startup-id SpiderOakONE
