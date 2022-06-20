@@ -78,7 +78,7 @@
 	autoSetupMerge = always
 
 [push]
-  default = matching
+  default = simple
 	followTags = true
 
 [fetch]
