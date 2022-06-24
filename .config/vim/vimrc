@@ -297,6 +297,7 @@ endif
 
 " sets {{{
 set autoindent                  " Indent at the same level of the previous line
+set vb t_vb=                    " Disable visual bell
 set backspace=indent,eol,start  " Backspace for dummies
 set background=light            " Use dark theme
 set backup                      " Backups are nice ...
