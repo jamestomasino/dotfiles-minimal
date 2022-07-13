@@ -23,6 +23,7 @@ Plug 'embear/vim-localvimrc'              " override vimrc per repo
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " install fzf
 Plug 'junegunn/fzf.vim'                   " fzf vim integration
 Plug 'ervandew/supertab'                  " more natural tab-completion
+Plug 'inkarkat/vim-ReplaceWithRegister'   " smarter replacement from register
 
 " Writing/Authoring Tools
 Plug 'reedes/vim-pencil'                  " Super-powered writing things
