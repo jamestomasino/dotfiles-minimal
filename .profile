@@ -60,7 +60,7 @@ export WWW_HOME="gopher://gopher.black"
 # sync
 export SYNCTHING_PATH="$HOME/.syncthing"
 export SSH_ENV="$HOME/.ssh/environment"
-export SSH_AUTH_SOCK=~/.ssh/ssh-agent.$HOSTNAME.sock
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
 # lastpass
 export LPASS_HOME="$HOME/.lpass"
