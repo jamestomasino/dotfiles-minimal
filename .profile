@@ -95,7 +95,6 @@ export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
 export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
-export NPM_CONFIG_TMP=$XDG_RUNTIME_DIR/npm
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 
@@ -201,11 +200,11 @@ path "/snap/bin"
 path "/tilde/bin"
 path "${HOME}/bin"
 path "${HOME}/.yarn/bin"
+path "${HOME}/.npm-packages/bin"
 path "${HOME}/.config/yarn/global/node_modules/.bin"
 path "${HOME}/.node/bin"
 path "${HOME}/.local/bin"
 path "${HOME}/.fzf/bin"
-path "${HOME}/.npm-packages/bin"
 path "${HOME}/go/bin"
 
 # javascript
@@ -215,9 +214,6 @@ if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
   export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
   export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
-  [ -d "$HOME/.yarn" ] && PATH=${PATH}:${HOME}/.yarn/bin
-  [ -d "$HOME/.config/yarn" ] && PATH=${PATH}:${HOME}/.config/yarn/global/node_modules/.bin
-  [ -d "$HOME/.node" ] && PATH=${PATH}:${HOME}/.node/bin
 fi
 
 # perl 5
