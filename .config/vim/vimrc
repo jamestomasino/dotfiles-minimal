@@ -285,8 +285,9 @@ let g:localvimrc_ask=0
 " }}}
 
 " VimWiki Config {{{
-let g:vimwiki_list = [{'path': '~/.syncthing/wiki/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'}]
+let g:vimwiki_list = [{'path': '~/.syncthing/wiki/', 'syntax': 'markdown', 'ext': '.wiki', 'links_space_char': '-'}]
 let g:vimwiki_map_prefix = '<Leader>W'
+let g:vimwiki_global_ext = 0
 " }}}
 
 " ag support {{{
