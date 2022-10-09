@@ -151,6 +151,7 @@ alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/l
 alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
 alias getplaylist="youtube-dl -x --audio-quality 0 --audio-format mp3 --yes-playlist"
+alias wiki="vim -c VimwikiIndex"
 
 # PROMPT COMMANDS
 PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
