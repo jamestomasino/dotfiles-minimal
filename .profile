@@ -203,6 +203,8 @@ path "${HOME}/.node/bin"
 path "${HOME}/.local/bin"
 path "${HOME}/.fzf/bin"
 path "${HOME}/go/bin"
+path "/var/lib/flatpak/exports/share"
+path "${HOME}/.local/share/flatpak/exports/share"
 
 # javascript
 export NVM_DIR="$HOME/.local/share/nvm"

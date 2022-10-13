@@ -1,0 +1,51 @@
+%------------
+% Colors
+%------------
+color article           "white"  "black"
+color author            "white"  "magenta"
+color boldtext          "white"  "brightblue"
+color box               "white"  "black"
+color cursor            "white"  "gray"
+color description       "white"  "black"
+color error             "white"  "red"
+color frame             "blue"  "yellow"
+color group             "white"  "black"
+color grouplens_display "white"  "black"
+color header_name       "white"  "black"
+color header_number     "white"  "black"
+color headers           "white"  "magenta"
+color high_score        "white"  "red"
+color italicstext       "white"  "magenta"
+color menu              "blue"  "yellow"
+color menu_press        "yellow"  "black"
+color normal            "white"  "black"
+color pgpsignature      "white"  "black"
+color quotes            "white"  "red"
+color quotes1           "white"  "magenta"
+color quotes2           "white"  "red"
+color quotes3           "white"  "magenta"
+color quotes4           "white"  "red"
+color quotes5           "white"  "magenta"
+color quotes6           "white"  "red"
+color quotes7           "white"  "magenta"
+color response_char     "white"  "yellow"
+color signature         "white"  "black"
+color selection         "blue"  "yellow"
+color status            "blue"  "yellow"
+color subject           "white"  "black"
+color thread_number     "white"  "black"
+color tilde             "white"  "black"
+color tree              "white"  "red"
+color underlinetext     "white"  "gray"
+color verbatim          "white"  "cyan"
+
+% User details and munged hostname:
+set realname "James Tomasino"
+set username "tomasino"
+set hostname "cosmic.voyage"
+
+% Reply to a different but real email address:
+set replyto  "james@tomasino.org"
+
+% Set your favorite editor:
+set editor_command "vim '+set tw=72' +%d '%s'"

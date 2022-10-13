@@ -1,0 +1,22 @@
+#!/bin/sh
+
+server="$1"
+newsfileroot="${HOME}/.jnewsrc"
+
+if [ "$server" = "usenet" ]; then
+  newsfile="${newsfileroot}-usenet"
+  NNTPSERVER="nntp.aioe.org"
+  export NNTPSERVER
+fi
+
+if [ -z "$server" ]; then
+  newsfile="${newsfileroot}-tilde"
+  NNTPSERVER="localhost"
+  export NNTPSERVER
+fi
+
+if [ ! -f "$newsfile" ]; then
+  slrn --create -f "$newsfile"
+  slrn -d -f "$newsfile" -i "${HOME}/.config/slrn/slrnrc"
+fi
+slrn -f "$newsfile" -i "${HOME}/.config/slrn/slrnrc"
