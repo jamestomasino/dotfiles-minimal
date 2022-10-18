@@ -20,7 +20,7 @@
   program = gpg
 
 [init]
-	defaultBranch = main
+  defaultBranch = main
 
 [tag]
   gpgsign = true
@@ -75,11 +75,11 @@
   cmd = vim -f -c \"Gvdiffsplit!\" \"$MERGED\"
 
 [branch]
-	autoSetupMerge = always
+  autoSetupMerge = always
 
 [push]
-	default = current
-	followTags = true
+  default = nothing
+  followTags = true
 
 [fetch]
   prune = true
@@ -112,9 +112,6 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
-
-[http "https://git.gsw.agency"]
-  sslVerify = false
 
 [alias]
 
@@ -176,6 +173,3 @@
   # https://github.com/prabirshrestha/ProfilesAndSettings/blob/master/.gitconfig
   # show tags and any tag annotation (tito adds tag annotations for example)
   tags = tag -n1 -l
-
-  # Poor man's force-gpg-sign-tags
-  tag = tag -s
