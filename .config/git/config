@@ -78,8 +78,9 @@
   autoSetupMerge = always
 
 [push]
-  default = nothing
   followTags = true
+  default = current
+  autoSetupRemote = true
 
 [fetch]
   prune = true
@@ -129,6 +130,9 @@
 
   # remove all remote branches that have been merged
   removeallmerged = "!git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d"
+
+  # remove all files from repo that are ignored by gitignore
+  removeignored = "!git rm --cached $(git ls-files -i -c -X .gitignore)"
 
   # push to all remotes
   pushall = "!git remote | xargs -L1 git push --all"
