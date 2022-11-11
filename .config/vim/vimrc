@@ -128,7 +128,7 @@ if has('autocmd')
 
     augroup func_whitespace
         autocmd!
-        autocmd FileType c,markdown,cpp,java,go,php,javascript,python,twig,text,xml,yml autocmd BufWritePre <buffer> call StripTrailingWhitespace()
+        autocmd FileType c,markdown,vimwiki,cpp,java,go,php,javascript,python,twig,text,xml,yml autocmd BufWritePre <buffer> call StripTrailingWhitespace()
     augroup END
 
     augroup type_gitcommit
@@ -288,6 +288,7 @@ let g:localvimrc_ask=0
 let g:vimwiki_list = [{'path': '~/.syncthing/wiki/', 'syntax': 'markdown', 'ext': '.wiki', 'links_space_char': '-'}]
 let g:vimwiki_map_prefix = '<Leader>W'
 let g:vimwiki_global_ext = 0
+let g:vimwiki_auto_chdir = 1
 " }}}
 
 " ag support {{{
