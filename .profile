@@ -215,6 +215,11 @@ if command -v node > /dev/null 2>&1; then
   export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
 fi
 
+# deno
+export DENO_INSTALL="/home/tomasino/.deno"
+path "$DENO_INSTALL/bin"
+
+
 # perl 5
 if [ -d "${HOME}/perl5" ]; then
   PATH=${PATH}:${HOME}/perl5/bin
