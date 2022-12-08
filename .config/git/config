@@ -177,3 +177,4 @@
   # https://github.com/prabirshrestha/ProfilesAndSettings/blob/master/.gitconfig
   # show tags and any tag annotation (tito adds tag annotations for example)
   tags = tag -n1 -l
+	coffee = !curl -L https://git.io/coffee
