@@ -74,9 +74,9 @@ export CONTACTS_DIR="$SYNCTHING_PATH/contacts"
 export TRACK_DIR="$SYNCTHING_PATH/track"
 
 # system
-export TZ="Atlantic/Reykjavik"
+export TZ=":Etc/UTC"
 export LANG="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
+export LC_TIME="en_GB.UTF-8"
 export ZPOOL_VDEV_NAME_PATH=YES
 
 # XDG
