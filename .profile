@@ -62,9 +62,6 @@ export SYNCTHING_PATH="$HOME/.syncthing"
 export SSH_ENV="$HOME/.ssh/environment"
 export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR}/ssh-agent.socket"
 
-# lastpass
-export LPASS_HOME="$HOME/.lpass"
-export LPASS_DISABLE_PINENTRY=1
 export SSH_KEY_LOCATIONS="${HOME}/.ssh/ ${HOME}/keys/personal/ssh/ ${HOME}/keys/work/ssh/"
 
 # personal app storage paths
@@ -152,6 +149,7 @@ alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestre
 alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
 alias getplaylist="youtube-dl -x --audio-quality 0 --audio-format mp3 --yes-playlist"
 alias wiki="vim -c VimwikiIndex"
+alias mosh="export LC_ALL=\"en_US.UTF8\" && mosh"
 
 # PROMPT COMMANDS
 PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
