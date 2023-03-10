@@ -91,6 +91,10 @@ export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 
+# GPG
+GPG_TTY=$(tty)
+export GPG_TTY
+
 # vim
 export EDITOR="vim"
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
