@@ -8,7 +8,7 @@ export HISTIGNORE="clear:keybase*:lssh"
 # colors
 export LSCOLORS=gxfxcxdxbxggedabagacad
 export CLICOLOR=1
-export TERM="xterm-256color"
+export TERM="screen-256color"
 export COLORTERM=24bit
 LESS_TERMCAP_mb=$(tput bold; tput setaf 2); export LESS_TERMCAP_mb
 LESS_TERMCAP_md=$(tput bold; tput setaf 4); export LESS_TERMCAP_md
