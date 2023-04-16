@@ -10,10 +10,10 @@ gsum() {
     commit_message="$(sgpt "${query}")"
     printf "%s\n" "$commit_message"
     read -rp "Do you want to commit your changes with this commit message? [y/N] " response
-    if [[ $response =~ ^[Yy]$ ]]; then
+    if [ "$response" != "${response#[Yy]}" ] ; then
       git commit -m "$commit_message"
     else
-      echo "Commit cancelled."
+      printf "Commit cancelled.\n"
     fi
   fi
 }
