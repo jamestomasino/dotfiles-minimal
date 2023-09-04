@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# scarlet="alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo"
+# pcisink="alsa_output.pci-0000_0b_00.4.analog-stereo"
+# bluesink="bluez_sink.AC_80_0A_14_01_9F.a2dp_sink"
+
+# find input and output devices, assuming only 1
+mysink=$(pactl list short sinks | grep 'RUNNING' | head -n 1 | awk '{print $2}')
+mysource=$(pactl list short sources | grep 'RUNNING' | grep 'input' | head -n 1 | awk '{print $2}')
+
+# Cleanup
+pacmd unload-module module-echo-cancel
+pacmd unload-module module-remap-source
+
+# Remap mono mic to stereo
+pacmd load-module module-remap-source master=${mysource} master_channel_map=front-left,front-left channel_map=front-left,front-right
+
+# Echo Cancel (fixes volume too)
+pacmd load-module module-echo-cancel source_master=${mysource}.remapped sink_master=${mysink}
+
+# Set default devices
+pacmd set-default-source ${mysource}.remapped.echo-cancel
+pacmd set-default-sink ${mysink}
+
+# Set default volume (needs a brief delay)
+sleep 1
+pactl set-sink-volume @DEFAULT_SINK@ 60%
+pactl set-source-volume "${mysource}.remapped.echo-cancel" 90%
