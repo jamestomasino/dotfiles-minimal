@@ -151,8 +151,8 @@ alias anonradio='mplayer -quiet http://anonradio.net:8000/anonradio'
 alias tilderadio='mplayer -quiet https://azuracast.tilderadio.org/radio/8000/320k.ogg'
 alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
 alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
-alias getmusic="youtube-dl -x --audio-quality 0 --audio-format mp3"
-alias getplaylist="youtube-dl -x --audio-quality 0 --audio-format mp3 --yes-playlist"
+alias getmusic="yt-dlp -x --audio-quality 0 --audio-format mp3"
+alias getplaylist="yt-dlp -x --audio-quality 0 --audio-format mp3 --yes-playlist"
 alias wiki="vim -c VimwikiIndex"
 alias mosh="export LC_ALL=\"en_US.UTF8\" && mosh"
 alias proxy="ssh -D 1337 -q -C -N"

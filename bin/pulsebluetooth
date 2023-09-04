@@ -1,0 +1,26 @@
+#!/bin/sh
+
+scarlet="alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo"
+pcisink="alsa_output.pci-0000_0b_00.4.analog-stereo"
+bluesink="bluez_sink.AC_80_0A_14_01_9F.a2dp_sink"
+
+if [ "pci" = "$1" ]; then
+  mastersink=$picsink
+else
+  mastersink=$bluesink
+fi
+
+
+# Cleanup
+pacmd unload-module module-remap-source
+pacmd unload-module module-echo-cancel
+
+# Remap to stereo
+pacmd load-module module-remap-source master=${scarlet} master_channel_map=front-left,front-left channel_map=front-left,front-right
+
+# Echo Cancel (fixes volume too)
+pacmd load-module module-echo-cancel source_master=${scarlet}.remapped sink_master=${mastersink}
+
+# Set defaults
+pacmd set-default-source ${scarlet}.remapped.echo-cancel
+pacmd set-default-sink ${mastersink}
