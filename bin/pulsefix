@@ -5,8 +5,10 @@
 # bluesink="bluez_sink.AC_80_0A_14_01_9F.a2dp_sink"
 
 # find input and output devices, assuming only 1
-mysink=$(pactl list short sinks | grep 'RUNNING' | head -n 1 | awk '{print $2}')
-mysource=$(pactl list short sources | grep 'RUNNING' | grep 'input' | head -n 1 | awk '{print $2}')
+# mysink=$(pactl list short sinks | grep 'RUNNING' | head -n 1 | awk '{print $2}')
+# mysource=$(pactl list short sources | grep 'RUNNING' | grep 'input' | head -n 1 | awk '{print $2}')
+mysink="bluez_sink.AC_80_0A_14_01_9F.a2dp_sink"
+mysource="alsa_input.usb-Focusrite_Scarlett_2i2_USB-00.analog-stereo"
 
 # Cleanup
 pacmd unload-module module-echo-cancel

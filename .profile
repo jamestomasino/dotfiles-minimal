@@ -3,7 +3,7 @@ export HISTFILE="$HOME/.history"
 export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
-export HISTIGNORE="clear:keybase*:lssh"
+export HISTIGNORE="clear:keybase*:bssh"
 
 # colors
 export LSCOLORS=gxfxcxdxbxggedabagacad
