@@ -170,6 +170,7 @@ if has('autocmd')
         autocmd filetype javascript setlocal tabstop=2
         autocmd filetype javascript setlocal expandtab
         autocmd filetype javascript setlocal foldmethod=syntax
+        let b:ale_linters = {'javascript': ['eslint']}
     augroup END
 
     augroup type_vue
@@ -233,6 +234,7 @@ if has('autocmd')
     augroup markdown
         autocmd!
         autocmd filetype markdown let g:indentLine_enabled = 0
+        autocmd filetype markdown setlocal tw=80
     augroup END
 
     augroup mycolors

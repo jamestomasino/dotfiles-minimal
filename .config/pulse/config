@@ -1,1 +1,4 @@
 cookie-file = ${XDG_CACHE_HOME}/pulse/cookie
+
+# Switch on connect
+load-module module-switch-on-connect
