@@ -21,11 +21,3 @@ BASH_ENV="/home/tomasino/.profile"
 ## Linking strategy
 
 The install process will run through this repository recursively looking for individual files. It will link any files into the home directory on an individual file-by-file basis. If the corresponding folder doesn't exist yet, it will be created. The purpose of going file-by-file is to avoid linking any directories and accidentally scooping up other files that may be added there over time.
-
-Over time it is a goal of this repository to move as many of these dotfiles as possible out of the top-level to avoid polluting the home folder.
-
-## Top-level dotfiles
-
-Some configuration files are still stored at the top level and do not respect `XDG_CONFIG_HOME` or even a hard-coded `~/.config`. Several of these have active issues to correct that.
-
-- [.ctags](https://github.com/universal-ctags/ctags/issues/89)
