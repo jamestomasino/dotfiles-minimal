@@ -5,18 +5,20 @@ newsfileroot="${HOME}/.jnewsrc"
 
 if [ "$server" = "usenet" ]; then
   newsfile="${newsfileroot}-usenet"
-  NNTPSERVER="nntp.aioe.org"
+  NNTPSERVER="news.eternal-september.org"
+  SLRNCONFIG="${HOME}/.slrnrc-usenet"
   export NNTPSERVER
 fi
 
 if [ -z "$server" ]; then
   newsfile="${newsfileroot}-tilde"
   NNTPSERVER="localhost"
+  SLRNCONFIG="${HOME}/.slrnrc-tilde"
   export NNTPSERVER
 fi
 
 if [ ! -f "$newsfile" ]; then
   slrn --create -f "$newsfile"
-  slrn -d -f "$newsfile" -i "${HOME}/.config/slrn/slrnrc"
+  slrn -d -f "$newsfile" -i "${SLRNCONFIG}"
 fi
-slrn -f "$newsfile" -i "${HOME}/.config/slrn/slrnrc"
+slrn -f "$newsfile" -i "${SLRNCONFIG}"
