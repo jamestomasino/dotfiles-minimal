@@ -1,6 +1,0 @@
-#!/bin/sh
-if command -v dircolors > /dev/null 2>&1; then
-  eval "$(dircolors -b "$HOME/.config/ls_colors")"
-else
-  export LSCOLORS=gxfxcxdxbxggedabagacad
-fi
