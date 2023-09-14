@@ -91,6 +91,7 @@ export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
+alias ag='ag --path-to-ignore $XDG_CONFIG_HOME/ag/ignore'
 
 # GPG
 GPG_TTY=$(tty)

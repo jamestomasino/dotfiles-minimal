@@ -28,5 +28,4 @@ Over time it is a goal of this repository to move as many of these dotfiles as p
 
 Some configuration files are still stored at the top level and do not respect `XDG_CONFIG_HOME` or even a hard-coded `~/.config`. Several of these have active issues to correct that.
 
-- [.agignore](https://github.com/ggreer/the_silver_searcher/issues/1020)
 - [.ctags](https://github.com/universal-ctags/ctags/issues/89)
