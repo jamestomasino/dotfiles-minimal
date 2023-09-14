@@ -91,6 +91,7 @@ export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
+export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 alias ag='ag --path-to-ignore $XDG_CONFIG_HOME/ag/ignore'
 
 # GPG
@@ -99,16 +100,13 @@ export GPG_TTY
 
 # vim
 export EDITOR="vim"
-export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+set -o vi
 
 # less settings
 export PAGER=less
 
 # umask liberal
 umask 0022
-
-# use vim on the command line
-set -o vi
 
 # Load functions
 if [ -d "${HOME}/.functions" ]; then
@@ -127,6 +125,14 @@ else
   alias ls='ls --color'
 fi
 
+# Command overwrites
+alias mkdir='mkdir -p'
+alias grep='grep --color=auto'
+alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
+alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
+alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
+alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
+# Directory Helpers
 alias lsd='ls -Gl | grep "^d"'
 alias cd..="cd .."
 alias ..="cd .."
@@ -134,27 +140,24 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
-alias grep='grep --color=auto'
-alias mkdir='mkdir -p'
-alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
-alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
+# Time Aliases
 alias utc='date -u +%H:%M:%S'
-alias vimr='vim -u NONE -U NONE -i NONE'
-alias gs="git status"
-alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
-alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
-alias t='tmux attach || tmux new'
 alias beat='echo "x = ($(date +%s) + 3600) % 86400; scale=3; x / 86.4" | bc'
 alias beatTAI='echo "x = $(date +%s) % 86400; scale=3; x / 86.4" | bc'
 alias mil='echo "x = $(date +%s) % 86400; scale=3; x / 86400" | bc'
 alias julian='echo "x = $(date +%s); scale=5; x / 86400 + 2440587.5" | bc'
-alias anonradio='mplayer -quiet http://anonradio.net:8000/anonradio'
-alias tilderadio='mplayer -quiet https://azuracast.tilderadio.org/radio/8000/320k.ogg'
-alias sleepbot='mplayer -quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
-alias wrti="mplayer -quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
+# Music Aliases
+alias anonradio='mpv --really-quiet http://anonradio.net:8000/anonradio'
+alias tilderadio='mpv --really-quiet https://azuracast.tilderadio.org/radio/8000/320k.ogg'
+alias sleepbot='mpv --really-quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
+alias wrti="mpv --really-quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
 alias getmusic="yt-dlp -x --audio-quality 0 --audio-format mp3"
 alias getplaylist="yt-dlp -x --audio-quality 0 --audio-format mp3 --yes-playlist"
+# General Helpers
+alias vimr='vim -u NONE -U NONE -i NONE'
 alias wiki="vim -c VimwikiIndex"
+alias gs="git status"
+alias t='tmux attach || tmux new'
 alias mosh="export LC_ALL=\"en_US.UTF8\" && mosh"
 alias proxy="ssh -D 1337 -q -C -N"
 
@@ -212,8 +215,10 @@ path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
 
 # javascript
-export NVM_DIR="$HOME/.local/share/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+if [ -d "${HOME}/.local/share/nvm" ]; then
+  export NVM_DIR="$HOME/.local/share/nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+fi
 if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
   export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
@@ -221,17 +226,18 @@ if command -v node > /dev/null 2>&1; then
 fi
 
 # deno
-export DENO_INSTALL="/home/tomasino/.deno"
-path "$DENO_INSTALL/bin"
-
+if [ -d "${HOME}/.deno" ]; then
+  export DENO_INSTALL="${HOME}/.deno"
+  path "$DENO_INSTALL/bin"
+fi
 
 # perl 5
 if [ -d "${HOME}/perl5" ]; then
-  PATH=${PATH}:${HOME}/perl5/bin
-  export PERL5LIB="/home/tomasino/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
-  export PERL_LOCAL_LIB_ROOT="/home/tomasino/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
-  export PERL_MB_OPT="--install_base 'home/tomasino/perl5'"
-  export PERL_MM_OPT="INSTALL_BASE=/home/tomasino/perl5"
+  path "${HOME}/perl5/bin"
+  export PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+  export PERL_LOCAL_LIB_ROOT="${HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+  export PERL_MB_OPT="--install_base '${HOME}/perl5'"
+  export PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"
   if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]; then
     # shellcheck source=/dev/null
     . "$HOME/perl5/perlbrew/etc/bashrc"
@@ -241,10 +247,10 @@ fi
 # android sdk
 if [ -d "${HOME}/sdk/" ]; then
   export ANDROID_HOME="/usr/lib/android-sdk"
-  PATH=${PATH}:${ANDROID_HOME}/tools
-  PATH=${PATH}:${ANDROID_HOME}/tools/bin
-  PATH=${PATH}:${ANDROID_HOME}/platform-tools
-  PATH=${PATH}:${ANDROID_HOME}/build-tools/25.0.3
+  path "${ANDROID_HOME}/tools"
+  path "${ANDROID_HOME}/tools/bin"
+  path "${ANDROID_HOME}/platform-tools"
+  path "${ANDROID_HOME}/build-tools/25.0.3"
 fi
 
 # Load local system overrides
