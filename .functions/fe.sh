@@ -6,6 +6,12 @@
 fe() {
   IFS='
 '
-  files=$(fzf --query="$1" --multi --select-1 --exit-0)
+  if command -v batcat > /dev/null 2>&1; then
+    files=$(fzf --query="$1" --multi --select-1 --exit-0 --preview "batcat --theme Dracula --color=always {}")
+  elif command -v bat > /dev/null 2>&1; then
+    files=$(fzf --query="$1" --multi --select-1 --exit-0 --preview "bat --theme Dracula --color=always {}")
+  else
+    files=$(fzf --query="$1" --multi --select-1 --exit-0)
+  fi
   [ -n "$files" ] && ${EDITOR} "${files}"
 }

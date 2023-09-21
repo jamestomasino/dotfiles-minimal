@@ -93,9 +93,6 @@ export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
 alias ag='ag --path-to-ignore $XDG_CONFIG_HOME/ag/ignore'
-if command -v batcat > /dev/null 2>&1; then
-  alias e='fzf -m --bind ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all --print0 --preview "batcat --theme Dracula --color=always {}" | xargs -0 -o $EDITOR'
-fi
 
 # GPG
 GPG_TTY=$(tty)
