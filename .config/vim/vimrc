@@ -328,7 +328,16 @@ let g:localvimrc_ask=0
 " }}}
 
 " VimWiki Config {{{
-let g:vimwiki_list = [{'path': '~/.syncthing/wiki/', 'syntax': 'markdown', 'ext': '.wiki', 'links_space_char': '-'}]
+let g:vimwiki_list = [
+            \{'path': '~/.syncthing/wiki/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/computers/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/crafts/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/films/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/games/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/music/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/writing/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/work/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+            \{'path': '~/.syncthing/wiki/books/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'}]
 let g:vimwiki_map_prefix = '<Leader>W'
 let g:vimwiki_global_ext = 0
 let g:vimwiki_auto_chdir = 1
