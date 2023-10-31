@@ -1,0 +1,2 @@
+#!/bin/sh
+yt-dlp -o- "$1" | mpv --no-video - > /dev/null 2> /dev/null
