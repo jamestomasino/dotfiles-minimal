@@ -1,6 +1,0 @@
-#!/bin/sh
-if [ -z "$1" ]; then
-    echo set volume "100" | socat - "$XDG_CONFIG_HOME/mpv/socket"
-else
-    echo set volume "$1" | socat - "$XDG_CONFIG_HOME/mpv/socket"
-fi

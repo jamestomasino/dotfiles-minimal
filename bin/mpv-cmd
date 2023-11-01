@@ -1,6 +1,62 @@
 #!/bin/sh
-if [ -z "$1" ]; then
+if [ -z "$*" ]; then
     echo "Missing command param. See https://mpv.io/manual/master/#list-of-input-commands"
+elif [ "$1" = "list" ]; then
+    cat << EOF
+ignore
+seek <target> [<flags>]
+revert-seek [<flags>]
+frame-step
+frame-back-step
+set <name> <value>
+del <name>
+add <name> [<value>]
+cycle <name> [<value>]
+multiply <name> <value>
+screenshot <flags>
+screenshot-to-file <filename> <flags>
+playlist-next <flags>
+playlist-prev <flags>
+playlist-next-playlist
+playlist-prev-playlist
+playlist-play-index <integer|current|none>
+loadfile <url> [<flags> [<options>]]
+loadlist <url> [<flags>]
+playlist-clear
+playlist-remove <index>
+playlist-move <index1> <index2>
+playlist-shuffle
+playlist-unshuffle
+run <command> [<arg1> [<arg2> [...]]]
+subprocess
+quit [<code>]
+quit-watch-later [<code>]
+sub-add <url> [<flags> [<title> [<lang>]]]
+sub-remove [<id>]
+sub-reload [<id>]
+sub-step <skip> <flags>
+sub-seek <skip> <flags>
+print-text <text>
+show-text <text> [<duration>|-1 [<level>]]
+expand-text <string>
+expand-path "<string>"
+show-progress
+write-watch-later-config
+delete-watch-later-config [<filename>]
+stop [<flags>]
+mouse <x> <y> [<button> [<mode>]]
+keypress <name>
+keydown <name>
+keyup [<name>]
+keybind <name> <command>
+audio-add <url> [<flags> [<title> [<lang>]]]
+audio-remove [<id>]
+audio-reload [<id>]
+video-add <url> [<flags> [<title> [<lang> [<albumart>]]]]
+video-remove [<id>]
+video-reload [<id>]
+rescan-external-files [<mode>]
+EOF
 else
-    echo "$1" | socat - "$XDG_CONFIG_HOME/mpv/socket"
+    echo "$*" | socat - "$XDG_CONFIG_HOME/mpv/socket"
 fi
