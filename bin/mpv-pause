@@ -1,0 +1,2 @@
+#!/bin/sh
+echo cycle pause | socat - "$XDG_CONFIG_HOME/mpv/socket"
