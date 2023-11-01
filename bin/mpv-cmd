@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -z "$1" ]; then
+    echo "Missing command param"
+else
+    echo "$1" | socat - "$XDG_CONFIG_HOME/mpv/socket"
+fi
