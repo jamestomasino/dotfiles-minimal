@@ -1,8 +1,6 @@
 #!/bin/sh
-if [ -z "$*" ]; then
-    echo "Missing command param. See https://mpv.io/manual/master/#list-of-input-commands"
-elif [ "$1" = "list" ]; then
-    cat << EOF
+
+options=$(cat<<EOF
 ignore
 seek <target> [<flags>]
 revert-seek [<flags>]
@@ -57,6 +55,12 @@ video-remove [<id>]
 video-reload [<id>]
 rescan-external-files [<mode>]
 EOF
+)
+
+if [ -z "$*" ]; then
+    echo "Missing command param. Try 'help' or see https://mpv.io/manual/master/#list-of-input-commands"
+elif [ "$1" = "help" ]; then
+    echo "$options"
 else
     echo "$*" | socat - "$XDG_CONFIG_HOME/mpv/socket"
 fi
