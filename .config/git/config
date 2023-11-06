@@ -108,6 +108,16 @@
   changed = green
   untracked = cyan
 
+[safe]
+  directory = /var/cosmic
+  directory = /opt/cosmic-gemini
+
+[notes]
+  displayRef = refs/notes/*
+
+[remote "origin"]
+  fetch = +refs/notes/*:refs/notes/*
+
 [alias]
 
   # squash entire repo to a single commit (requires --force to push)
@@ -172,6 +182,3 @@
   # show tags and any tag annotation (tito adds tag annotations for example)
   tags = tag -n1 -l
 	coffee = !curl -L https://git.io/coffee
-[safe]
-	directory = /var/cosmic
-	directory = /opt/cosmic-gemini
