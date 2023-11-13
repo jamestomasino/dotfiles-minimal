@@ -70,6 +70,7 @@ export TODO="$SYNCTHING_PATH/todo/personal.txt"
 export NOTE_DIR="$SYNCTHING_PATH/notes"
 export CONTACTS_DIR="$SYNCTHING_PATH/contacts"
 export TRACK_DIR="$SYNCTHING_PATH/track"
+export AUDIOBOOKS="${HOME}/pCloudDrive/Audiobooks/"
 
 # system
 export TZ=":Etc/UTC"
