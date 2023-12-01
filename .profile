@@ -1,5 +1,6 @@
 # history
 export HISTFILE="$HOME/.history"
+export HISTTIMEFORMAT="%F %T "
 export HISTCONTRAL=ignoredups
 export HISTFILESIZE=10000
 export HISTSIZE=10000
