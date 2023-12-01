@@ -2,9 +2,9 @@
 export HISTFILE="$HOME/.history"
 export HISTTIMEFORMAT="%F %T "
 export HISTCONTRAL=ignoredups
-export HISTFILESIZE=10000
-export HISTSIZE=10000
-export HISTIGNORE="clear:keybase*:bssh"
+export HISTFILESIZE=100000
+export HISTSIZE=100000
+export HISTIGNORE="clear:keybase*:bssh:exit"
 
 # colors
 export LSCOLORS=gxfxcxdxbxggedabagacad
