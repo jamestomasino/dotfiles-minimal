@@ -148,11 +148,6 @@ alias beat='echo "x = ($(date +%s) + 3600) % 86400; scale=3; x / 86.4" | bc'
 alias beatTAI='echo "x = $(date +%s) % 86400; scale=3; x / 86.4" | bc'
 alias mil='echo "x = $(date +%s) % 86400; scale=3; x / 86400" | bc'
 alias julian='echo "x = $(date +%s); scale=5; x / 86400 + 2440587.5" | bc'
-# Music Aliases
-alias anonradio='mpv --really-quiet http://anonradio.net:8000/anonradio'
-alias tilderadio='mpv --really-quiet https://azuracast.tilderadio.org/radio/8000/320k.ogg'
-alias sleepbot='mpv --really-quiet -playlist "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"'
-alias wrti="mpv --really-quiet http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
 alias getmusic="yt-dlp -x --audio-quality 0 --audio-format mp3"
 alias getplaylist="yt-dlp -x --audio-quality 0 --audio-format mp3 --yes-playlist"
 # General Helpers
