@@ -1,0 +1,56 @@
+#!/bin/sh
+PLAYER="mpv --quiet"
+XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+
+if [ -z "$1" ]; then
+  options=$(cat<<EOF
+anonradio
+tilderadio
+sleepbot
+wrti
+classicfm
+classicfmchristmas
+soma
+EOF
+)
+
+  select="$(printf "$options" | fzf \
+    --multi \
+    --select-1 \
+    --exit-0 )"
+else
+  select="$1"
+fi
+
+if [ -n "$select" ]; then
+  if [ "anonradio" = $select ]; then
+    ${PLAYER} "http://anonradio.net:8000/anonradio"
+  elif [ "tilderadio" = $select ]; then
+    ${PLAYER} "https://azuracast.tilderadio.org/radio/8000/320k.ogg"
+  elif [ "sleepbot" = $select ]; then
+    ${PLAYER} "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"
+  elif [ "wrti" = $select ]; then
+    ${PLAYER} "http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
+  elif [ "classicfm" = $select ]; then
+    ${PLAYER} "https://www.globalplayer.com/live/classicfm/uk"
+  elif [ "classicfmchristmas" = $select ]; then
+    ${PLAYER} "https://www.globalplayer.com/playlists/2SWn5/"
+  elif [ "soma" = $select ]; then
+    tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
+    if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then
+      rm "$tempfile"
+    fi
+
+    if [ ! -f "$tempfile" ]; then
+      curl -s https://somafm.com/listen/ | awk -F '[<>]' '/MP3 PLS/ { print $6 }' | awk -F '"' '{print $2}' | tr -d \\/ | sed 's|.pls$||' > "$tempfile"
+    fi
+
+    station="$(fzf \
+      --multi \
+      --select-1 \
+      --exit-0 < "$tempfile")"
+    if [ -n "$station" ]; then
+      ${PLAYER} "https://somafm.com/${station}.pls"
+    fi
+  fi
+fi
