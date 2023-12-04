@@ -1,2 +1,2 @@
 #!/bin/sh
-yt-dlp -q -o- "$1" | mpv --no-video - > /dev/null 2> /dev/null
+mpv --no-video --quiet "$1"
