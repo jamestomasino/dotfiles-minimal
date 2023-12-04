@@ -1,20 +1,15 @@
 #!/bin/sh
 PLAYER="mpv --quiet"
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+STATIONS=${STATIONS:-$HOME/stations.txt}
+
+# == stations.txt example ==
+# sleepbot=http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls
+# soma
+# tilderadio=https://azuracast.tilderadio.org/radio/8000/320k.ogg
 
 if [ -z "$1" ]; then
-  options=$(cat<<EOF
-anonradio
-tilderadio
-sleepbot
-wrti
-classicfm
-classicfmchristmas
-soma
-EOF
-)
-
-  select="$(printf "$options" | fzf \
+  select="$(cat "$STATIONS" | cut -d "=" -f 1 | fzf \
     --multi \
     --select-1 \
     --exit-0 )"
@@ -23,18 +18,9 @@ else
 fi
 
 if [ -n "$select" ]; then
-  if [ "anonradio" = $select ]; then
-    ${PLAYER} "http://anonradio.net:8000/anonradio"
-  elif [ "tilderadio" = $select ]; then
-    ${PLAYER} "https://azuracast.tilderadio.org/radio/8000/320k.ogg"
-  elif [ "sleepbot" = $select ]; then
-    ${PLAYER} "http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls"
-  elif [ "wrti" = $select ]; then
-    ${PLAYER} "http://playerservices.streamtheworld.com/api/livestream-redirect/WRTI_CLASSICAL.mp3"
-  elif [ "classicfm" = $select ]; then
-    ${PLAYER} "https://www.globalplayer.com/live/classicfm/uk"
-  elif [ "classicfmchristmas" = $select ]; then
-    ${PLAYER} "https://www.globalplayer.com/playlists/2SWn5/"
+  stream=$(sed -n "/^${select}=/p" ${STATIONS}  | cut -d "=" -f 2)
+  if [ -n "$stream" ]; then
+    ${PLAYER} $stream
   elif [ "soma" = $select ]; then
     tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
     if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then
