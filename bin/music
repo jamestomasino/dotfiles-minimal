@@ -8,6 +8,7 @@ STATIONS=${STATIONS:-$HOME/stations.txt}
 # soma
 # tilderadio=https://azuracast.tilderadio.org/radio/8000/320k.ogg
 
+# Read stations.txt and get list of stations to browse
 if [ -z "$1" ]; then
   select="$(cat "$STATIONS" | cut -d "=" -f 1 | fzf \
     --multi \
@@ -17,24 +18,35 @@ else
   select="$1"
 fi
 
+# If a station is chosen (or passed directly as a param..)
 if [ -n "$select" ]; then
+
+  # If the station has a stream URL play it
   stream=$(sed -n "/^${select}=/p" ${STATIONS}  | cut -d "=" -f 2)
   if [ -n "$stream" ]; then
     ${PLAYER} $stream
+
+  # If the station is somafm..
   elif [ "soma" = $select ]; then
+
+    # We cache a copy of the somafm stations list for 1 day at a time to save query time
     tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
     if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then
       rm "$tempfile"
     fi
 
+    # Fetch a new station list if there isn't one cached
     if [ ! -f "$tempfile" ]; then
       curl -s https://somafm.com/listen/ | awk -F '[<>]' '/MP3 PLS/ { print $6 }' | awk -F '"' '{print $2}' | tr -d \\/ | sed 's|.pls$||' > "$tempfile"
     fi
 
+    # Browse the station list with FZF
     station="$(fzf \
       --multi \
       --select-1 \
       --exit-0 < "$tempfile")"
+
+    # If one is chosen, play that station
     if [ -n "$station" ]; then
       ${PLAYER} "https://somafm.com/${station}.pls"
     fi
