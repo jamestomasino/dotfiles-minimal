@@ -86,10 +86,8 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
 # XDG Path Fixes
-export MPLAYER_HOME=$XDG_CONFIG_HOME/mplayer
 export LESSHISTFILE="${XDG_CONFIG_HOME}/less/history"
 export LESSKEY="${XDG_CONFIG_HOME}/less/keys"
-export LPASS_HOME=$XDG_CONFIG_HOME/lpass
 export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
@@ -213,8 +211,8 @@ path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
 
 # javascript
-if [ -d "${HOME}/.local/share/nvm" ]; then
-  export NVM_DIR="$HOME/.local/share/nvm"
+if [ -d "${HOME}/.config/nvm" ]; then
+  export NVM_DIR="$HOME/.config/nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 fi
 if command -v node > /dev/null 2>&1; then

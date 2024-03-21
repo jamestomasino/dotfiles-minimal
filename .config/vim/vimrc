@@ -237,6 +237,12 @@ if has('autocmd')
         autocmd filetype markdown setlocal tw=80
     augroup END
 
+    augroup mjml
+        autocmd!
+        autocmd BufNewFile,BufRead *.mjml   set filetype=mjml
+        autocmd BufNewFile,BufRead *.mjml   set syntax=html
+    augroup END
+
     augroup mycolors
         autocmd!
         autocmd ColorScheme * call MyHighlights()
@@ -322,6 +328,11 @@ let g:easycomplete_sign_text = {
       \ }
 let g:easycomplete_tab_trigger="<c-space>"
 let g:easycomplete_colorful = 1
+noremap gr :EasyCompleteReference<CR>
+noremap gd :EasyCompleteGotoDefinition<CR>
+noremap rn :EasyCompleteRename<CR>
+noremap gb :BackToOriginalBuffer<CR>
+noremap gn :EasyCompleteNextDiagnostic<CR>
 " }}}
 
 " Local vimrc loading {{{
