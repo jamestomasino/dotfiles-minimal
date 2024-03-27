@@ -131,6 +131,7 @@ alias mkdir='mkdir -p'
 alias grep='grep --color=auto'
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
+alias tmate='tmate -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 # Directory Helpers

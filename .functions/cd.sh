@@ -50,6 +50,8 @@ _cd_track() {
 
 # This checks for .nvmrc and sets nvm if appropriate
 _cdnvm() {
+  if command -v nvm &> /dev/null
+  then
     nvm_path="$(nvm_find_up .nvmrc | command tr -d '\n')"
 
     # If there are no .nvmrc file, use the default nvm version
@@ -88,6 +90,7 @@ _cdnvm() {
             nvm use "${nvm_version}";
         fi
     fi
+  fi
 }
 
 # Everything below is necessary to override 'cd' builtin successfully in dash
