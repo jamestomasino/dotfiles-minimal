@@ -19,32 +19,28 @@ endif
 call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
-Plug 'embear/vim-localvimrc'              " override vimrc per repo
+Plug 'embear/vim-localvimrc'               " override vimrc per repo
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " install fzf
-Plug 'junegunn/fzf.vim'                   " fzf vim integration
-Plug 'inkarkat/vim-ReplaceWithRegister'   " smarter replacement from register
+Plug 'junegunn/fzf.vim'                    " fzf vim integration
+Plug 'inkarkat/vim-ReplaceWithRegister'    " smarter replacement from register
 
 " Writing/Authoring Tools
-Plug 'reedes/vim-pencil'                  " Super-powered writing things
-Plug 'tpope/vim-abolish'                  " Fancy abbreviation replacements
-Plug 'junegunn/goyo.vim'                  " Full screen writing mode
+Plug 'reedes/vim-pencil'                   " Super-powered writing things
+Plug 'tpope/vim-abolish'                   " Fancy abbreviation replacements
+Plug 'junegunn/goyo.vim'                   " Full screen writing mode
 Plug 'vimwiki/vimwiki', { 'branch' : 'dev' } " Wiki
 
 " Styling
-Plug 'romainl/Apprentice'                 " color scheme
-Plug 'itchyny/landscape.vim'              " color scheme
+Plug 'romainl/Apprentice'                  " color scheme
 
 " Development Tools
-Plug 'tpope/vim-commentary'               " easy comment toggling
-Plug 'airblade/vim-gitgutter'             " pretty git sidebar
-Plug 'tpope/vim-fugitive'                 " git integration
-Plug 'storyn26383/vim-vue'                " extra syntax support for vue
-Plug 'sheerun/vim-polyglot'               " syntax for everything
-Plug 'dense-analysis/ale'                 " linting for everything
-Plug 'jonsmithers/vim-html-template-literals' " special support for template lit
-Plug 'pangloss/vim-javascript'            " explicit js syntax help for ^
-Plug 'jayli/vim-easycomplete'             " better tab completion
-Plug 'SirVer/ultisnips'                   " snippet support
+Plug 'tpope/vim-commentary'                " easy comment toggling
+Plug 'airblade/vim-gitgutter'              " pretty git sidebar
+Plug 'tpope/vim-fugitive'                  " git integration
+Plug 'prabirshrestha/vim-lsp'              " language server protocol
+Plug 'mattn/vim-lsp-settings'              " lsp config
+Plug 'prabirshrestha/asyncomplete.vim'     " autocomplete
+Plug 'prabirshrestha/asyncomplete-lsp.vim' " autocomplete lsp integration
 
 call plug#end()
 
@@ -287,52 +283,15 @@ let g:pencil#softDetectThreshold = 130
 " Tagbar {{{
 nmap <F8> :TagbarToggle<CR>
 " }}}
-" easycomplete {{{
-let g:easycomplete_menu_skin = {
-      \   "buf": {
-      \      "kind":"⚯",
-      \      "menu":"[B]",
-      \    },
-      \   "snip": {
-      \      "kind":"<>",
-      \      "menu":"[S]",
-      \    },
-      \   "dict": {
-      \      "kind":"d",
-      \      "menu":"[D]",
-      \    },
-      \   "tabnine": {
-      \      "kind":"",
-      \    },
-      \ }
-let g:easycomplete_lsp_type_font = {
-      \ 'text' : '⚯',         'method':'m',    'function': 'f',
-      \ 'constructor' : '≡',  'field': 'f',    'default':'d',
-      \ 'variable' : '𝘤',     'class':'c',     'interface': 'i',
-      \ 'module' : 'm',       'property': 'p', 'unit':'u',
-      \ 'value' : '𝘧',        'enum': 'e',     'keyword': 'k',
-      \ 'snippet': '𝘧',       'color': 'c',    'file':'f',
-      \ 'reference': 'r',     'folder': 'f',   'enummember': 'e',
-      \ 'constant':'c',       'struct': 's',   'event':'e',
-      \ 'typeparameter': 't', 'var': 'v',      'const': 'c',
-      \ 'operator':'o',
-      \ 't':'𝘵',   'f':'𝘧',   'c':'𝘤',   'm':'𝘮',   'u':'𝘶',   'e':'𝘦',
-      \ 's':'𝘴',   'v':'𝘷',   'i':'𝘪',   'p':'𝘱',   'k':'𝘬',   'r':'𝘳',
-      \ 'o':"𝘰",   'l':"𝘭",   'a':"𝘢",   'd':'𝘥',
-      \ }
-let g:easycomplete_sign_text = {
-      \   'error':       "◉",
-      \   'warning':     "▲",
-      \   'information': '◎',
-      \   'hint':        '▧'
-      \ }
-let g:easycomplete_tab_trigger="<c-space>"
-let g:easycomplete_colorful = 1
-noremap gr :EasyCompleteReference<CR>
-noremap gd :EasyCompleteGotoDefinition<CR>
-noremap rn :EasyCompleteRename<CR>
-noremap gb :BackToOriginalBuffer<CR>
-noremap gn :EasyCompleteNextDiagnostic<CR>
+
+" LSP {{{
+let g:lsp_settings_filetype_vue = ['typescript-language-server', 'volar-server']
+" }}}
+
+" asynccomplete {{{
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 " }}}
 
 " Local vimrc loading {{{

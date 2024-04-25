@@ -212,10 +212,8 @@ path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
 
 # javascript
-if [ -d "${HOME}/.config/nvm" ]; then
-  export NVM_DIR="$HOME/.config/nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-fi
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
   export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
