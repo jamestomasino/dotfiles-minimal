@@ -19,29 +19,29 @@ endif
 call plug#begin('$XDG_DATA_HOME/vim/plugged')
 
 " Global
-Plug 'embear/vim-localvimrc'               " override vimrc per repo
+Plug 'embear/vim-localvimrc'                 " override vimrc per repo
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } " install fzf
-Plug 'junegunn/fzf.vim'                    " fzf vim integration
-Plug 'inkarkat/vim-ReplaceWithRegister'    " smarter replacement from register
+Plug 'junegunn/fzf.vim'                      " fzf vim integration
+Plug 'inkarkat/vim-ReplaceWithRegister'      " smarter replacement from register
 
 " Writing/Authoring Tools
-Plug 'reedes/vim-pencil'                   " Super-powered writing things
-Plug 'tpope/vim-abolish'                   " Fancy abbreviation replacements
-Plug 'junegunn/goyo.vim'                   " Full screen writing mode
+Plug 'reedes/vim-pencil'                     " Super-powered writing things
+Plug 'tpope/vim-abolish'                     " Fancy abbreviation replacements
+Plug 'junegunn/goyo.vim'                     " Full screen writing mode
 Plug 'vimwiki/vimwiki', { 'branch' : 'dev' } " Wiki
 
 " Styling
-Plug 'romainl/Apprentice'                  " color scheme
+Plug 'romainl/Apprentice'                    " color scheme
 
 " Development Tools
-Plug 'tpope/vim-commentary'                " easy comment toggling
-Plug 'airblade/vim-gitgutter'              " pretty git sidebar
-Plug 'tpope/vim-fugitive'                  " git integration
-Plug 'prabirshrestha/vim-lsp'              " language server protocol
-Plug 'mattn/vim-lsp-settings'              " lsp config
-Plug 'prabirshrestha/asyncomplete.vim'     " autocomplete
-Plug 'prabirshrestha/asyncomplete-lsp.vim' " autocomplete lsp integration
-
+Plug 'tpope/vim-commentary'                  " easy comment toggling
+Plug 'airblade/vim-gitgutter'                " pretty git sidebar
+Plug 'tpope/vim-fugitive'                    " git integration
+Plug 'prabirshrestha/vim-lsp'                " language server protocol
+Plug 'mattn/vim-lsp-settings'                " lsp default config for languages
+Plug 'prabirshrestha/asyncomplete.vim'       " autocomplete
+Plug 'prabirshrestha/asyncomplete-lsp.vim'   " autocomplete lsp integration
+Plug 'prabirshrestha/asyncomplete-file.vim'  " autocomplete filenames
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -141,77 +141,6 @@ if has('autocmd')
                     \ | setl fdo+=search
     augroup END
 
-    augroup type_html
-        autocmd!
-        autocmd filetype html setlocal shiftwidth=2
-        autocmd filetype html setlocal softtabstop=2
-        autocmd filetype html setlocal tabstop=2
-        autocmd filetype html setlocal noexpandtab
-        autocmd filetype html setlocal foldmethod=syntax
-    augroup END
-
-    augroup type_awk
-        autocmd!
-        autocmd filetype awk setlocal shiftwidth=2
-        autocmd filetype awk setlocal softtabstop=2
-        autocmd filetype awk setlocal tabstop=2
-        autocmd filetype awk setlocal noexpandtab
-        autocmd filetype awk setlocal foldmethod=syntax
-    augroup END
-
-    augroup type_javascript
-        autocmd!
-        autocmd filetype javascript setlocal shiftwidth=2
-        autocmd filetype javascript setlocal softtabstop=2
-        autocmd filetype javascript setlocal tabstop=2
-        autocmd filetype javascript setlocal expandtab
-        autocmd filetype javascript setlocal foldmethod=syntax
-        let b:ale_linters = {'javascript': ['eslint']}
-    augroup END
-
-    augroup type_vue
-        autocmd!
-        let g:vue_disable_pre_processors=1
-        autocmd filetype vue syntax sync fromstart
-    augroup END
-
-    augroup type_css
-        autocmd!
-        autocmd filetype css,scss setlocal noexpandtab
-        autocmd filetype css,scss setlocal softtabstop=2
-        autocmd filetype css,scss setlocal shiftwidth=2
-        autocmd filetype css,scss setlocal tabstop=2
-    augroup END
-
-    augroup type_python
-        autocmd!
-        autocmd filetype python setlocal expandtab
-        autocmd filetype python setlocal softtabstop=4
-        autocmd filetype python setlocal shiftwidth=4
-        autocmd filetype python setlocal tabstop=4
-    augroup END
-
-    augroup type_json
-        autocmd!
-        autocmd filetype json set conceallevel=0
-    augroup END
-
-    augroup type_make
-        autocmd!
-        autocmd filetype make setlocal noexpandtab
-        autocmd filetype make setlocal softtabstop=4
-        autocmd filetype make setlocal shiftwidth=4
-        autocmd filetype make setlocal tabstop=4
-    augroup END
-
-    augroup bundle_php
-        autocmd!
-        autocmd filetype php setlocal expandtab
-        autocmd filetype php setlocal softtabstop=2
-        autocmd filetype php setlocal shiftwidth=2
-        autocmd filetype php setlocal tabstop=2
-    augroup END
-
     augroup gemini
         autocmd!
         autocmd BufNewFile,BufRead *.gmi   set filetype=gemini
@@ -280,18 +209,31 @@ let g:pencil#softDetectSample = 20
 let g:pencil#softDetectThreshold = 130
 " }}}
 
-" Tagbar {{{
-nmap <F8> :TagbarToggle<CR>
-" }}}
-
 " LSP {{{
 let g:lsp_settings_filetype_vue = ['typescript-language-server', 'volar-server']
-" }}}
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    set foldmethod=expr
+          \ foldexpr=lsp#ui#vim#folding#foldexpr()
+          \ foldtext=lsp#ui#vim#folding#foldtext()
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> <leader>nd <plug>(lsp-previous-diagnostic)
+    nmap <buffer> <leader>pd <plug>(lsp-next-diagnostic)
+    nmap <buffer> <leader>K <plug>(lsp-hover)
+    let g:lsp_format_sync_timeout = 1000
+endfunction
 
-" asynccomplete {{{
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
 " }}}
 
 " Local vimrc loading {{{
@@ -429,7 +371,11 @@ nnoremap <Leader>s :b#<cr>
 nnoremap <leader>w :bd<cr>
 " }}}
 
-
+" asynccomplete {{{
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+" }}}
 
 " Make {{{
 nnoremap <Leader>m :make<space>
