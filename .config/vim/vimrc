@@ -303,6 +303,7 @@ set shiftwidth=2                " Default spacing
 set shortmess+=aoOtTI           " Abbrev. of messages (avoids 'hit enter')
 set showmatch                   " Show matching brackets/parenthesis
 set showmode                    " Display the current mode
+set tabstop=2                   " Default spacing
 set softtabstop=2               " Default spacing
 set splitbelow                  " Puts new split windows to the bottom of the current
 set splitright                  " Puts new vsplit windows to the right of the current
