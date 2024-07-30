@@ -37,12 +37,10 @@ Plug 'romainl/Apprentice'                    " color scheme
 Plug 'tpope/vim-commentary'                  " easy comment toggling
 Plug 'airblade/vim-gitgutter'                " pretty git sidebar
 Plug 'tpope/vim-fugitive'                    " git integration
-Plug 'dense-analysis/ale'
-" Plug 'prabirshrestha/vim-lsp'                " language server protocol
-" Plug 'mattn/vim-lsp-settings'                " lsp default config for languages
-" Plug 'prabirshrestha/asyncomplete.vim'       " autocomplete
-" Plug 'prabirshrestha/asyncomplete-lsp.vim'   " autocomplete lsp integration
-" Plug 'prabirshrestha/asyncomplete-file.vim'  " autocomplete filenames
+Plug 'dense-analysis/ale'                    " syntax highlighting
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'rhysd/vim-lsp-ale'
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
