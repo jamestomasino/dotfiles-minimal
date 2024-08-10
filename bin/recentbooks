@@ -30,5 +30,5 @@ EOF
 ################################
 
 FEED=$(curl -s "${FEEDURL}")
-FIELDS=$(${XMLSTARLET} sel -t -m "/rss/channel/item" -v "title" -o "^" -v "author_name" -o "^" -v "book/num_pages" -o "^" -v "user_rating" -o "^" -v "user_read_at" -o "^" -v "user_review" -n <<< "${FEED}")
+FIELDS=$(${XMLSTARLET} sel -t -m "/rss/channel/item" -v "title" -o "^" -v "author_name" -o "^" -v "book/num_pages" -o "^" -v "user_rating" -o "^" -v "user_date_added" -o "^" -v "user_review" -n <<< "${FEED}")
 awk "$awkParseBooks" <<< "${FIELDS}"
