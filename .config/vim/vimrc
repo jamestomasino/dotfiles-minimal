@@ -172,6 +172,11 @@ if has('autocmd')
         autocmd ColorScheme * call MyHighlights()
     augroup END
 
+    augroup mail
+        autocmd!
+        autocmd filetype mail setlocal formatoptions-=t
+    augroup END
+
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
