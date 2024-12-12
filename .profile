@@ -205,6 +205,7 @@ path "${HOME}/.yarn/bin"
 path "${HOME}/.npm-packages/bin"
 path "${HOME}/.config/yarn/global/node_modules/.bin"
 path "${HOME}/.node/bin"
+path "${HOME}/.cargo/bin"
 path "${HOME}/.local/bin"
 path "${HOME}/.fzf/bin"
 path "${HOME}/go/bin"
@@ -237,6 +238,11 @@ if [ -d "${HOME}/perl5" ]; then
     # shellcheck source=/dev/null
     . "$HOME/perl5/perlbrew/etc/bashrc"
   fi
+fi
+
+# rust
+if [ -f "$HOME/.cargo" ]; then
+  . "$HOME/.cargo/env"
 fi
 
 # android sdk
