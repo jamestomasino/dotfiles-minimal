@@ -41,6 +41,7 @@ Plug 'dense-analysis/ale'                    " syntax highlighting
 Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'rhysd/vim-lsp-ale'
+Plug 'ollykel/v-vim'                         " v-lang support
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -177,6 +178,9 @@ if has('autocmd')
         autocmd filetype mail setlocal formatoptions-=t
     augroup END
 
+    augroup vlang
+      let g:v_autofmt_bufwritepre = 1
+    augroup END
 endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
