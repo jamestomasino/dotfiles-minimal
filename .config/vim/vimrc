@@ -232,6 +232,8 @@ function! s:on_lsp_buffer_enabled() abort
           \ foldtext=lsp#ui#vim#folding#foldtext()
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
     nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
     nmap <buffer> <leader>nd <plug>(lsp-previous-diagnostic)
     nmap <buffer> <leader>pd <plug>(lsp-next-diagnostic)
