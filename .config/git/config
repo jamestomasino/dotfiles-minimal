@@ -119,6 +119,9 @@
 [remote "origin"]
   fetch = +refs/notes/*:refs/notes/*
 
+[pull]
+  rebase = true
+
 [alias]
 
   # squash entire repo to a single commit (requires --force to push)
@@ -182,6 +185,6 @@
   # https://github.com/prabirshrestha/ProfilesAndSettings/blob/master/.gitconfig
   # show tags and any tag annotation (tito adds tag annotations for example)
   tags = tag -n1 -l
-	coffee = !curl -L https://git.io/coffee
-[pull]
-	rebase = true
+
+  # Silly coffee in the term
+  coffee = !curl -L https://git.io/coffee
