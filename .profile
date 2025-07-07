@@ -200,6 +200,7 @@ path "/opt/local/bin"
 path "/opt/local/sbin"
 path "/snap/bin"
 path "/tilde/bin"
+path "${HOME}/.pyenv/bin"
 path "${HOME}/bin"
 path "${HOME}/.yarn/bin"
 path "${HOME}/.npm-packages/bin"
@@ -258,6 +259,12 @@ fi
 if [ -f "$HOME/.profile_local" ]; then
   # shellcheck source=/dev/null
   . "$HOME/.profile_local"
+fi
+
+
+if [ -d "${HOME}/.pyenv/" ]; then
+  eval "$(pyenv init - bash)"
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 . "$HOME/.cargo/env"
