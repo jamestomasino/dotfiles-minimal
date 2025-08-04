@@ -37,18 +37,17 @@ if [ -n "$select" ]; then
 
     # Fetch a new station list if there isn't one cached
     if [ ! -f "$tempfile" ]; then
-      curl -s https://somafm.com/listen/ | awk -F '[<>]' '/MP3 PLS/ { print $6 }' | awk -F '"' '{print $2}' | tr -d \\/ | sed 's|.pls$||' > "$tempfile"
+      curl -s https://somafm.com/channels.json | jq -r '.channels[] | "\(.title),\(.playlists[0].url)"' > "$tempfile"
     fi
 
     # Browse the station list with FZF
-    station="$(fzf \
-      --multi \
-      --select-1 \
-      --exit-0 < "$tempfile")"
+    station="$(awk -F',' '{print $1}' "$tempfile" | \
+      fzf --select-1 --exit-0 | \
+      xargs -r -I {} awk -F',' -v k="{}" '$1 == k { sub(/^[^,]+,/, ""); print $0 }' "$tempfile")"
 
     # If one is chosen, play that station
     if [ -n "$station" ]; then
-      ${PLAYER} "https://somafm.com/${station}.pls"
+      ${PLAYER} "${station}"
     fi
   fi
 fi

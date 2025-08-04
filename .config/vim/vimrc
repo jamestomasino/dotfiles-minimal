@@ -40,10 +40,10 @@ Plug 'tpope/vim-commentary'                  " easy comment toggling
 Plug 'airblade/vim-gitgutter'                " pretty git sidebar
 Plug 'tpope/vim-fugitive'                    " git integration
 Plug 'dense-analysis/ale'                    " syntax highlighting
-Plug 'prabirshrestha/vim-lsp'
-Plug 'mattn/vim-lsp-settings'
-Plug 'rhysd/vim-lsp-ale'
-Plug 'ollykel/v-vim'                         " v-lang support
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'mattn/vim-lsp-settings'
+" Plug 'rhysd/vim-lsp-ale'
+" Plug 'ollykel/v-vim'                         " v-lang support
 call plug#end()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -238,6 +238,7 @@ function! s:on_lsp_buffer_enabled() abort
           \ foldexpr=lsp#ui#vim#folding#foldexpr()
           \ foldtext=lsp#ui#vim#folding#foldtext()
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gq call lsp#disable()
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gs <plug>(lsp-document-symbol-search)
     nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
