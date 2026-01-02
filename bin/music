@@ -1,5 +1,5 @@
 #!/bin/sh
-PLAYER="mpv --quiet"
+PLAYER='mpv --quiet --no-resume-playback --http-header-fields="Icy-MetaData:1"'
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 STATIONS=${STATIONS:-$HOME/stations.txt}
 

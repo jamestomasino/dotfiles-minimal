@@ -23,8 +23,8 @@
   defaultBranch = main
 
 [tag]
-  gpgsign = true
-  forceSignAnnotated = true
+  gpgsign = false
+  forceSignAnnotated = false
 
 [core]
   whitespace = trailing-space, space-before-tab, cr-at-eol
