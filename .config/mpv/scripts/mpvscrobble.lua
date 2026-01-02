@@ -28,28 +28,42 @@ end
 local function normalize_icy(s)
     if not s then return s end
 
-    -- trim
     s = s:match("^%s*(.-)%s*$")
 
-    -- normalize common dash-like Unicode to ASCII '-'
-    -- NOTE: If you prefer not to include Unicode em dash in your file, you can remove that line.
+    -- normalize common dash-like unicode to ascii '-'
     s = s:gsub("–", "-")
-         :gsub("—", "-")
          :gsub("−", "-")
          :gsub("﹣", "-")
          :gsub("－", "-")
 
-    -- normalize colon spacing
-    s = s:gsub("%s*:%s*", ": ")
+    -- keep this one only if you want it, it is optional
+    -- s = s:gsub("—", "-")
 
-    -- strip common suffixes
-    s = s:gsub("%s+on%s+[^%-]+$", "")
-         :gsub("%s+%-+%s+[^%-]+$", "")
+    -- remove some common “on StationName” suffixes only
+    s = s:gsub("%s+on%s+[^|]+$", "")
 
-    -- collapse whitespace
     s = s:gsub("%s+", " ")
-
     return s
+end
+
+
+local function norm_key(k)
+    -- lower + strip non-alphanumerics so "icy-title", "ICY_TITLE", "IcyTitle" all match
+    return (tostring(k):lower():gsub("[^%w]", ""))
+end
+
+local function get_tag(metadata, want)
+    -- want is a list like {"icytitle", "title"} in normalized form
+    local wantset = {}
+    for _, w in ipairs(want) do wantset[w] = true end
+
+    for k, v in pairs(metadata) do
+        local nk = norm_key(k)
+        if wantset[nk] and type(v) == "string" and v ~= "" then
+            return v, k
+        end
+    end
+    return nil, nil
 end
 
 local function parse_icy_title(icy_title)
@@ -502,40 +516,56 @@ local function on_metadata_change()
     if not is_radio or not options.enable_radio then return end
 
     local metadata = mp.get_property_native("metadata")
+    for k, v in pairs(metadata) do
+      if type(v) == "string" and (norm_key(k):find("icy") or norm_key(k):find("title") or norm_key(k):find("artist")) then
+        msg.debug("META " .. tostring(k) .. " = " .. v)
+      end
+    end
     if not metadata then return end
 
-    -- Prefer ICY keys first for radio
-    local icy_title  = first_nonempty(metadata["icy-title"], metadata["ICY-TITLE"], metadata.icy_title)
-    local icy_artist = first_nonempty(metadata["icy-artist"], metadata["ICY-ARTIST"], metadata.icy_artist)
+    -- Find ICY fields robustly, regardless of hyphen/underscore/case
+    local icy_title, icy_title_key = get_tag(metadata, {"icytitle"})
+    local icy_artist, icy_artist_key = get_tag(metadata, {"icyartist"})
 
-    local title  = first_nonempty(icy_title, metadata.title, metadata.TITLE)
-    local artist = first_nonempty(icy_artist, metadata.artist, metadata.ARTIST, metadata.album_artist, metadata.ALBUM_ARTIST)
+    -- Also grab generic tags (these are often polluted for radio)
+    local gen_title, gen_title_key = get_tag(metadata, {"title"})
+    local gen_artist, gen_artist_key = get_tag(metadata, {"artist", "albumartist"})
+
+    -- Prefer ICY title for radio, fall back only if missing
+    local raw_title = icy_title or gen_title
+    local raw_artist = icy_artist or gen_artist
 
     local parsed = nil
 
-    if icy_artist and title then
+    -- Case A, stream provides separate ICY artist
+    if icy_artist and raw_title then
         parsed = {
             artist = icy_artist:match("^%s*(.-)%s*$"),
-            title  = title:match("^%s*(.-)%s*$")
+            title  = normalize_icy(raw_title):match("^%s*(.-)%s*$")
         }
-        msg.debug("Using ICY artist + title: " .. parsed.artist .. " | " .. parsed.title)
-    elseif title and options.parse_patterns then
-        parsed = parse_icy_title(title)
+        msg.debug("Using ICY artist + title from keys: " .. tostring(icy_artist_key) .. " + " .. tostring(icy_title_key or gen_title_key))
+
+    -- Case B, parse "Artist - Title" from ICY title string
+    elseif raw_title and options.parse_patterns then
+        parsed = parse_icy_title(raw_title)
         if parsed then
-            msg.debug("Parsed from ICY title: " .. parsed.artist .. " | " .. parsed.title)
+            msg.debug("Parsed from title key: " .. tostring(icy_title_key or gen_title_key))
         end
-    elseif artist and title then
-        parsed = {
-            artist = artist:match("^%s*(.-)%s*$"),
-            title  = title:match("^%s*(.-)%s*$")
-        }
-        msg.debug("Using generic artist + title: " .. parsed.artist .. " | " .. parsed.title)
     end
 
-    if not parsed and title then
-        local t = normalize_icy(title)
-        parsed = { artist = "Unknown Artist", title = t }
-        msg.debug("Using raw title only: " .. t)
+    -- Heuristic rescue: mpv sometimes sets metadata.title to artist-only.
+    -- If we have an ICY title and the generic title is shorter and has no separator, force ICY.
+    if (not parsed) and icy_title and gen_title and #gen_title < #icy_title and not gen_title:match("%-") then
+        parsed = parse_icy_title(icy_title)
+        if parsed then
+            msg.debug("Heuristic forced ICY title parse from key: " .. tostring(icy_title_key))
+        end
+    end
+
+    -- Last resort
+    if not parsed and raw_title then
+        parsed = { artist = "Unknown Artist", title = normalize_icy(raw_title) }
+        msg.debug("Fallback raw title key: " .. tostring(icy_title_key or gen_title_key))
     end
 
     if not parsed then
