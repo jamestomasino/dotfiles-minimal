@@ -266,5 +266,3 @@ if [ -d "${HOME}/.pyenv/" ]; then
   eval "$(pyenv init - bash)"
   eval "$(pyenv virtualenv-init -)"
 fi
-
-. "$HOME/.cargo/env"
