@@ -31,6 +31,8 @@ if command -v rg > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='rg --files --hidden -g "!.git" -g "!.sass-cache" -g "!node_modules"'
 elif command -v ag > /dev/null 2>&1; then
   export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore node_modules -g ""'
+elif command -v grep > /dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='grep -RIl . --exclude-dir=.git --exclude-dir=.sass-cache --exclude-dir=node_modules'
 fi
 
 # fzf
@@ -136,8 +138,14 @@ alias grep='grep --color=auto'
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias tmate='tmate -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
-rg() {
-  command rg --ignore-file "$XDG_CONFIG_HOME/ag/ignore" "$@"
+search() {
+  if command -v rg > /dev/null 2>&1; then
+    command rg --ignore-file "$XDG_CONFIG_HOME/ag/ignore" "$@"
+  elif command -v ag > /dev/null 2>&1; then
+    command ag --path-to-ignore "$XDG_CONFIG_HOME/ag/ignore" "$@"
+  else
+    command grep -RIn --exclude-dir=.git --exclude-dir=.sass-cache --exclude-dir=node_modules "$@"
+  fi
 }
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 # Directory Helpers
