@@ -128,8 +128,8 @@ bindsym Mod4+Shift+z exec "i3lock -n -e -c 000000"
 bindsym XF86AudioLowerVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ '-5%'
 bindsym XF86AudioRaiseVolume exec /usr/bin/pactl set-sink-volume @DEFAULT_SINK@ '+5%'
 bindsym XF86AudioMute exec /usr/bin/pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+bindsym XF86MonBrightnessUp exec sh -c 'if command -v brightnessctl >/dev/null 2>&1; then brightnessctl set +20%; elif command -v light >/dev/null 2>&1; then light -A 20; elif command -v xbacklight >/dev/null 2>&1; then xbacklight -inc 20; fi' # increase screen brightness
+bindsym XF86MonBrightnessDown exec sh -c 'if command -v brightnessctl >/dev/null 2>&1; then brightnessctl set 20%-; elif command -v light >/dev/null 2>&1; then light -U 20; elif command -v xbacklight >/dev/null 2>&1; then xbacklight -dec 20; fi' # decrease screen brightness
 bindsym XF86AudioPlay exec playerctl play
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
@@ -167,19 +167,18 @@ hide_edge_borders none
 font xft:Hack 8
 
 # High DPI & Theming
-exec --no-startup-id /usr/libexec/gsd-xsettings
+exec --no-startup-id sh -c 'command -v /usr/libexec/gsd-xsettings >/dev/null 2>&1 && /usr/libexec/gsd-xsettings'
 exec_always --no-startup-id gsettings set org.gnome.settings-daemon.plugins.xsettings overrides "[{'Gdk/WindowScalingFactor', <2>}, {'Xft/DPI', <196608>}, {'Xcursor/Size', <25000>}, {'Xcursor/size', <25000>}]"
 exec_always --no-startup-id gsettings set org.gnome.desktop.interface cursor-size 25
-exec_always --no-startup-id xrdb -merge /home/tomasino/.Xresources
-exec_always --no-startup-id xrandr --dpi 220
-exec xrandr --dpi 220
+exec_always --no-startup-id sh -c '[ -f "$HOME/.Xresources" ] && command -v xrdb >/dev/null 2>&1 && xrdb -merge "$HOME/.Xresources"'
+exec_always --no-startup-id sh -c 'command -v xrandr >/dev/null 2>&1 && xrandr --dpi 220'
 
 # Startup scripts
-exec --no-startup-id feh --bg-scale /home/tomasino/Pictures/background.jpg
-exec --no-startup-id wire-desktop
-exec --no-startup-id dropbox start
-exec --no-startup-id pcloud
-exec --no-startup-id i3-msg 'workspace 1; exec kitty'
+exec --no-startup-id sh -c 'command -v feh >/dev/null 2>&1 && [ -f "$HOME/Pictures/background.jpg" ] && feh --bg-scale "$HOME/Pictures/background.jpg"'
+exec --no-startup-id sh -c 'command -v wire-desktop >/dev/null 2>&1 && wire-desktop'
+exec --no-startup-id sh -c 'command -v dropbox >/dev/null 2>&1 && dropbox start'
+exec --no-startup-id sh -c 'command -v pcloud >/dev/null 2>&1 && pcloud'
+exec --no-startup-id sh -c 'command -v kitty >/dev/null 2>&1 && i3-msg "workspace 1; exec kitty"'
 
 ## Base16 Default Dark
 # Author: Chris Kempson (http://chriskempson.com)
@@ -205,7 +204,7 @@ set $base0F #a16946
 
 # Basic bar configuration using the Base16 variables.
 bar {
-    status_command i3status
+    status_command ~/bin/i3status-wrapper
     tray_output primary
     position top
 

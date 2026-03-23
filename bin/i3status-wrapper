@@ -1,0 +1,114 @@
+#!/bin/sh
+
+set -eu
+
+tmp_config="$(mktemp)"
+cleanup() {
+  rm -f "$tmp_config"
+}
+trap cleanup EXIT INT TERM
+
+wifi_if=""
+for dev in /sys/class/net/*; do
+  [ -d "$dev/wireless" ] || continue
+  wifi_if="$(basename "$dev")"
+  break
+done
+
+eth_if=""
+for dev in /sys/class/net/*; do
+  name="$(basename "$dev")"
+  case "$name" in
+    lo|wl*|ww*|docker*|veth*|br*|virbr*|tun*|tap*)
+      continue
+      ;;
+  esac
+  eth_if="$name"
+  break
+done
+
+battery_slot=""
+for bat in /sys/class/power_supply/BAT*; do
+  [ -e "$bat" ] || continue
+  battery_name="$(basename "$bat")"
+  battery_slot="${battery_name#BAT}"
+  break
+done
+
+{
+  cat <<'EOF'
+general {
+        output_format = "i3bar"
+        colors = true
+        interval = 5
+}
+
+order += "load"
+EOF
+
+  if [ -n "$wifi_if" ]; then
+    printf 'order += "wireless %s"\n' "$wifi_if"
+  fi
+
+  if [ -n "$eth_if" ]; then
+    printf 'order += "ethernet %s"\n' "$eth_if"
+  fi
+
+  if [ -n "$battery_slot" ]; then
+    printf 'order += "battery %s"\n' "$battery_slot"
+  fi
+
+  cat <<'EOF'
+order += "volume master"
+order += "tztime local"
+
+load {
+        format = "%1min"
+}
+EOF
+
+  if [ -n "$wifi_if" ]; then
+    cat <<EOF
+
+wireless $wifi_if {
+        format_up = "%essid %quality"
+        format_down = "No Wifi"
+}
+EOF
+  fi
+
+  if [ -n "$eth_if" ]; then
+    cat <<EOF
+
+ethernet $eth_if {
+        format_up = "E: %ip (%speed)"
+        format_down = ""
+}
+EOF
+  fi
+
+  if [ -n "$battery_slot" ]; then
+    cat <<EOF
+
+battery $battery_slot {
+        format = "%status %percentage %remaining"
+}
+EOF
+  fi
+
+  cat <<'EOF'
+
+tztime local {
+        format = "%Y-%m-%d %H:%M"
+}
+
+volume master {
+        format = "♪: %volume"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+EOF
+} > "$tmp_config"
+
+exec i3status -c "$tmp_config"
