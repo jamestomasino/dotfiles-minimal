@@ -11,7 +11,7 @@
   annotate = yes
 
 [credential]
-  helper = 'cache --timeout 3600'
+  helper = cache --timeout=3600
 
 [github]
   user = jamestomasino
@@ -25,17 +25,10 @@
 [tag]
   gpgsign = false
   forceSignAnnotated = false
-
 [core]
   whitespace = trailing-space, space-before-tab, cr-at-eol
-  editor = 'vim'
-  eol = native
+  editor = vim
   autocrlf = input
-  compression = 9
-  bigFileThreshold = 20m
-  ignorecase = false
-  packedGitLimit = 256m
-  packedGitWindowSize = 256m
   pager = delta
 
 [delta]
@@ -46,25 +39,14 @@
 [interactive]
   diffFilter = delta --color-only
 
-[pack]
-  threads = 1
-  window = 0
-  windowMemory = 256m
-  SizeLimit = 256m
-  deltaCacheSize = 256m
-  packSizeLimet = 256m
-
-[color]
-  diff = auto
-  status = auto
-  branch = auto
-  interactive = auto
-  ui = auto
+[diff]
+  algorithm = histogram
 
 [merge]
   stat = true
   log = true
   tool = fugitive
+  conflictstyle = zdiff3
   renamelimit = 100000
 
 [mergetool]
@@ -74,23 +56,27 @@
 [mergetool "fugitive"]
   cmd = vim -f -c \"Gvdiffsplit!\" \"$MERGED\"
 
+[rerere]
+  enabled = true
+
 [branch]
   autoSetupMerge = always
 
 [push]
   followTags = true
-  default = current
+  default = simple
   autoSetupRemote = true
 
 [fetch]
   prune = true
+  pruneTags = true
+
+[pull]
+  rebase = true
 
 [rebase]
   autosquash = true
-	autoStash = true
-
-[advice]
-  statusHints = true
+  autoStash = true
 
 [color]
   diff = auto
@@ -116,75 +102,12 @@
 [notes]
   displayRef = refs/notes/*
 
-[remote "origin"]
-  fetch = +refs/notes/*:refs/notes/*
-
-[pull]
-  rebase = true
-
 [alias]
-
-  # squash entire repo to a single commit (requires --force to push)
-  squash = "!git reset $(git commit-tree HEAD^{tree} -m 'initial commit') "
-
-  # rollback
-  rollback = "!f() { git reset $1; git reset --soft HEAD@{1}; git commit -m 'reverting to older revision $1'; git reset --hard; }; f"
-
-  # get biggest file according to repo history
-  biggest = "!git rev-list --objects --all | grep `git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -1 | awk '{ print $1 }'`"
-
-  # remove a file or folder from git history. Will require a push -f. You might have to re-add the remote too.
-  balefire = "git filter-repo --invert-paths --path $1"
-
-  # remove all remote branches that have been merged
-  removeallmerged = "!git branch --merged | grep -v \"\\*\" | xargs -n 1 git branch -d"
-
-  # remove all files from repo that are ignored by gitignore
-  removeignored = "!git rm --cached $(git ls-files -i -c -X .gitignore)"
-
-  # push to all remotes
-  pushall = "!git remote | xargs -L1 git push --all"
-
-  # local exclude
-  exclude = "!sh -c 'echo "$1" >> .git/info/exclude' -"
-
-  # What has changed since...
-  changelist = "!git whatchanged --since='$1' --oneline | awk '/^:/ {print $6}' | sort -u; #"
-
-  # various pretty loggers from various places
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
   lp = log --pretty=format:'%Cblue%h%Creset %Cgreen%<(15)%ad%Creset | %s%d [%C(yellow)%an%Creset] %C(cyan)%d%Creset' --date=relative --no-merges
-
-  # List remote Git branches and the last commit date for each branch. Sort by most recent commit date.
-  latestremote = "!git for-each-ref refs/remotes/ --format=\"%(color:green)%(committerdate:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset)\" --sort -committerdate"
-
-  # show a log without the formating, occasionaly handy for c&p
-  rawlog = log --format=\"format:commit %H%nAuthor:%an%n%n%B%n\"
-
-  # show a list of branches sorted by time of last commit
-  branchage = "!f() { git for-each-ref --sort=committerdate refs/heads $1  --format=\"%(refname:short)\" ; }; g() { for C in $(f $1) ; do git show -s --pretty=format:\"%Cgreen%ci %Cblue%cr%Creset  $C\" \"$C\" -- ; done; }; g "
-
-  # show remote branches as well
-  branchageall = !git brage refs/remotes
-
-  # show a list of every branch and show their latests commit, sorted by last commit
-  branchlog = "!sh -c 'for C in $(git for-each-ref --sort=committerdate refs/heads --format=\"%(refname:short)\") ; do git show  -s --pretty=format:\"%Cgreen%ci %Cblue%cr%Creset  $C\" \"$C\" -- ; git show --stat -s $C ; echo; done'"
-
-  # from https://github.com/cypher/dotfiles/blob/master/gitconfig
+  latestremote = !git for-each-ref refs/remotes/ --format="%(color:green)%(committerdate:short)%(color:reset) %(color:yellow)%(refname:short)%(color:reset)" --sort=-committerdate
+  rawlog = log --format="format:commit %H%nAuthor:%an%n%n%B%n"
+  branchage = for-each-ref --sort=committerdate refs/heads --format=%(color:green)%(committerdate:iso8601)%(color:reset) %(color:blue)%(committerdate:relative)%(color:reset) %(refname:short)
+  branchageall = for-each-ref --sort=committerdate refs/remotes --format=%(color:green)%(committerdate:iso8601)%(color:reset) %(color:blue)%(committerdate:relative)%(color:reset) %(refname:short)
   ls-ignored = ls-files --exclude-standard --ignored --others
-
-  # ignore local changes to a file
-  ignore = update-index --assume-unchanged
-
-  # https://github.com/wadey/dotfiles/blob/master/gitconfig
-  # check if a branch has been merged into the current HEAD
-  #  if on master, "git merged topic" will tell you if topic
-  #  has been merged
-  merged = !sh -c 'git rev-list HEAD | grep $(git rev-parse $0)'
-
-  # https://github.com/prabirshrestha/ProfilesAndSettings/blob/master/.gitconfig
-  # show tags and any tag annotation (tito adds tag annotations for example)
   tags = tag -n1 -l
-
-  # Silly coffee in the term
-  coffee = !curl -L https://git.io/coffee

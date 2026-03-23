@@ -28,6 +28,7 @@ Plug 'inkarkat/vim-ReplaceWithRegister'      " smarter replacement from register
 Plug 'reedes/vim-pencil'                     " Super-powered writing things
 Plug 'tpope/vim-abolish'                     " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                     " Full screen writing mode
+Plug 'kaarmu/typst.vim'                      " Syntax highlighting for typst files
 Plug 'vimwiki/vimwiki', { 'branch' : 'dev' } " Wiki
 
 " Styling

@@ -213,6 +213,7 @@ path "${HOME}/.fzf/bin"
 path "${HOME}/go/bin"
 path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
+path "${ANDROID_SDK_ROOT}/platform-tools"
 
 # javascript
 export NVM_DIR="$HOME/.config/nvm"
@@ -243,17 +244,15 @@ if [ -d "${HOME}/perl5" ]; then
 fi
 
 # rust
-if [ -f "$HOME/.cargo" ]; then
+if [ -d "$HOME/.cargo" ]; then
   . "$HOME/.cargo/env"
 fi
 
 # android sdk
-if [ -d "${HOME}/sdk/" ]; then
-  export ANDROID_HOME="/usr/lib/android-sdk"
-  path "${ANDROID_HOME}/tools"
-  path "${ANDROID_HOME}/tools/bin"
-  path "${ANDROID_HOME}/platform-tools"
-  path "${ANDROID_HOME}/build-tools/25.0.3"
+if [ -d "${HOME}/Android/Sdk" ]; then
+  export ANDROID_SDK_ROOT="${HOME}/Android/Sdk"
+  export JAVA_HOME="/snap/android-studio/current/jbr"
+  path "$JAVA_HOME/bin"
 fi
 
 # Load local system overrides
