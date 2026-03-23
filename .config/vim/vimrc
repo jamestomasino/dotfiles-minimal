@@ -29,7 +29,9 @@ Plug 'reedes/vim-pencil'                     " Super-powered writing things
 Plug 'tpope/vim-abolish'                     " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                     " Full screen writing mode
 Plug 'kaarmu/typst.vim'                      " Syntax highlighting for typst files
+if !empty($VIM_WIKI)
 Plug 'vimwiki/vimwiki', { 'branch' : 'dev' } " Wiki
+endif
 
 " Styling
 Plug 'romainl/Apprentice'                    " color scheme
@@ -53,17 +55,16 @@ call plug#end()
 
 function! InitDirs()
     let l:parent = $XDG_DATA_HOME
-    let l:prefix = 'vim'
     let l:dir_list = {
                 \ 'backup': 'backupdir',
-                \ 'views': 'viewdir',
+                \ 'view': 'viewdir',
                 \ 'swap': 'directory' }
 
     if has('persistent_undo')
         let l:dir_list['undo'] = 'undodir'
     endif
 
-    let l:common_dir = l:parent . '/' . l:prefix
+    let l:common_dir = l:parent . '/vim/'
 
     for [l:dirname, l:settingname] in items(l:dir_list)
         let l:directory = l:common_dir . l:dirname . '/'
@@ -105,13 +106,28 @@ function! AsciiMode()
   setlocal virtualedit=all
   setlocal cc=80
   hi ColorColumn ctermbg=8 guibg=8
-  autocmd BufWritePre * :%s/\s\+$//e
+  augroup ascii_mode
+    autocmd!
+    autocmd BufWritePre <buffer> %s/\s\+$//e
+  augroup END
 endfunction
 
 function! MyHighlights() abort
     highlight clear SignColumn      " SignColumn should match background
     highlight clear LineNr          " Current line number row will have same background color in relative mode
     highlight clear CursorLineNR    " disable color block on curretn line
+endfunction
+
+function! LargeFileMode() abort
+    if exists('b:large_file_mode')
+        return
+    endif
+    let b:large_file_mode = 1
+    setlocal synmaxcol=300
+    setlocal nowrap
+    setlocal nolist
+    setlocal nocursorline
+    setlocal foldmethod=manual
 endfunction
 
 
@@ -151,12 +167,10 @@ if has('autocmd')
         autocmd filetype gemini call pencil#init({'wrap': 'soft'})
                     \ | setl spell spl=en_us fdl=4 noru nonu nornu
                     \ | setl fdo+=search
-        autocmd filetype gemini let g:indentLine_enabled = 0
     augroup END
 
     augroup text
         autocmd!
-        autocmd filetype text let g:indentLine_enabled = 0
     augroup END
 
     augroup ejs
@@ -166,7 +180,6 @@ if has('autocmd')
 
     augroup markdown
         autocmd!
-        autocmd filetype markdown let g:indentLine_enabled = 0
         autocmd filetype markdown setlocal tw=80
     augroup END
 
@@ -179,6 +192,12 @@ if has('autocmd')
     augroup mycolors
         autocmd!
         autocmd ColorScheme * call MyHighlights()
+    augroup END
+
+    augroup largefile
+        autocmd!
+        autocmd BufReadPre * let b:large_file = getfsize(expand('<afile>')) > 1024 * 1024
+        autocmd BufReadPost * if get(b:, 'large_file', 0) || search('\%>300v', 'nw') | call LargeFileMode() | endif
     augroup END
 
     augroup mail
@@ -208,12 +227,6 @@ scriptencoding utf-8            " utf-8 all the things
 " }}}
 
 
-" Indent Guides {{{
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 0
-" }}}
-
 " Pencil / Writing Controls {{{
 let g:pencil#wrapModeDefault = 'soft'
 let g:pencil#textwidth = 74
@@ -225,61 +238,34 @@ let g:pencil#softDetectSample = 20
 let g:pencil#softDetectThreshold = 130
 " }}}
 
-" LSP {{{
-let g:lsp_settings_filetype_vue = ['typescript-language-server', 'volar-server']
-let g:lsp_diagnostics_signs_error = {'text': '✗'}
-let g:lsp_diagnostics_signs_warning = {'text': '!'}
-let g:lsp_diagnostics_signs_hint = {'text': '💡'}
-let g:lsp_diagnostics_signs_information = {'text': '!'}
-
-function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    set foldmethod=expr
-          \ foldexpr=lsp#ui#vim#folding#foldexpr()
-          \ foldtext=lsp#ui#vim#folding#foldtext()
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    nmap <buffer> gq call lsp#disable()
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gs <plug>(lsp-document-symbol-search)
-    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> <leader>nd <plug>(lsp-previous-diagnostic)
-    nmap <buffer> <leader>pd <plug>(lsp-next-diagnostic)
-    nmap <buffer> <leader>K <plug>(lsp-hover)
-    let g:lsp_format_sync_timeout = 1000
-endfunction
-
-augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-augroup END
-" }}}
-
 " Local vimrc loading {{{
 let g:localvimrc_sandbox=0
 let g:localvimrc_ask=0
 " }}}
 
 " VimWiki Config {{{
-let g:vimwiki_list = [
-            \{'path': '$SYNCTHING_PATH/wiki/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/computers/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/crafts/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/films/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/games/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/music/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/writing/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/work/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
-            \{'path': '$SYNCTHING_PATH/wiki/books/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'}]
-let g:vimwiki_map_prefix = '<Leader>W'
-let g:vimwiki_global_ext = 0
-let g:vimwiki_auto_chdir = 1
+if !empty($VIM_WIKI)
+    let g:vimwiki_list = [
+                \{'path': '$SYNCTHING_PATH/wiki/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/computers/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/crafts/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/films/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/games/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/music/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/writing/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/work/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'},
+                \{'path': '$SYNCTHING_PATH/wiki/books/', 'syntax': 'markdown', 'ext': '.md', 'links_space_char': '-'}]
+    let g:vimwiki_map_prefix = '<Leader>W'
+    let g:vimwiki_global_ext = 0
+    let g:vimwiki_auto_chdir = 1
+endif
 " }}}
 
 " ag support {{{
-if executable('ag')
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+elseif executable('ag')
     set grepprg=ag\ --ignore\ --nogroup\ --nocolor\ --ignore-case\ --column
     set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
@@ -312,6 +298,7 @@ set mousehide                   " Hide the mouse cursor while typing
 set nojoinspaces                " Prevents inserting two spaces after punctuation on a join (J)
 set noshowcmd                   " Don't show the current command
 set nowrap                      " Do not wrap long lines
+set redrawtime=1500             " Abort expensive syntax highlighting sooner
 set relativenumber number       " Use relative line numbers
 set scrolljump=5                " Lines to scroll when cursor leaves screen
 set scrolloff=3                 " Minimum lines to keep above and below cursor
@@ -393,10 +380,10 @@ nnoremap <Leader>s :b#<cr>
 nnoremap <leader>w :bd<cr>
 " }}}
 
-" asynccomplete {{{
+" popup menu completion {{{
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
 " }}}
 
 " Make {{{

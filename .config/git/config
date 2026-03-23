@@ -23,8 +23,8 @@
   defaultBranch = main
 
 [tag]
-  gpgsign = false
-  forceSignAnnotated = false
+  gpgsign = true
+  forceSignAnnotated = true
 [core]
   whitespace = trailing-space, space-before-tab, cr-at-eol
   editor = vim
@@ -47,7 +47,6 @@
   log = true
   tool = fugitive
   conflictstyle = zdiff3
-  renamelimit = 100000
 
 [mergetool]
   keepBackup = false
@@ -58,9 +57,6 @@
 
 [rerere]
   enabled = true
-
-[branch]
-  autoSetupMerge = always
 
 [push]
   followTags = true

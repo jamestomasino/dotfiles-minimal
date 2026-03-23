@@ -1,7 +1,9 @@
+# shellcheck shell=bash
+
 # history
 export HISTFILE="$HOME/.history"
 export HISTTIMEFORMAT="%F %T "
-export HISTCONTRAL=ignoredups
+export HISTCONTROL=ignoredups
 export HISTFILESIZE=100000
 export HISTSIZE=100000
 export HISTIGNORE="clear:keybase*:bssh:exit"
@@ -25,8 +27,10 @@ LESS_TERMCAP_ZW=$(tput rsupm); export LESS_TERMCAP_ZW
 export GROFF_NO_SGR=1;
 
 # search
-if command -v ag > /dev/null 2>&1; then
-  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore npm_modules -g ""'
+if command -v rg > /dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='rg --files --hidden -g "!.git" -g "!.sass-cache" -g "!node_modules"'
+elif command -v ag > /dev/null 2>&1; then
+  export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore .sass-cache --ignore node_modules -g ""'
 fi
 
 # fzf
@@ -92,8 +96,8 @@ export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/config
 export NPM_CONFIG_CACHE=$XDG_CACHE_HOME/npm
 export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
+# shellcheck disable=SC2016
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
-alias ag='ag --path-to-ignore $XDG_CONFIG_HOME/ag/ignore'
 
 # GPG
 GPG_TTY=$(tty)
@@ -132,7 +136,9 @@ alias grep='grep --color=auto'
 alias lynx='lynx -display_charset=utf8 --lss=/dev/null'
 alias tmux='tmux -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
 alias tmate='tmate -u2 -f "$XDG_CONFIG_HOME"/tmux/tmux.conf'
-alias ag="ag --color-path 35 --color-match '1;35' --color-line-number 32"
+rg() {
+  command rg --ignore-file "$XDG_CONFIG_HOME/ag/ignore" "$@"
+}
 alias newsboat='newsboat -C "$XDG_CONFIG_HOME"/newsboat/config -u "$XDG_CONFIG_HOME"/newsboat/urls -c "$XDG_CACHE_HOME"/newsboat.db'
 # Directory Helpers
 alias lsd='ls -Gl | grep "^d"'
@@ -152,14 +158,17 @@ alias getmusic="yt-dlp -x --audio-quality 0 --audio-format mp3"
 alias getplaylist="yt-dlp -x --audio-quality 0 --audio-format mp3 --yes-playlist"
 # General Helpers
 alias vimr='vim -u NONE -U NONE -i NONE'
-alias wiki="vim -c VimwikiIndex"
+alias wiki="VIM_WIKI=1 vim -c VimwikiIndex"
 alias gs="git status"
 alias t='tmux attach || tmux new'
 alias mosh="export LC_ALL=\"en_US.UTF8\" && mosh"
 alias proxy="ssh -D 1337 -q -C -N"
 
 # PROMPT COMMANDS
-PROMPT_COMMAND="history -a; history -r; $PROMPT_COMMAND"
+case "$PROMPT_COMMAND" in
+  *"history -a; history -r;"*) ;;
+  *) PROMPT_COMMAND="history -a; history -r;${PROMPT_COMMAND:+ $PROMPT_COMMAND}" ;;
+esac
 
 # use color in prompt if not dash. Color works there, but screws up line wrapping
 USER=$(id -un)
@@ -181,12 +190,18 @@ else
   PS1=${PS1}"${PIPE_COLOR}|" # [hostname]
   PS1=${PS1}"${DIRECTORY_COLOR}\w" # workingdir
   PS1=${PS1}"\n$PROMPT_COLOR->$RESET_COLOR " # ->
-  unset DIRECTORY_COLOR PROMPT_COLOR HOST_COLO RESET_COLOR
+  unset DIRECTORY_COLOR PROMPT_COLOR HOST_COLOR RESET_COLOR
 fi
 export PS1
 
 # system path
-path() { [ -d "$1" ] && PATH="${PATH}${PATH:+:}${1}"; }
+path() {
+  [ -d "$1" ] || return
+  case ":$PATH:" in
+    *":$1:"*) ;;
+    *) PATH="${PATH}${PATH:+:}${1}" ;;
+  esac
+}
 PATH=/bin
 path "/sbin"
 path "/usr/bin"
@@ -213,10 +228,10 @@ path "${HOME}/.fzf/bin"
 path "${HOME}/go/bin"
 path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
-path "${ANDROID_SDK_ROOT}/platform-tools"
 
 # javascript
 export NVM_DIR="$HOME/.config/nvm"
+# shellcheck disable=SC1091
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
@@ -245,6 +260,7 @@ fi
 
 # rust
 if [ -d "$HOME/.cargo" ]; then
+  # shellcheck disable=SC1091
   . "$HOME/.cargo/env"
 fi
 
@@ -252,6 +268,7 @@ fi
 if [ -d "${HOME}/Android/Sdk" ]; then
   export ANDROID_SDK_ROOT="${HOME}/Android/Sdk"
   export JAVA_HOME="/snap/android-studio/current/jbr"
+  path "$ANDROID_SDK_ROOT/platform-tools"
   path "$JAVA_HOME/bin"
 fi
 
