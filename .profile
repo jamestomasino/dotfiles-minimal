@@ -111,7 +111,7 @@ export EDITOR="vim"
 set -o vi
 
 # less settings
-export PAGER=less
+export PAGER="less -R"
 
 # umask liberal
 umask 0022
