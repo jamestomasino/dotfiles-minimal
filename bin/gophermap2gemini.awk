@@ -58,14 +58,22 @@ BEGIN {
 		}
 		url = path
 		printf("=> %s %s\n", url, label)
-	} else if ( type == "T") {
-		# telnet links
-		if (isFenced)  {
-			# end fences for links
-			print "```"
-			isFenced=0
-		}
-		printf("=> telnet://%s:%s/%s%s %s\n", server, port, type, path, label)
+        } else if ( type == "T") {
+                # ANONYMOUS TN3270 links
+                if (isFenced)  {
+                        # end fences for links
+                        print "```"
+                        isFenced=0
+                }
+                printf("=> telnet://%s:%s/%s %s\n", server, port, path, label)
+        } else if ( type == "8") {
+                # ANONYMOUS telnet links
+                if (isFenced)  {
+                        # end fences for links
+                        print "```"
+                        isFenced=0
+                }
+                printf("=> telnet://%s:%s/%s %s\n", server, port, path, label)
 	} else {
 		# any other gopher type
 		if (isFenced)  {
