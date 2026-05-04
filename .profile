@@ -240,6 +240,9 @@ path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
 
 # javascript
+export VOLTA_HOME="$HOME/.volta"
+path "${VOLTA_HOME}/bin"
+
 export NVM_DIR="$HOME/.config/nvm"
 # shellcheck disable=SC1091
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
