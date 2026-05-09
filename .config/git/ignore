@@ -97,6 +97,9 @@ com_crashlytics_export_strings.xml
 # Dropbox #
 .dropbox
 
+# Codex #
+.codex
+
 # ctags
 .tags
 tags

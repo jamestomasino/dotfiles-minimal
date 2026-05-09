@@ -1,7 +1,7 @@
 [user]
   name = James Tomasino
   email = james@tomasino.org
-  signingkey = 09DDD7DF
+  signingkey = 34FA8812
 
 [sendemail]
   smtpserver = mail.messagingengine.com

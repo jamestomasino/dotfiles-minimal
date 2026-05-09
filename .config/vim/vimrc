@@ -29,6 +29,7 @@ Plug 'reedes/vim-pencil'                     " Super-powered writing things
 Plug 'tpope/vim-abolish'                     " Fancy abbreviation replacements
 Plug 'junegunn/goyo.vim'                     " Full screen writing mode
 Plug 'kaarmu/typst.vim'                      " Syntax highlighting for typst files
+Plug 'jamestomasino/vim-writingsyntax'       " writing markups
 if !empty($VIM_WIKI)
 Plug 'vimwiki/vimwiki', { 'branch' : 'dev' } " Wiki
 endif

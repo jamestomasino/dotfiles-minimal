@@ -78,6 +78,7 @@ export TODO="$SYNCTHING_PATH/todo/personal.txt"
 export NOTE_DIR="$SYNCTHING_PATH/notes"
 export CONTACTS_DIR="$SYNCTHING_PATH/contacts"
 export TRACK_DIR="$SYNCTHING_PATH/track"
+export MAP_DEFAULT_DIRECTORY="$SYNCTHING_PATH/maps"
 export AUDIOBOOKS="${HOME}/pCloudDrive/Audiobooks/"
 export STATIONS="${SYNCTHING_PATH}/music/stations.txt"
 
@@ -238,6 +239,12 @@ path "${HOME}/.fzf/bin"
 path "${HOME}/go/bin"
 path "/var/lib/flatpak/exports/share"
 path "${HOME}/.local/share/flatpak/exports/share"
+path "${HOME}/.bun/bin"
+
+# homebrew (linuxbrew)
+if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 # javascript
 export VOLTA_HOME="$HOME/.volta"
@@ -273,8 +280,10 @@ fi
 
 # rust
 if [ -d "$HOME/.cargo" ]; then
-  # shellcheck disable=SC1091
-  . "$HOME/.cargo/env"
+  if [ -f "$HOME/.cargo/env" ]; then
+    # shellcheck disable=SC1091
+    . "$HOME/.cargo/env"
+  fi
 fi
 
 # android sdk
