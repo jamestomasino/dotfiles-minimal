@@ -1,0 +1,132 @@
+# jcode configuration — tuned for:
+#   AMD Ryzen 7 7700 (8C/16T) · NVIDIA RTX 5090 (32 GB VRAM) · 62 GB RAM · Linux
+#
+# Default: local LM Studio models (fast, private, free).
+# Fallback: OpenAI Enterprise (use /model to switch when you need it).
+#
+# Environment variables override these settings.
+# Run `/config` in jcode to see current live values.
+
+# ─── Keybindings ───────────────────────────────────────────────────────────────
+[keybindings]
+# Defaults are vim-style and work well on Linux + kitty — leave as-is unless
+# you want to remap.
+
+# ─── Display ──────────────────────────────────────────────────────────────────
+[display]
+# Full animations — your GPU/terminal can easily handle them.
+performance = "full"
+animation_fps = 60
+redraw_fps = 60
+
+# Diff display: inline diffs in chat.
+diff_mode = "inline"
+
+# Show reasoning/thinking content live, collapse after each turn.
+reasoning_display = "current"
+
+idle_animation = true
+prompt_entry_animation = true
+
+# ─── Features ─────────────────────────────────────────────────────────────────
+[features]
+memory = true
+swarm = true
+message_timestamps = true
+kv_cache_miss_notices = true
+update_channel = "stable"
+
+# ─── Tools ────────────────────────────────────────────────────────────────────
+[tools]
+profile = "full"
+
+# ─── Provider ─────────────────────────────────────────────────────────────────
+[provider]
+# Default: local LM Studio. Switch to OpenAI with /model or --model on CLI.
+default_provider = "lm-server"
+default_model = "qwen/qwen3.6-27b"
+
+# Local models can have cold-start latency — raise idle timeout.
+stream_idle_timeout_secs = 300
+
+# ─── Local LM Studio Provider ────────────────────────────────────────────────
+[providers.lm-server]
+type = "openai-compatible"
+base_url = "http://localhost:1234/v1"
+auth = "none"
+default_model = "qwen/qwen3.6-27b"
+requires_api_key = false
+
+[[providers.lm-server.models]]
+id = "qwen/qwen3.6-27b"
+context_window = 160804
+
+# ─── OpenAI Enterprise ────────────────────────────────────────────────────────
+# Your OPENAI_API_KEY env var is already detected. Switch with:
+#   /model  (in jcode TUI) → pick any OpenAI model
+#   jcode --provider openai --model gpt-4.1 run "..."
+# Enterprise accounts get access to additional models via the auto-detected
+# model catalog.
+
+# ─── Compaction ────────────────────────────────────────────────────────────────
+[compaction]
+# Proactive: predicts when you'll hit the context limit and compacts early.
+# Smoother than reactive, especially with a 160k window.
+mode = "proactive"
+
+# ─── Auto-Review ───────────────────────────────────────────────────────────────
+[auto_review]
+# Automatically review code changes at end of each turn.
+# Uses a cheap model so cost is negligible.
+enabled = true
+model = "gpt-4.1-nano"
+
+# ─── Agents (Swarm / Memory Sidecar) ──────────────────────────────────────────
+[agents]
+# Open a kitty window per swarm worker.
+swarm_spawn_mode = "visible"
+
+# Use OpenAI embeddings — much higher quality than local ONNX,
+# and dirt cheap (~$0.0001 per 1000 tokens).
+memory_sidecar_enabled = true
+memory_embedding_backend = "openai"
+memory_embedding_model = "text-embedding-3-small"
+
+# Pin memory sidecar to a cheap model for relevance/extraction judgments.
+memory_model = "gpt-4.1-nano"
+
+# High-precision memory rerank: 2 judges, both must agree → ~1.0 precision.
+memory_rerank_cadence = 3
+memory_rerank_votes = 2
+memory_rerank_min_agree = 2
+
+# ─── Terminal / Spawning (kitty) ──────────────────────────────────────────────
+[terminal]
+# Open each headed spawn (swarm agents, resume, self-dev) as a new kitty tab.
+# jcode runs: <spawn_hook> <jcode-binary> <args...>
+spawn_hook = "kitty @ launch --type=tab"
+
+# ─── Notifications ────────────────────────────────────────────────────────────
+[notifications]
+turn_complete = true
+turn_complete_min_secs = 120
+turn_complete_todo_min_secs = 30
+turn_complete_only_when_unfocused = true
+
+# ─── Power ────────────────────────────────────────────────────────────────────
+[power]
+prevent_sleep_while_streaming = true
+
+# ─── Ambient Mode ─────────────────────────────────────────────────────────────
+[ambient]
+enabled = false
+
+# ─── Safety ───────────────────────────────────────────────────────────────────
+[safety]
+desktop_notifications = true
+
+# ─── Web Search ───────────────────────────────────────────────────────────────
+[websearch]
+engine = "duckduckgo"
+fallback_engines = ["bing"]
+bing_market = "en-US"

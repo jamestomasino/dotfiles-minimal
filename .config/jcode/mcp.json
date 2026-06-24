@@ -1,0 +1,19 @@
+{
+  "servers": {
+    "github": {
+      "command": "/home/tomasino/.local/bin/gh-mcp-server",
+      "args": [],
+      "shared": true
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fs", "/mnt/data/personal", "/home/tomasino"],
+      "shared": true
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "shared": true
+    }
+  }
+}

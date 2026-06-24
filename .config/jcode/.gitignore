@@ -1,0 +1,16 @@
+# jcode runtime data (not config)
+telemetry_*
+logs/
+sessions/
+memory/
+auth.json
+*.env
+update_metadata.json
+provider_activity.json
+setup_hints.json
+keymap-snapshot.json
+servers.json
+models/
+source/
+builds/
+pending-login/
