@@ -7,12 +7,7 @@
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fs", "/mnt/data/personal", "/home/tomasino"],
-      "shared": true
-    },
-    "git": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/mnt/data/personal", "/home/tomasino"],
       "shared": true
     }
   }

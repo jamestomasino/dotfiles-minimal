@@ -102,6 +102,9 @@ export CALCHISTFILE=$XDG_DATA_HOME/calc_history
 export DOTREMINDERS=$XDG_CONFIG_HOME/remind/reminders
 # shellcheck disable=SC2016
 export VIMINIT='let $MYVIMRC="$XDG_CONFIG_HOME/vim/vimrc" | source $MYVIMRC'
+# jcode config directory (version-controlled in dotfiles)
+export JCODE_HOME="$HOME/.config/jcode"
+
 
 # GPG
 GPG_TTY=$(tty)
@@ -227,6 +230,7 @@ path "/opt/local/bin"
 path "/opt/local/sbin"
 path "/snap/bin"
 path "/tilde/bin"
+path "${HOME}/.lmstudio/bin"
 path "${HOME}/.pyenv/bin"
 path "${HOME}/bin"
 path "${HOME}/.yarn/bin"
@@ -305,3 +309,8 @@ if [ -d "${HOME}/.pyenv/" ]; then
   eval "$(pyenv init - bash)"
   eval "$(pyenv virtualenv-init -)"
 fi
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/tomasino/.lmstudio/bin"
+# End of LM Studio CLI section
+
