@@ -166,6 +166,7 @@ alias ......="cd ../../../../.."
 alias utc='date -u +%H:%M:%S'
 alias beat='echo "x = ($(date +%s) + 3600) % 86400; scale=3; x / 86.4" | bc'
 alias beatTAI='echo "x = $(date +%s) % 86400; scale=3; x / 86.4" | bc'
+alias uuid='openssl rand -hex 32'
 alias mil='echo "x = $(date +%s) % 86400; scale=3; x / 86400" | bc'
 alias julian='echo "x = $(date +%s); scale=5; x / 86400 + 2440587.5" | bc'
 alias getmusic="yt-dlp -x --audio-quality 0 --audio-format mp3"
