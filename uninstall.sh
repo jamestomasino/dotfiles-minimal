@@ -11,8 +11,20 @@ pushd () {
 }
 
 popd () {
-  command popd > /dev/null
+  command popd "$@" > /dev/null
 }
+
+# parse flags
+DESKTOP=false
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --desktop) DESKTOP=true; shift ;;
+    *) shift ;;
+  esac
+done
+
+# list of desktop-only top-level entries (local machines only)
+DESKTOP_ONLY="kitty imwheel"
 
 tryfiles () {
   local path="$1"
@@ -35,8 +47,23 @@ tryfiles () {
   fi
 }
 
+# main loop, ignoring some key files
 for x in *; do
-  if [ "$x" != ".git" ] && [ "$x" != "." ] && [ "$x" != ".." ] && [ "$x" != "install.sh" ]&& [ "$x" != "uninstall.sh" ] && [ "$x" != "README.md" ]; then
-    tryfiles "$x"
+  # skip internal / meta files
+  if [ "$x" = ".git" ] || [ "$x" = ".gitignore" ] || [ "$x" = "." ] || [ "$x" = ".." ] ||
+     [ "$x" = "install.sh" ] || [ "$x" = "uninstall.sh" ] || [ "$x" = "README.md" ] || [ "$x" = "PLAN.md" ]; then
+    continue
   fi
+
+  # skip desktop-only entries unless --desktop was passed
+  if ! $DESKTOP; then
+    for d in $DESKTOP_ONLY; do
+      if [ "$x" = "$d" ]; then
+        printf "Skipping (desktop-only): %s\\n" "$x"
+        continue 2
+      fi
+    done
+  fi
+
+  tryfiles "$x"
 done

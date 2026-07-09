@@ -1,1 +1,21 @@
+# npm config (generated/credentials)
 .config/npm/config
+
+# Editor swap/backup files
+*.swp
+*.swo
+*~
+
+# Vim undo/backup
+.*/
+
+# OS generated
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Shell history
+.history
+
+# Temporary files
+tmp/
