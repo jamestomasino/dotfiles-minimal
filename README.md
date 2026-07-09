@@ -1,23 +1,86 @@
-# dotfiles
+# dotfiles-minimal
 
-My previous [dotfiles](https://github.com/jamestomasino/dotfiles) collection has grown over the years to encompass a huge variety of features that were `bash` focused. Setup relied on some gnu packages that are not available on all systems. The functions wrapping git functionality and other per-prompt processing loaded down the shell and lengthened startup times.
+Minimal, portable dotfiles for a `/bin/sh` or `dash` interactive shell. Designed
+to work across machines with minimal dependencies, though some tools (like
+`bash`) may still be used where they add value.
 
-This repository is a reboot. I've stripped out a lot, but kept most of the more useful features that I take advantage of day-by-day. These dotfiles are designed to run with `/bin/sh` or `dash` as the interactive shell. While I may still run `bash` on some machines for tab-completion, this set should prove more portable.
+## What's included
+
+| Category | Tools |
+|----------|-------|
+| Shell | `.profile`, `.bashrc`, `.inputrc`, shell functions (`.functions/`) |
+| Terminal | `tmux`, `kitty` (desktop-only) |
+| Editor | `vim` (vim-plug, fzf, pencil, goyo) |
+| Email | `aerc` (Dracula theme) |
+| Media | `cmus`, `mpv`, `mplayer` |
+| News & RSS | `newsboat` |
+| Web | `curl`, `lynx` |
+| Dev | `git` (delta pager, fugitive merge tool, GPG signing) |
+| Utilities | `sc-im`, `remind`, `phetch`, `slrn`, `ag`, `vf1`, `imwheel` (desktop-only) |
+| Scripts | 25 custom binaries in `bin/` (audiobooks, music, news, clipboard, file management) |
+| AI | `jcode` LSP/agent configuration with skills library |
+
+## Requirements
+
+- **bash** — for install/uninstall scripts
+- **coreutils** — `ln`, `mkdir`, `pwd`, `pushd`/`popd`
+- **symlinks** — your home directory filesystem must support them
+
+Optional tools depend on what you have installed on a given machine. The install
+script skips files for tools that aren't present without failing.
 
 ## Usage
 
-* Install with `install.sh`.
-* Uninstall with `uninstall.sh`.
+```bash
+# Clone the repository
+git clone https://github.com/jamestomasino/dotfiles-minimal.git
+cd dotfiles-minimal
 
-## Non-login environment
+# Install (link files into your home directory)
+./install.sh
 
-Since everything is shoved into .profile there's nothing set up path-wise for non-login script execution, like cronjobs. I add the following to my user cron if I need the environment populated:
+# Install with desktop-only configs (kitty, imwheel)
+./install.sh --desktop
 
-```
-SHELL=/bin/bash
-BASH_ENV="/home/tomasino/.profile"
+# Uninstall (remove symlinks and empty directories)
+./uninstall.sh
 ```
 
 ## Linking strategy
 
-The install process will run through this repository recursively looking for individual files. It will link any files into the home directory on an individual file-by-file basis. If the corresponding folder doesn't exist yet, it will be created. The purpose of going file-by-file is to avoid linking any directories and accidentally scooping up other files that may be added there over time.
+The install process recursively traverses the repository, creating symlinks for
+each **individual file** into the corresponding location in your home directory.
+Directories themselves are never symlinked. This prevents accidentally pulling in
+untracked files that may be created inside a config directory over time.
+
+Files that are skipped during install:
+- `.git/` (version control)
+- `.gitignore`
+- `install.sh`, `uninstall.sh` (management scripts)
+- `README.md`
+
+Desktop-only entries (`kitty`, `imwheel`) are skipped unless `--desktop` is
+passed.
+
+## Directory structure
+
+```
+├── .profile          # Shell profile (aliases, PATH, environment)
+├── .bashrc           # Bash-specific settings
+├── .inputrc          # Readline configuration
+├── .imwheelrc        # Mouse wheel mapping (desktop)
+├── .functions/       # Shell functions (cd, fd, fda, z, etc.)
+├── .config/          # XDG config files (vim, tmux, git, mpv, etc.)
+├── bin/              # Custom utility scripts
+├── install.sh        # Install script
+├── uninstall.sh      # Uninstall script
+└── README.md
+```
+
+## Notes
+
+- Run `./install.sh` after pulling updates to pick up new or changed files.
+- Existing files in your home directory are **not overwritten**. The installer
+  skips them and prints a warning.
+- The `--desktop` flag is intended for local machines. On servers or minimal
+  systems, omit it to skip GUI-dependent configs.
