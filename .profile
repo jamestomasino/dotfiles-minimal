@@ -1,5 +1,11 @@
 # shellcheck shell=bash
 
+# Guard against double-sourcing
+if [ -n "$PROFILE_SOURCED" ]; then
+  return 0 2>/dev/null || exit 0
+fi
+export PROFILE_SOURCED=1
+
 # history
 export HISTFILE="$HOME/.history"
 export HISTTIMEFORMAT="%F %T "
@@ -25,7 +31,7 @@ if [ -t 1 ] && command -v tput > /dev/null 2>&1; then
   LESS_TERMCAP_ZV=$(tput rsubm); export LESS_TERMCAP_ZV
   LESS_TERMCAP_ZW=$(tput rsupm); export LESS_TERMCAP_ZW
 fi
-export GROFF_NO_SGR=1;
+export GROFF_NO_SGR=1
 
 # search
 if command -v rg > /dev/null 2>&1; then
@@ -55,7 +61,10 @@ if command -v fzf > /dev/null 2>&1; then
     "
   }
   _gen_fzf_default_opts
-  if [ -f ~/.fzf.bash ]; then
+  if [ -f "$XDG_CONFIG_HOME/fzf/shell/key-bindings.bash" ]; then
+    # shellcheck source=/dev/null
+    . "$XDG_CONFIG_HOME/fzf/shell/key-bindings.bash"
+  elif [ -f ~/.fzf.bash ]; then
     # shellcheck source=/dev/null
     . ~/.fzf.bash
   fi
@@ -107,12 +116,11 @@ export JCODE_HOME="$HOME/.config/jcode"
 
 
 # GPG
-GPG_TTY=$(tty)
+GPG_TTY="${GPG_TTY:-$(tty)}"
 export GPG_TTY
 
 # vim
 export EDITOR="vim"
-set -o vi
 
 # less settings
 export PAGER="less -R"
@@ -186,8 +194,8 @@ case "$PROMPT_COMMAND" in
 esac
 
 # use color in prompt if not dash. Color works there, but screws up line wrapping
-USER=$(id -un)
-HOSTNAME=$(uname -n)
+USER="${USER:-$(id -un)}"
+HOSTNAME="${HOSTNAME:-$(uname -n)}"
 # true shell (TS) name
 TS=$(ps -cp "$$" -o command="" 2>/dev/null)
 if [ -z "$TS" ] || [ "$TS" = "" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; then
@@ -221,16 +229,8 @@ PATH=/bin
 path "/sbin"
 path "/usr/bin"
 path "/usr/sbin"
-path "/usr/games"
-path "/usr/pkg/bin"
 path "/usr/local/sbin"
 path "/usr/local/bin"
-path "/usr/local/volta"
-path "/usr/X11/bin"
-path "/opt/local/bin"
-path "/opt/local/sbin"
-path "/snap/bin"
-path "/tilde/bin"
 path "${HOME}/.lmstudio/bin"
 path "${HOME}/.pyenv/bin"
 path "${HOME}/bin"
@@ -240,11 +240,7 @@ path "${HOME}/.config/yarn/global/node_modules/.bin"
 path "${HOME}/.node/bin"
 path "${HOME}/.cargo/bin"
 path "${HOME}/.local/bin"
-path "${HOME}/.fzf/bin"
-path "${HOME}/go/bin"
-path "/var/lib/flatpak/exports/share"
-path "${HOME}/.local/share/flatpak/exports/share"
-path "${HOME}/.bun/bin"
+path "${HOME}/.opencode/bin"
 
 # homebrew (linuxbrew)
 if [ -x "/home/linuxbrew/.linuxbrew/bin/brew" ]; then
@@ -260,8 +256,7 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 if command -v node > /dev/null 2>&1; then
   NPM_PACKAGES="${HOME}/.npm-packages"
-  export NODE_PATH="/usr/local/lib/jsctags:/usr/local/lib/node:${HOME}/.yarn/bin:/usr/bin/npm"
-  export MANPATH="${MANPATH-$(manpath)}:$NPM_PACKAGES/share/man"
+  export MANPATH="${MANPATH:-$(manpath)}:$NPM_PACKAGES/share/man"
 fi
 
 # deno
@@ -291,27 +286,15 @@ if [ -d "$HOME/.cargo" ]; then
   fi
 fi
 
-# android sdk
-if [ -d "${HOME}/Android/Sdk" ]; then
-  export ANDROID_SDK_ROOT="${HOME}/Android/Sdk"
-  export JAVA_HOME="/snap/android-studio/current/jbr"
-  path "$ANDROID_SDK_ROOT/platform-tools"
-  path "$JAVA_HOME/bin"
-fi
-
 # Load local system overrides
 if [ -f "$HOME/.profile_local" ]; then
   # shellcheck source=/dev/null
   . "$HOME/.profile_local"
 fi
 
-
+# pyenv
 if [ -d "${HOME}/.pyenv/" ]; then
   eval "$(pyenv init - bash)"
   eval "$(pyenv virtualenv-init -)"
 fi
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/home/tomasino/.lmstudio/bin"
-# End of LM Studio CLI section
 
