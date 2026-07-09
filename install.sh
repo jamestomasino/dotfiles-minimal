@@ -1,72 +1,55 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-# allow globs to see dotfiles
-shopt -s dotglob
+# Resolve script directory (trailing slash for safe path matching)
+DIR="$(cd "$(dirname "$0")" && pwd)/"
 
-# get reference to script directory as starting point
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-# suppress echos from pushd and popd for clean output
-pushd () {
-  command pushd "$@" > /dev/null
-}
-
-popd () {
-  command popd "$@" > /dev/null
-}
-
-# parse flags
-DESKTOP=false
-while [[ $# -gt 0 ]]; do
+# Parse flags
+DESKTOP=0
+while [ $# -gt 0 ]; do
   case "$1" in
-    --desktop) DESKTOP=true; shift ;;
+    --desktop) DESKTOP=1; shift ;;
     *) shift ;;
   esac
 done
 
-# list of desktop-only top-level entries (local machines only)
+# Desktop-only entries (local machines only)
 DESKTOP_ONLY="kitty imwheel"
 
-# recursive loop over files, creating mirrored directories and linking
-# only files. Avoids accidentally adding new files to dotfiles repo
-# if they are created and inserted into a symlinked directory later
-tryfiles () {
-  local path="$1"
-  if [ -d "${DIR}/${path}" ]; then
-    pushd "${DIR}/${path}" || return
-    mkdir -p "${HOME}/${path}"
-    for f in *; do
-      local newpath="${path}/${f}"
-      tryfiles "${newpath}"
-    done
-    popd || return
-  else
-    if [ -e "${HOME}/${path}" ]; then
-      printf "File Exists, Skipping: %s\\n" "${HOME}/${path}"
-    else
-      ln -sfn "${DIR}/${path}" "$HOME/${path}"
-      printf "Linking: %s/%s\\n" "${DIR}" "${path}"
-    fi
+# Check if a path should be skipped (desktop-only, when --desktop not set)
+should_skip() {
+  if [ "$DESKTOP" -eq 1 ]; then
+    return 1
   fi
+  for d in $DESKTOP_ONLY; do
+    case "$1" in
+      "${d}"/*) return 0 ;;
+    esac
+  done
+  return 1
 }
 
-# main loop, ignoring some key files
-for x in *; do
-  # skip internal / meta files
-  if [ "$x" = ".git" ] || [ "$x" = ".gitignore" ] || [ "$x" = "." ] || [ "$x" = ".." ] ||
-     [ "$x" = "install.sh" ] || [ "$x" = "uninstall.sh" ] || [ "$x" = "README.md" ] || [ "$x" = "PLAN.md" ]; then
-    continue
-  fi
+# Collect all files, excluding .git and management files.
+find . -not -path ./.git -not -path './.git/*' -type f | while IFS= read -r file; do
+  relpath="${file#./}"
+  base="$(basename "$relpath")"
 
-  # skip desktop-only entries unless --desktop was passed
-  if ! $DESKTOP; then
-    for d in $DESKTOP_ONLY; do
-      if [ "$x" = "$d" ]; then
-        printf "Skipping (desktop-only): %s\\n" "$x"
-        continue 2
-      fi
-    done
-  fi
+  # Skip management files
+  case "$base" in
+    .gitignore|install.sh|uninstall.sh|README.md|PLAN.md) continue ;;
+  esac
 
-  tryfiles "$x"
+  # Skip desktop-only paths
+  should_skip "$relpath" && continue
+
+  # Create parent directory if needed
+  parent="$(dirname "${HOME}/${relpath}")"
+  mkdir -p "$parent"
+
+  # Link file (skip if target already exists)
+  if [ -e "${HOME}/${relpath}" ]; then
+    printf 'File Exists, Skipping: %s\n' "${HOME}/${relpath}"
+  else
+    ln -sf "${DIR}${relpath}" "${HOME}/${relpath}"
+    printf 'Linking: %s/%s\n' "${DIR}" "${relpath}"
+  fi
 done

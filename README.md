@@ -22,8 +22,8 @@ to work across machines with minimal dependencies, though some tools (like
 
 ## Requirements
 
-- **bash** — for install/uninstall scripts
-- **coreutils** — `ln`, `mkdir`, `pwd`, `pushd`/`popd`
+- **POSIX sh** — `dash`, `ash`, or any POSIX-compliant shell for install/uninstall scripts
+- **coreutils** — `ln`, `mkdir`, `pwd`, `find`, `rm`
 - **symlinks** — your home directory filesystem must support them
 
 Optional tools depend on what you have installed on a given machine. The install
@@ -48,7 +48,7 @@ cd dotfiles-minimal
 
 ## Linking strategy
 
-The install process recursively traverses the repository, creating symlinks for
+The install process walks the repository with `find`, creating symlinks for
 each **individual file** into the corresponding location in your home directory.
 Directories themselves are never symlinked. This prevents accidentally pulling in
 untracked files that may be created inside a config directory over time.
