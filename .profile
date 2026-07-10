@@ -1,10 +1,16 @@
 # shellcheck shell=bash
 
-# Guard against double-sourcing
-if [ -n "$PROFILE_SOURCED" ]; then
+# Guard against double-sourcing within the same shell (no export — stays local)
+if [ "$_PROFILE_GUARD" ]; then
   return 0 2>/dev/null || exit 0
 fi
-export PROFILE_SOURCED=1
+readonly _PROFILE_GUARD=1
+
+# Source .bashrc for interactive bash login shells (vi mode, completion)
+if [ -n "$BASH_VERSION" ] && [ -n "$PS1" ] && [ -f "$HOME/.bashrc" ]; then
+  # shellcheck disable=SC1091
+  . "$HOME/.bashrc"
+fi
 
 # history
 export HISTFILE="$HOME/.history"
