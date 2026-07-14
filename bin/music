@@ -1,5 +1,15 @@
 #!/bin/sh
-PLAYER='mpv --quiet --msg-level=cplayer=no,ffmpeg=no,ao=no,ad=no,display-tags=no --no-resume-playback --http-header-fields="Icy-MetaData:1"'
+
+# mpv player function — avoids storing a command string (quoting nightmare)
+play() {
+  mpv --quiet \
+    --msg-level=cplayer=no,ffmpeg=no,ao=no,ad=no,display-tags=no \
+    --no-resume-playback \
+    --http-header-fields="Icy-MetaData:1" \
+    --http-header-fields="User-Agent: mpv/0.37.0" \
+    "$@"
+}
+
 XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 STATIONS=${STATIONS:-$HOME/stations.txt}
 
@@ -8,12 +18,25 @@ STATIONS=${STATIONS:-$HOME/stations.txt}
 # soma
 # tilderadio=https://azuracast.tilderadio.org/radio/8000/320k.ogg
 
+# Safe lookup: exact-match station name, no regex injection
+lookup_station() {
+  _lookup_name="$1"
+  while IFS='=' read -r key value; do
+    [ -z "$key" ] && continue
+    case "$key" in \#*) continue ;; esac
+    if [ "$key" = "$_lookup_name" ]; then
+      printf '%s' "$value"
+      return 0
+    fi
+  done < "$STATIONS"
+  return 1
+}
+
 # Read stations.txt and get list of stations to browse
 if [ -z "$1" ]; then
-  select="$(cat "$STATIONS" | cut -d "=" -f 1 | fzf \
-    --multi \
+  select="$(grep -v '^#' "$STATIONS" | grep '=' | cut -d '=' -f 1 | fzf \
     --select-1 \
-    --exit-0 )"
+    --exit-0)"
 else
   select="$1"
 fi
@@ -21,33 +44,37 @@ fi
 # If a station is chosen (or passed directly as a param..)
 if [ -n "$select" ]; then
 
-  # If the station has a stream URL play it
-  stream=$(sed -n "/^${select}=/p" ${STATIONS}  | cut -d "=" -f 2)
+  # If the station has a stream URL, play it
+  stream="$(lookup_station "$select")"
   if [ -n "$stream" ]; then
-    ${PLAYER} $stream
+    play "$stream"
 
   # If the station is somafm..
-  elif [ "soma" = $select ]; then
+  elif [ "$select" = "soma" ]; then
 
-    # We cache a copy of the somafm stations list for 1 day at a time to save query time
-    tempfile="${XDG_CACHE_HOME}/soma-stations.txt" || return
-    if test "$(find "$tempfile" -mmin +$((60*24)) 2> /dev/null)"; then
+    # We cache a copy of the somafm stations list for 1 day at a time
+    tempfile="${XDG_CACHE_HOME}/soma-stations.txt"
+    if [ -f "$tempfile" ] && [ "$(find "$tempfile" -mmin +$((60*24)) 2>/dev/null)" ]; then
       rm "$tempfile"
     fi
 
     # Fetch a new station list if there isn't one cached
     if [ ! -f "$tempfile" ]; then
-      curl -s https://somafm.com/channels.json | jq -r '.channels[] | "\(.title),\(.playlists[0].url)"' > "$tempfile"
+      # Use tab as delimiter so station names with commas/spaces are safe
+      curl -s https://somafm.com/channels.json \
+        | jq -r '.channels[] | [.title, .playlists[0].url] | @tsv' \
+        > "$tempfile"
     fi
 
-    # Browse the station list with FZF
-    station="$(awk -F',' '{print $1}' "$tempfile" | \
-      fzf --select-1 --exit-0 | \
-      xargs -r -I {} awk -F',' -v k="{}" '$1 == k { sub(/^[^,]+,/, ""); print $0 }' "$tempfile")"
+    # Browse the station list with FZF, then extract URL by exact name match
+    _soma_name="$(cut -f1 "$tempfile" | fzf --select-1 --exit-0)"
+    if [ -n "$_soma_name" ]; then
+      station="$(awk -F'\t' -v k="$_soma_name" '$1 == k { print $2; exit }' "$tempfile")"
+    fi
 
     # If one is chosen, play that station
     if [ -n "$station" ]; then
-      ${PLAYER} "${station}"
+      play "$station"
     fi
   fi
 fi
