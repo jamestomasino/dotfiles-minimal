@@ -57,22 +57,21 @@ handler_soma() {
 
 # Read stations.txt and get list of stations to browse
 if [ -z "$1" ]; then
-  select="$(grep -v '^#' "$STATIONS" | grep -v '^$' | cut -d '=' -f 1 | fzf \
+  select="$(grep -v '^#' "$STATIONS" | grep -v '^$' | cut -d '=' -f 1 | sed 's/^+//' | fzf \
     --select-1 \
     --exit-0)"
 else
   select="$1"
 fi
 
+# Normalize: strip leading + so 'music +soma' and 'music soma' both work
+select="${select#+}"
+
 if [ -n "$select" ]; then
 
-  # Special handler? (entries prefixed with +)
-  case "$select" in
-    +*) _handler_name="handler_${select#+}" ;;
-    *)  _handler_name="" ;;
-  esac
-
-  if [ -n "$_handler_name" ] && type "$_handler_name" >/dev/null 2>&1; then
+  # Special handler? (try handler_<name>)
+  _handler_name="handler_${select}"
+  if type "$_handler_name" >/dev/null 2>&1; then
     "$_handler_name"
 
   else
