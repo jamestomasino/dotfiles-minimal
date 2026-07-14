@@ -18,12 +18,13 @@ STATIONS=${STATIONS:-$HOME/stations.txt}
 # soma
 # tilderadio=https://azuracast.tilderadio.org/radio/8000/320k.ogg
 
-# Safe lookup: exact-match station name, no regex injection
+# Safe lookup: exact-match station name, no regex injection.
+# Only matches lines containing '=' (plain URL entries).
 lookup_station() {
   _lookup_name="$1"
   while IFS='=' read -r key value; do
     [ -z "$key" ] && continue
-    case "$key" in \#*) continue ;; esac
+    case "$key" in \#*|+*) continue ;; esac
     if [ "$key" = "$_lookup_name" ]; then
       printf '%s' "$value"
       return 0
@@ -31,6 +32,28 @@ lookup_station() {
   done < "$STATIONS"
   return 1
 }
+
+# ── Special handlers ─────────────────────────────────────────────────
+# Add a new handler by defining handler_<name> and adding +<name> to stations.txt.
+
+handler_soma() {
+  _soma_cache="${XDG_CACHE_HOME}/soma-stations.txt"
+  if [ -f "$_soma_cache" ] && [ "$(find "$_soma_cache" -mmin +$((60*24)) 2>/dev/null)" ]; then
+    rm "$_soma_cache"
+  fi
+  if [ ! -f "$_soma_cache" ]; then
+    curl -s https://somafm.com/channels.json \
+      | jq -r '.channels[] | [.title, .playlists[0].url] | @tsv' \
+      > "$_soma_cache"
+  fi
+  _soma_name="$(cut -f1 "$_soma_cache" | fzf --select-1 --exit-0)"
+  if [ -n "$_soma_name" ]; then
+    _soma_url="$(awk -F'\t' -v k="$_soma_name" '$1 == k { print $2; exit }' "$_soma_cache")"
+    [ -n "$_soma_url" ] && play "$_soma_url"
+  fi
+}
+
+# ── Main ─────────────────────────────────────────────────────────────
 
 # Read stations.txt and get list of stations to browse
 if [ -z "$1" ]; then
@@ -41,40 +64,20 @@ else
   select="$1"
 fi
 
-# If a station is chosen (or passed directly as a param..)
 if [ -n "$select" ]; then
 
-  # If the station has a stream URL, play it
-  stream="$(lookup_station "$select")"
-  if [ -n "$stream" ]; then
-    play "$stream"
+  # Special handler? (entries prefixed with +)
+  case "$select" in
+    +*) _handler_name="handler_${select#+}" ;;
+    *)  _handler_name="" ;;
+  esac
 
-  # If the station is somafm..
-  elif [ "$select" = "soma" ]; then
+  if [ -n "$_handler_name" ] && type "$_handler_name" >/dev/null 2>&1; then
+    "$_handler_name"
 
-    # We cache a copy of the somafm stations list for 1 day at a time
-    tempfile="${XDG_CACHE_HOME}/soma-stations.txt"
-    if [ -f "$tempfile" ] && [ "$(find "$tempfile" -mmin +$((60*24)) 2>/dev/null)" ]; then
-      rm "$tempfile"
-    fi
-
-    # Fetch a new station list if there isn't one cached
-    if [ ! -f "$tempfile" ]; then
-      # Use tab as delimiter so station names with commas/spaces are safe
-      curl -s https://somafm.com/channels.json \
-        | jq -r '.channels[] | [.title, .playlists[0].url] | @tsv' \
-        > "$tempfile"
-    fi
-
-    # Browse the station list with FZF, then extract URL by exact name match
-    _soma_name="$(cut -f1 "$tempfile" | fzf --select-1 --exit-0)"
-    if [ -n "$_soma_name" ]; then
-      station="$(awk -F'\t' -v k="$_soma_name" '$1 == k { print $2; exit }' "$tempfile")"
-    fi
-
-    # If one is chosen, play that station
-    if [ -n "$station" ]; then
-      play "$station"
-    fi
+  else
+    # Plain URL entry
+    stream="$(lookup_station "$select")"
+    [ -n "$stream" ] && play "$stream"
   fi
 fi
