@@ -34,7 +34,7 @@ lookup_station() {
 
 # Read stations.txt and get list of stations to browse
 if [ -z "$1" ]; then
-  select="$(grep -v '^#' "$STATIONS" | grep '=' | cut -d '=' -f 1 | fzf \
+  select="$(grep -v '^#' "$STATIONS" | grep -v '^$' | cut -d '=' -f 1 | fzf \
     --select-1 \
     --exit-0)"
 else
