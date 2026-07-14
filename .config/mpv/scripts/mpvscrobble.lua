@@ -15,6 +15,77 @@ local options = {
 require "mp.options".read_options(options, "mpvscrobble")
 
 -- ============================================================================
+-- HTML Entity Decoding
+-- ============================================================================
+local html_entity_map = {
+    ["&apos;"] = "'",
+    ["&amp;"]  = "&",
+    ["&quot;"] = '"',
+    ["&lt;"]   = "<",
+    ["&gt;"]   = ">",
+    ["&nbsp;"] = " ",
+    ["&mdash;"] = "-",
+    ["&ndash;"] = "-",
+    ["&laquo;"] = "<<",
+    ["&raquo;"] = ">>",
+    ["&copy;"]  = "(c)",
+    ["&reg;"]   = "(R)",
+    ["&trade;"] = "(TM)",
+    ["&deg;"]   = "°",
+    ["&bull;"]  = "*",
+    ["&hellip;"] = "...",
+    ["&lsquo;"] = "'",
+    ["&rsquo;"] = "'",
+    ["&ldquo;"] = '"',
+    ["&rdquo;"] = '"',
+    ["&minus;"] = "-",
+    ["&times;"] = "x",
+    ["&divide;"] = "/",
+    ["&pound;"] = "£",
+    ["&euro;"]  = "€",
+    ["&yen;"]   = "¥",
+    ["&cent;"]  = "¢",
+    ["&micro;"] = "µ",
+    ["&sect;"]  = "§",
+    ["&para;"]  = "¶",
+    ["&dagger;"] = "*",
+    ["&Dagger;"] = "**",
+    ["&permil;"] = "‰",
+}
+
+local function decode_html_entities(s)
+    if not s then return s end
+
+    -- Named entities (must come before numeric to avoid partial matches)
+    for entity, replacement in pairs(html_entity_map) do
+        s = s:gsub(entity, replacement)
+    end
+
+    -- Numeric decimal entities: &#123;
+    s = s:gsub("&#(%d+);", function(n)
+        local c = tonumber(n)
+        if c and c > 0 and c < 65536 then
+            return utf8.char(c)
+        end
+        return ""
+    end)
+
+    -- Numeric hex entities: &#x1A2B;
+    s = s:gsub("&#x(%x+);", function(h)
+        local c = tonumber(h, 16)
+        if c and c > 0 and c < 65536 then
+            return utf8.char(c)
+        end
+        return ""
+    end)
+
+    -- Clean up any leftover bare ampersands not part of entities
+    s = s:gsub("&[^&]*;", "")
+
+    return s
+end
+
+-- ============================================================================
 -- Helpers
 -- ============================================================================
 local function first_nonempty(...)
@@ -27,6 +98,9 @@ end
 
 local function normalize_icy(s)
     if not s then return s end
+
+    -- Decode HTML entities first
+    s = decode_html_entities(s)
 
     s = s:match("^%s*(.-)%s*$")
 
