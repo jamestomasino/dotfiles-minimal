@@ -14,7 +14,7 @@ path = "/home/tomasino/.syncthing/contacts/{collection}/"
 fileext = ".vcf"
 
 [storage remote_contacts]
-type = "caldav"
+type = "carddav"
 url = "https://caldav.tomasino.org/"
 username = "tomasino"
 password.fetch = ["command", "secret-tool", "lookup", "service", "radicale"]
