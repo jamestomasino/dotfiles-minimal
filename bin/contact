@@ -10,10 +10,7 @@ if ! command -v khard >/dev/null 2>&1; then
   exit 1
 fi
 
-# fzf preview: given a UID, show the vcard
-preview() {
-  khard show --format vcard "$1" 2>/dev/null || echo "(unable to preview)"
-}
+TAB="$(printf '\t')"
 
 if [ $# -eq 0 ]; then
   # Interactive selection via fzf
@@ -22,9 +19,9 @@ if [ $# -eq 0 ]; then
     fzf \
       --select-1 \
       --exit-0 \
-      --delimiter=$'\t' \
+      --delimiter="$TAB" \
       --with-nth=2,3 \
-      --preview="preview \$1" \
+      --preview="khard show --format pretty {1} 2>/dev/null" \
       --preview-window=right:70%:wrap \
       | cut -f1)
 
@@ -42,7 +39,7 @@ else
       ;;
     "-s"|"--show")
       shift
-      khard show --format vcard "${@}"
+      khard show --format pretty "${@}"
       ;;
     *)
       khard edit --format vcard "${@}"
