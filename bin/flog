@@ -1,20 +1,112 @@
 #!/bin/sh
 
-# fshow - git commit browser (enter for show, ctrl-d for diff, ` toggles sort)
-while out=$(
-  git log --graph --color=always \
-    --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-    fzf --ansi --multi --no-sort --reverse --query="$q" \
-    --print-query --expect=ctrl-d --toggle-sort=\`); do
-  q=$(echo "$out" | head -1)
-  k=$(echo "$out" | head -2 | tail -1)
-  shas=$(echo "$out" | sed '1,2d;s/^[^a-z0-9]*//;/^$/d' | awk '{print $1}')
-  [ -z "$shas" ] && continue
-  if [ "$k" = ctrl-d ]; then
-    git diff --color=always "$shas" | less -R
-  else
-    for sha in $shas; do
-      git show --color=always "$sha" | less -R
-    done
-  fi
+# fshow, interactive Git commit browser
+#
+# Enter       Show selected commits
+# Ctrl-D      Show commit diff, or compare two selected commits
+# Ctrl-S      Show summary/statistics
+# `           Toggle sorting
+# Ctrl-/      Toggle preview
+# Esc         Exit
+
+set -eu
+
+separator=$(printf '\037')
+query=
+
+is_commit() {
+  git cat-file -e "$1^{commit}" 2>/dev/null
+}
+
+show_commits() {
+  for sha do
+    git --no-pager show --color=always "$sha"
+  done | less -R
+}
+
+show_stats() {
+  for sha do
+    git --no-pager show \
+      --color=always \
+      --stat \
+      --summary \
+      --format=fuller \
+      "$sha"
+  done | less -R
+}
+
+show_diff() {
+  count=$#
+
+  case "$count" in
+    1)
+      # Show the changes introduced by this commit.
+      git --no-pager diff --color=always "$1^" "$1" | less -R
+      ;;
+    2)
+      # Compare the first selected commit with the second.
+      git --no-pager diff --color=always "$1" "$2" | less -R
+      ;;
+    *)
+      printf '%s\n' \
+        "Ctrl-D supports one commit or exactly two selected commits." >&2
+      ;;
+  esac
+}
+
+while :; do
+  out=$(
+    git log \
+      --graph \
+      --color=always \
+      --date=relative \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr${separator}%H" \
+      "$@" |
+      fzf \
+        --ansi \
+        --multi \
+        --reverse \
+        --no-sort \
+        --query="$query" \
+        --delimiter="$separator" \
+        --with-nth=1 \
+        --print-query \
+        --expect=enter,ctrl-d,ctrl-s \
+        --bind='`:toggle-sort' \
+        --bind='ctrl-/:toggle-preview' \
+        --header='Enter: show  Ctrl-D: diff  Ctrl-S: stat  `: sort  Ctrl-/: preview' \
+        --preview='git show --color=always --stat --summary {2} 2>/dev/null' \
+        --preview-window='right,55%,border-left'
+  ) || exit 0
+
+  query=$(printf '%s\n' "$out" | sed -n '1p')
+  key=$(printf '%s\n' "$out" | sed -n '2p')
+
+  set --
+  while IFS= read -r line; do
+    case "$line" in
+      *"$separator"*)
+        sha=${line##*"$separator"}
+        if is_commit "$sha"; then
+          set -- "$@" "$sha"
+        fi
+        ;;
+    esac
+  done <<EOF
+$(printf '%s\n' "$out" | sed '1,2d')
+EOF
+
+  [ "$#" -gt 0 ] || continue
+
+  case "$key" in
+    ctrl-d)
+      show_diff "$@"
+      ;;
+    ctrl-s)
+      show_stats "$@"
+      ;;
+    *)
+      show_commits "$@"
+      ;;
+  esac
 done
