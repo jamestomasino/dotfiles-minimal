@@ -1,43 +1,406 @@
 #!/bin/sh
 
-fetch() {
-  find "${NOTE_DIR}" -name "*.md" | \
-  sed -e "s|${NOTE_DIR}/||" | \
-  sed -e 's/\.md$//' | \
-  fzf \
-  --multi \
-  --select-1 \
-  --exit-0
+set -eu
+
+PROGRAM=${0##*/}
+SELF=$0
+
+die() {
+  printf '%s: %s\n' "$PROGRAM" "$*" >&2
+  exit 1
 }
 
-# Note taking function and command completion
-: "${NOTE_DIR:?'NOTE_DIR env var not set'}"
-if [ -d "${NOTE_DIR}" ]; then
-  if [ $# -eq 0 ]; then
-    file=$(fetch)
-    [ -n "$file" ] && ${EDITOR:-vim} "${NOTE_DIR}/${file}.md"
+: "${NOTE_DIR:?NOTE_DIR environment variable is not set}"
+
+[ -d "$NOTE_DIR" ] || die "note directory does not exist: $NOTE_DIR"
+command -v fzf >/dev/null 2>&1 || die "fzf is not installed"
+
+editor=${VISUAL:-${EDITOR:-vim}}
+pager=${PAGER:-less}
+
+strip_ansi() {
+  awk '
+    BEGIN {
+      esc = sprintf("%c", 27)
+    }
+
+    {
+      gsub(esc "\\[[0-9;]*m", "")
+      print
+    }
+  '
+}
+
+validate_note_name() {
+  case $1 in
+    ''|/*|..|../*|*/..|*/../*)
+      die "invalid note name: $1"
+      ;;
+  esac
+
+  case $1 in
+    *.md)
+      die "omit the .md extension: $1"
+      ;;
+  esac
+}
+
+note_path() {
+  validate_note_name "$1"
+  printf '%s/%s.md\n' "$NOTE_DIR" "$1"
+}
+
+join_arguments() {
+  result=
+  separator=
+
+  for argument do
+    result=$result$separator$argument
+    separator=' '
+  done
+
+  printf '%s\n' "$result"
+}
+
+list_notes() {
+  (
+    cd "$NOTE_DIR"
+
+    find . \
+      -type d -name '.archive' -prune -o \
+      -type f -name '*.md' -print |
+      sed -e 's|^\./||' -e 's|\.md$||' |
+      sort |
+      awk '
+        BEGIN {
+          esc = sprintf("%c", 27)
+          reset = esc "[0m"
+          filename_color = esc "[1;97m"
+
+          colors[1] = esc "[38;5;75m"
+          colors[2] = esc "[38;5;114m"
+          colors[3] = esc "[38;5;180m"
+          colors[4] = esc "[38;5;176m"
+          colors[5] = esc "[38;5;109m"
+
+          color_count = 5
+        }
+
+        {
+          count = split($0, parts, "/")
+          display = ""
+
+          for (i = 1; i < count; i++) {
+            color = colors[((i - 1) % color_count) + 1]
+            display = display color parts[i] reset "/"
+          }
+
+          display = display filename_color parts[count] reset
+          print display
+        }
+      '
+  )
+}
+
+preview_note() {
+  colored_note=${1-}
+
+  [ -n "$colored_note" ] || return 0
+
+  note=$(printf '%s\n' "$colored_note" | strip_ansi)
+  path=$(note_path "$note")
+
+  [ -f "$path" ] || return 0
+
+  if command -v bat >/dev/null 2>&1; then
+    bat \
+      --color=always \
+      --style=plain \
+      --paging=never \
+      --line-range=:200 \
+      "$path"
   else
-    case "$1" in
-      "-d")
-        if [ -n "$2" ]; then
-          rm "${NOTE_DIR}"/"$2".md
-        else
-          file=$(fetch)
-          [ -n "$file" ] && rm "${NOTE_DIR}/${file}.md"
-        fi
-        ;;
-      "-r")
-        if [ -n "$2" ]; then
-          cat "${NOTE_DIR}"/"$2".md
-        else
-          file=$(fetch)
-          [ -n "$file" ] && cat "${NOTE_DIR}/${file}.md"
-        fi
-        ;;
-      *)
-        mkdir -p "$(dirname "${NOTE_DIR}/${*}.md")"
-        ${EDITOR:-vim} "${NOTE_DIR}"/"$*".md
-        ;;
-    esac
+    sed -n '1,200p' "$path"
   fi
-fi
+}
+
+edit_note() {
+  note=$1
+  path=$(note_path "$note")
+
+  mkdir -p "$(dirname "$path")"
+
+  # Deliberate word splitting allows EDITOR values such as "nvim -f".
+  # shellcheck disable=SC2086
+  $editor "$path" </dev/tty
+}
+
+read_note() {
+  note=$1
+  path=$(note_path "$note")
+
+  [ -f "$path" ] || die "note does not exist: $note"
+
+  if [ -t 1 ]; then
+    # Deliberate word splitting allows PAGER values with arguments.
+    # shellcheck disable=SC2086
+    $pager "$path" </dev/tty
+  else
+    cat "$path"
+  fi
+}
+
+create_note_interactively() {
+  printf 'New note name: ' >/dev/tty
+  IFS= read -r note </dev/tty
+
+  [ -n "$note" ] || return 0
+
+  edit_note "$note"
+}
+
+delete_notes() {
+  notes=$1
+
+  [ -n "$notes" ] || return 0
+
+  printf '\nThe following notes will be deleted:\n\n' >/dev/tty
+  printf '%s\n' "$notes" | sed 's/^/  /' >/dev/tty
+  printf '\nType DELETE to confirm: ' >/dev/tty
+
+  IFS= read -r answer </dev/tty
+  [ "$answer" = DELETE ] || {
+    printf 'Deletion cancelled.\n' >/dev/tty
+    return 0
+  }
+
+  printf '%s\n' "$notes" |
+    while IFS= read -r note; do
+      [ -n "$note" ] || continue
+
+      path=$(note_path "$note")
+      [ -f "$path" ] || {
+        printf '%s: note does not exist: %s\n' "$PROGRAM" "$note" >&2
+        continue
+      }
+
+      rm -- "$path"
+      printf 'Deleted: %s\n' "$note" >/dev/tty
+    done
+}
+
+archive_notes() {
+  notes=$1
+
+  [ -n "$notes" ] || return 0
+
+  archive_root="$NOTE_DIR/.archive/$(date '+%Y-%m-%d')"
+
+  printf '%s\n' "$notes" |
+    while IFS= read -r note; do
+      [ -n "$note" ] || continue
+
+      source=$(note_path "$note")
+      destination="$archive_root/$note.md"
+
+      [ -f "$source" ] || {
+        printf '%s: note does not exist: %s\n' "$PROGRAM" "$note" >&2
+        continue
+      }
+
+      if [ -e "$destination" ]; then
+        printf '%s: archive destination already exists: %s\n' \
+          "$PROGRAM" "$destination" >&2
+        continue
+      fi
+
+      mkdir -p "$(dirname "$destination")"
+      mv -- "$source" "$destination"
+
+      printf 'Archived: %s\n' "$note" >/dev/tty
+    done
+}
+
+rename_note() {
+  notes=$1
+
+  count=$(printf '%s\n' "$notes" | awk 'NF { count++ } END { print count + 0 }')
+
+  [ "$count" -gt 0 ] || return 0
+  [ "$count" -eq 1 ] || die "rename supports one note at a time"
+
+  old_note=$(printf '%s\n' "$notes" | sed -n '1p')
+  old_path=$(note_path "$old_note")
+
+  [ -f "$old_path" ] || die "note does not exist: $old_note"
+
+  printf 'Rename "%s" to: ' "$old_note" >/dev/tty
+  IFS= read -r new_note </dev/tty
+
+  [ -n "$new_note" ] || return 0
+  validate_note_name "$new_note"
+
+  new_path=$(note_path "$new_note")
+
+  if [ -e "$new_path" ]; then
+    die "destination already exists: $new_note"
+  fi
+
+  mkdir -p "$(dirname "$new_path")"
+  mv -- "$old_path" "$new_path"
+
+  printf 'Renamed: %s -> %s\n' "$old_note" "$new_note" >/dev/tty
+}
+
+process_notes() {
+  action=$1
+  notes=$2
+
+  printf '%s\n' "$notes" |
+    while IFS= read -r note; do
+      [ -n "$note" ] || continue
+      "$action" "$note"
+    done
+}
+
+interactive_picker() {
+  output_file=$(mktemp "${TMPDIR:-/tmp}/${PROGRAM}.XXXXXX")
+  trap 'rm -f "$output_file"' EXIT HUP INT TERM
+
+  list_notes |
+    fzf \
+      --ansi \
+      --multi \
+      --select-1 \
+      --exit-0 \
+      --prompt='Notes> ' \
+      --header='Enter edit | Ctrl-R read | Ctrl-N new | Ctrl-E rename | Ctrl-A archive | Ctrl-D delete' \
+      --expect='enter,ctrl-r,ctrl-n,ctrl-e,ctrl-a,ctrl-d' \
+      --preview="$SELF --preview {}" \
+      --preview-window='right:60%:wrap' \
+      >"$output_file" || true
+
+  key=$(sed -n '1p' "$output_file")
+  notes=$(
+    sed -n '2,$p' "$output_file" |
+      strip_ansi
+  )
+
+  rm -f "$output_file"
+  trap - EXIT HUP INT TERM
+
+  case $key in
+    enter|'')
+      [ -n "$notes" ] && process_notes edit_note "$notes"
+      ;;
+
+    ctrl-r)
+      [ -n "$notes" ] && process_notes read_note "$notes"
+      ;;
+
+    ctrl-n)
+      create_note_interactively
+      ;;
+
+    ctrl-e)
+      [ -n "$notes" ] && rename_note "$notes"
+      ;;
+
+    ctrl-a)
+      [ -n "$notes" ] && archive_notes "$notes"
+      ;;
+
+    ctrl-d)
+      [ -n "$notes" ] && delete_notes "$notes"
+      ;;
+  esac
+}
+
+show_help() {
+  cat <<EOF
+Usage:
+  $PROGRAM                     Open the interactive note picker
+  $PROGRAM NOTE NAME           Create or edit a note
+  $PROGRAM -r NOTE NAME        Read a note
+  $PROGRAM -d NOTE NAME        Delete a note
+  $PROGRAM -a NOTE NAME        Archive a note
+  $PROGRAM -m OLD NAME         Rename a note interactively
+  $PROGRAM -n                  Create a note interactively
+  $PROGRAM -h                  Show this help
+
+Interactive controls:
+  Enter       Edit selected notes
+  Ctrl-R      Read selected notes
+  Ctrl-N      Create a new note
+  Ctrl-E      Rename the selected note
+  Ctrl-A      Archive selected notes
+  Ctrl-D      Delete selected notes
+  Tab         Select multiple notes
+  Esc         Cancel
+
+Notes are stored beneath:
+  $NOTE_DIR
+
+Archived notes are stored beneath:
+  $NOTE_DIR/.archive/YYYY-MM-DD
+EOF
+}
+
+case ${1-} in
+  --preview)
+    shift
+    preview_note "${1-}"
+    ;;
+
+  '')
+    interactive_picker
+    ;;
+
+  -n|--new)
+    shift
+    [ "$#" -eq 0 ] || die "$1 does not accept a note name"
+    create_note_interactively
+    ;;
+
+  -r|--read)
+    shift
+    [ "$#" -gt 0 ] || die "missing note name"
+    read_note "$(join_arguments "$@")"
+    ;;
+
+  -d|--delete)
+    shift
+    [ "$#" -gt 0 ] || die "missing note name"
+    delete_notes "$(join_arguments "$@")"
+    ;;
+
+  -a|--archive)
+    shift
+    [ "$#" -gt 0 ] || die "missing note name"
+    archive_notes "$(join_arguments "$@")"
+    ;;
+
+  -m|--move|--rename)
+    shift
+    [ "$#" -gt 0 ] || die "missing note name"
+    rename_note "$(join_arguments "$@")"
+    ;;
+
+  -h|--help)
+    show_help
+    ;;
+
+  --)
+    shift
+    [ "$#" -gt 0 ] || die "missing note name"
+    edit_note "$(join_arguments "$@")"
+    ;;
+
+  -*)
+    die "unknown option: $1"
+    ;;
+
+  *)
+    edit_note "$(join_arguments "$@")"
+    ;;
+esac
