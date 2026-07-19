@@ -1,8 +1,93 @@
 #!/bin/sh
 
-# fkill - kill process
-pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-if [ "x${pid}" != "x" ]
-then
-  kill -"${1:-9}" "$pid"
-fi
+# fkill, interactive process killer
+#
+# Enter       Kill selected processes
+# Ctrl-A      Kill all processes matching the selected command
+# Ctrl-S      Use sudo
+# Ctrl-K      Use sudo and kill all matching processes
+#
+# Usage:
+#   fkill          # defaults to SIGTERM
+#   fkill 9        # use SIGKILL
+#   fkill TERM     # named signals also work
+
+set -eu
+
+signal=${1:-TERM}
+current_pid=$$
+parent_pid=$PPID
+query=
+
+while :; do
+  out=$(
+    ps -eo pid=,user=,ppid=,stat=,etime=,comm=,args= |
+      awk -v self="$current_pid" -v parent="$parent_pid" '
+        $1 != self && $1 != parent
+      ' |
+      fzf \
+        --multi \
+        --reverse \
+        --query="$query" \
+        --print-query \
+        --expect=enter,ctrl-a,ctrl-s,ctrl-k \
+        --header="Enter: kill  Ctrl-A: kill all matching command  Ctrl-S: sudo kill  Ctrl-K: sudo kill all  Signal: $signal" \
+        --preview='
+          pid=$(printf "%s\n" {} | awk "{print \$1}")
+          ps -p "$pid" -o pid,user,ppid,pgid,sid,stat,etime,%cpu,%mem,comm,args
+        ' \
+        --preview-window='down,8,border-top'
+  ) || exit 0
+
+  query=$(printf '%s\n' "$out" | sed -n '1p')
+  key=$(printf '%s\n' "$out" | sed -n '2p')
+  selections=$(printf '%s\n' "$out" | sed '1,2d')
+
+  [ -n "$selections" ] || continue
+
+  case "$key" in
+    ctrl-a|ctrl-k)
+      commands=$(
+        printf '%s\n' "$selections" |
+          awk '{print $6}' |
+          sort -u
+      )
+
+      [ -n "$commands" ] || continue
+
+      printf 'Kill all processes with command name:\n'
+      printf '  %s\n' $commands
+      printf 'Signal: %s\n' "$signal"
+      printf 'Continue? [y/N] '
+
+      IFS= read -r answer
+      case "$answer" in
+        y|Y|yes|YES)
+          ;;
+        *)
+          continue
+          ;;
+      esac
+
+      for command in $commands; do
+        if [ "$key" = "ctrl-k" ]; then
+          sudo pkill -"$signal" -x "$command"
+        else
+          pkill -"$signal" -x "$command"
+        fi
+      done
+      ;;
+
+    ctrl-s)
+      pids=$(printf '%s\n' "$selections" | awk '{print $1}')
+      sudo kill -"$signal" $pids
+      ;;
+
+    *)
+      pids=$(printf '%s\n' "$selections" | awk '{print $1}')
+      kill -"$signal" $pids
+      ;;
+  esac
+
+  exit 0
+done
