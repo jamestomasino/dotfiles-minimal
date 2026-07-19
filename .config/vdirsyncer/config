@@ -1,0 +1,38 @@
+[general]
+status_path = "/home/tomasino/.local/share/vdirsyncer/status/v3/"
+
+[pair contacts]
+a = "local_contacts"
+b = "remote_contacts"
+collections = ["family", "friends", "work"]
+metadata = []
+conflict_resolution = "b wins"
+
+[storage local_contacts]
+type = "filesystem"
+path = "/home/tomasino/.syncthing/contacts/{collection}/"
+fileext = ".vcf"
+
+[storage remote_contacts]
+type = "caldav"
+url = "https://caldav.tomasino.org/"
+username = "tomasino"
+password.fetch = ["command", "secret-tool", "lookup", "service", "radicale"]
+
+[pair calendars]
+a = "local_calendars"
+b = "remote_calendars"
+collections = ["default"]
+metadata = ["color"]
+conflict_resolution = "b wins"
+
+[storage local_calendars]
+type = "filesystem"
+path = "/home/tomasino/.local/share/khal/calendars/{collection}/"
+fileext = ".ics"
+
+[storage remote_calendars]
+type = "caldav"
+url = "https://caldav.tomasino.org/"
+username = "tomasino"
+password.fetch = ["command", "secret-tool", "lookup", "service", "radicale"]

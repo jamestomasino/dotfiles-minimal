@@ -2,7 +2,6 @@
   [[default]]
     path = /home/tomasino/.local/share/khal/calendars/default
     color = dark blue
-    symbology = utf8-all
 
 [locale]
   timeformat = %H:%M
@@ -10,7 +9,3 @@
   longdateformat = %Y-%m-%d %H:%M
   default_timezone = Atlantic/Reykjavik
   local_timezone = Atlantic/Reykjavik
-  first_weekday = 0
-
-[horizons]
-  default = 1
