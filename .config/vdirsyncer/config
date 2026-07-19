@@ -10,7 +10,7 @@ conflict_resolution = "b wins"
 
 [storage local_contacts]
 type = "filesystem"
-path = "/home/tomasino/.syncthing/contacts/{collection}/"
+path = "/home/tomasino/.syncthing/contacts/"
 fileext = ".vcf"
 
 [storage remote_contacts]
@@ -28,7 +28,7 @@ conflict_resolution = "b wins"
 
 [storage local_calendars]
 type = "filesystem"
-path = "/home/tomasino/.local/share/khal/calendars/{collection}/"
+path = "/home/tomasino/.syncthing/calendars/"
 fileext = ".ics"
 
 [storage remote_calendars]
