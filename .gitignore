@@ -6,9 +6,6 @@
 *.swo
 *~
 
-# Vim undo/backup
-.*/
-
 # OS generated
 .DS_Store
 Thumbs.db

@@ -1,24 +1,51 @@
 #!/bin/sh
 
-: "${CONTACTS_DIR:?'CONTACTS_DIR ENV Var not set'}"
-if [ -d "${CONTACTS_DIR}" ]; then
-  if [ $# -eq 0 ]; then
-    file=$(ls --color=never -1 "${CONTACTS_DIR}" | \
-      fzf \
-      --multi \
+# Contact manager using khard + vCards
+# Uses khard addressbooks configured in ~/.config/khard/config
+
+set -u
+
+if ! command -v khard >/dev/null 2>&1; then
+  echo "khard not found" >&2
+  exit 1
+fi
+
+# fzf preview: given a UID, show the vcard
+preview() {
+  khard show --format vcard "$1" 2>/dev/null || echo "(unable to preview)"
+}
+
+if [ $# -eq 0 ]; then
+  # Interactive selection via fzf
+  # khard list -p outputs: uid<TAB>name<TAB>addressbook
+  uid=$(khard list -p 2>/dev/null | \
+    fzf \
       --select-1 \
       --exit-0 \
-      --preview="cat ${CONTACTS_DIR}/{}" \
-      --preview-window=right:70%:wrap)
-    [ -n "$file" ] && ${EDITOR:-vim} "${CONTACTS_DIR}/${file}"
-  else
-    case "$1" in
-      "-d")
-        rm "${CONTACTS_DIR}"/"$2"
-        ;;
-      *)
-        ${EDITOR:-vim} "${CONTACTS_DIR}"/"$*"
-        ;;
-    esac
-  fi
+      --delimiter=$'\t' \
+      --with-nth=2,3 \
+      --preview="preview \$1" \
+      --preview-window=right:70%:wrap \
+      | cut -f1)
+
+  [ -n "$uid" ] && khard edit --format vcard "$uid"
+
+else
+  case "$1" in
+    "-n"|"--new")
+      shift
+      khard new "${@}"
+      ;;
+    "-d"|"--delete")
+      shift
+      khard remove --force "${@}"
+      ;;
+    "-s"|"--show")
+      shift
+      khard show --format vcard "${@}"
+      ;;
+    *)
+      khard edit --format vcard "${@}"
+      ;;
+  esac
 fi
