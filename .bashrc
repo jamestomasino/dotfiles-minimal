@@ -27,3 +27,4 @@ if [ -f "$HOME/.local/share/bash-completion/completions/deno.bash" ]; then
   # shellcheck disable=SC1091
   . "$HOME/.local/share/bash-completion/completions/deno.bash"
 fi
+export JCODE_NO_AUTO_UPDATE=1

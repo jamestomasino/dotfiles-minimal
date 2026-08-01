@@ -3,17 +3,25 @@
 server="$1"
 newsfileroot="${HOME}/.jnewsrc"
 
+# Detect hostname to decide server
+myhost=$(hostname -f 2>/dev/null || hostname 2>/dev/null)
+
 if [ "$server" = "usenet" ]; then
   newsfile="${newsfileroot}-usenet"
   NNTPSERVER="news.eternal-september.org"
   SLRNCONFIG="${HOME}/.slrnrc-usenet"
   export NNTPSERVER
-fi
-
-if [ -z "$server" ]; then
-  newsfile="${newsfileroot}-tilde"
+elif [ "$myhost" = "cosmic.voyage" ]; then
+  # Running on the server itself — connect locally
+  newsfile="${newsfileroot}-cosmic"
   NNTPSERVER="localhost"
-  SLRNCONFIG="${HOME}/.slrnrc-tilde"
+  SLRNCONFIG="${HOME}/.slrn/slrnrc"
+  export NNTPSERVER
+else
+  # Running remotely — connect to cosmic.voyage
+  newsfile="${newsfileroot}-cosmic"
+  NNTPSERVER="cosmic.voyage"
+  SLRNCONFIG="${HOME}/.slrn/slrnrc"
   export NNTPSERVER
 fi
 
