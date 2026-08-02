@@ -1,0 +1,21 @@
+% -*- slang -*-
+% SLRN configuration for cosmic.voyage
+
+% --- Identity ---
+set hostname "cosmic.voyage"
+
+% --- SSL ---
+% SSL is enabled via snews:// prefix in nnrpaccess below
+
+% --- Authentication ---
+nnrpaccess "snews://cosmic.voyage:563" "tomasino" ""
+
+% --- General ---
+set read_active 1
+set confirm_actions 0
+
+% --- Posting ---
+set warn_followup_to 0
+
+% --- Scoring ---
+% set scorefile ".slrn/score"

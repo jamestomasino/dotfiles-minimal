@@ -12,21 +12,21 @@ if [ "$server" = "usenet" ]; then
   SLRNCONFIG="${HOME}/.slrnrc-usenet"
   export NNTPSERVER
 elif [ "$myhost" = "cosmic.voyage" ]; then
-  # Running on the server itself — connect locally
+  # Running on the server itself — connect locally over SSL
   newsfile="${newsfileroot}-cosmic"
-  NNTPSERVER="localhost"
+  NNTPSERVER="snews://localhost:563"
   SLRNCONFIG="${HOME}/.slrn/slrnrc"
   export NNTPSERVER
 else
-  # Running remotely — connect to cosmic.voyage
+  # Running remotely — connect to cosmic.voyage over SSL
   newsfile="${newsfileroot}-cosmic"
-  NNTPSERVER="cosmic.voyage"
+  NNTPSERVER="snews://cosmic.voyage:563"
   SLRNCONFIG="${HOME}/.slrn/slrnrc"
   export NNTPSERVER
 fi
 
 if [ ! -f "$newsfile" ]; then
-  slrn --create -f "$newsfile"
+  slrn --create -f "$newsfile" -i "${SLRNCONFIG}"
   slrn -d -f "$newsfile" -i "${SLRNCONFIG}"
 fi
 slrn -f "$newsfile" -i "${SLRNCONFIG}"
