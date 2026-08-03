@@ -25,17 +25,20 @@ export LSCOLORS=gxfxcxdxbxggedabagacad
 export CLICOLOR=1
 export COLORTERM=truecolor
 if [ -t 1 ] && command -v tput > /dev/null 2>&1; then
-  LESS_TERMCAP_mb=$(tput bold; tput setaf 2); export LESS_TERMCAP_mb
-  LESS_TERMCAP_md=$(tput bold; tput setaf 4); export LESS_TERMCAP_md
-  LESS_TERMCAP_me=$(tput sgr0); export LESS_TERMCAP_me
-  LESS_TERMCAP_so=$(tput bold; tput setaf 7; tput setab 4); export LESS_TERMCAP_so
-  LESS_TERMCAP_se=$(tput rmso; tput sgr0); export LESS_TERMCAP_se
-  LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 9); export LESS_TERMCAP_us
-  LESS_TERMCAP_ue=$(tput rmul; tput sgr0); export LESS_TERMCAP_ue
-  LESS_TERMCAP_mr=$(tput rev); export LESS_TERMCAP_mr
-  LESS_TERMCAP_mh=$(tput dim); export LESS_TERMCAP_mh
-  LESS_TERMCAP_ZV=$(tput rsubm); export LESS_TERMCAP_ZV
-  LESS_TERMCAP_ZW=$(tput rsupm); export LESS_TERMCAP_ZW
+  # Use tput TERM if available, fall back to xterm-256color for unsupported terminals
+  _tput_term="${TPUT_TERM:-$TERM}"
+  tput -T "$_tput_term" init > /dev/null 2>&1 || _tput_term="xterm-256color"
+  LESS_TERMCAP_mb=$(tput -T "$_tput_term" bold; tput -T "$_tput_term" setaf 2); export LESS_TERMCAP_mb
+  LESS_TERMCAP_md=$(tput -T "$_tput_term" bold; tput -T "$_tput_term" setaf 4); export LESS_TERMCAP_md
+  LESS_TERMCAP_me=$(tput -T "$_tput_term" sgr0); export LESS_TERMCAP_me
+  LESS_TERMCAP_so=$(tput -T "$_tput_term" bold; tput -T "$_tput_term" setaf 7; tput -T "$_tput_term" setab 4); export LESS_TERMCAP_so
+  LESS_TERMCAP_se=$(tput -T "$_tput_term" rmso; tput -T "$_tput_term" sgr0); export LESS_TERMCAP_se
+  LESS_TERMCAP_us=$(tput -T "$_tput_term" smul; tput -T "$_tput_term" bold; tput -T "$_tput_term" setaf 9); export LESS_TERMCAP_us
+  LESS_TERMCAP_ue=$(tput -T "$_tput_term" rmul; tput -T "$_tput_term" sgr0); export LESS_TERMCAP_ue
+  LESS_TERMCAP_mr=$(tput -T "$_tput_term" rev); export LESS_TERMCAP_mr
+  LESS_TERMCAP_mh=$(tput -T "$_tput_term" dim); export LESS_TERMCAP_mh
+  LESS_TERMCAP_ZV=$(tput -T "$_tput_term" rsubm); export LESS_TERMCAP_ZV
+  LESS_TERMCAP_ZW=$(tput -T "$_tput_term" rsupm); export LESS_TERMCAP_ZW
 fi
 export GROFF_NO_SGR=1
 
@@ -210,11 +213,14 @@ if [ -z "$TS" ] || [ "$TS" = "" ] || [ "$TS" = "dash" ] || [ "$TS" = "sh" ]; the
   PS1=${PS1}'$(basename $(pwd)) ' # workingdir
   PS1=${PS1}"-> " # ->
 else
-  DIRECTORY_COLOR="\001$(tput setaf 12)\002";
-  PIPE_COLOR="\001$(tput setaf 241)\002";
-  PROMPT_COLOR="\001$(tput setaf 196)\002";
-  HOST_COLOR="\001$(tput setaf 245)\002"
-  RESET_COLOR="\001$(tput sgr0)\002"
+  # Fall back to xterm-256color if current TERM unsupported
+  _tput_term="${TPUT_TERM:-$TERM}"
+  tput -T "$_tput_term" init > /dev/null 2>&1 || _tput_term="xterm-256color"
+  DIRECTORY_COLOR="\001$(tput -T "$_tput_term" setaf 12)\002";
+  PIPE_COLOR="\001$(tput -T "$_tput_term" setaf 241)\002";
+  PROMPT_COLOR="\001$(tput -T "$_tput_term" setaf 196)\002";
+  HOST_COLOR="\001$(tput -T "$_tput_term" setaf 245)\002"
+  RESET_COLOR="\001$(tput -T "$_tput_term" sgr0)\002"
   PS1="${HOST_COLOR}${HOSTNAME}" # [hostname]
   PS1=${PS1}"${PIPE_COLOR}|" # [hostname]
   PS1=${PS1}"${DIRECTORY_COLOR}\w" # workingdir
