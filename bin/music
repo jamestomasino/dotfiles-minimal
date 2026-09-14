@@ -53,6 +53,34 @@ handler_soma() {
   fi
 }
 
+# chillhop.com: no continuous stream — each station is a wall-clock scheduled
+# playlist of finite MP3s that the web player chains seamlessly. Approximate
+# "radio" by snapshotting the station's live schedule into an m3u and looping it.
+# Station *list* is cached a day (rarely changes); the live schedule is fetched
+# fresh at selection time (it is the current, constantly-advancing schedule).
+handler_chillhop() {
+  _ch_cache="${XDG_CACHE_HOME}/chillhop-stations.txt"
+  if [ -f "$_ch_cache" ] && [ "$(find "$_ch_cache" -mmin +$((60*24)) 2>/dev/null)" ]; then
+    rm "$_ch_cache"
+  fi
+  if [ ! -f "$_ch_cache" ]; then
+    curl -s https://stream.chillhop.com/stations \
+      | jq -r '.stations[] | [.name, .id] | @tsv' \
+      > "$_ch_cache"
+  fi
+  _ch_name="$(cut -f1 "$_ch_cache" | fzf --select-1 --exit-0)"
+  if [ -n "$_ch_name" ]; then
+    _ch_id="$(awk -F'\t' -v k="$_ch_name" '$1 == k { print $2; exit }' "$_ch_cache")"
+    if [ -n "$_ch_id" ]; then
+      _ch_m3u="${XDG_CACHE_HOME}/chillhop-live-${_ch_id}.m3u"
+      curl -s "https://stream.chillhop.com/live/${_ch_id}" \
+        | jq -r '.[] | .streamUrl // ("https://stream.chillhop.com/mp3/" + (.fileId|tostring))' \
+        > "$_ch_m3u"
+      [ -s "$_ch_m3u" ] && play --loop-playlist "$_ch_m3u"
+    fi
+  fi
+}
+
 # ── Main ─────────────────────────────────────────────────────────────
 
 # Read stations.txt and get list of stations to browse
