@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# mpv player function — avoids storing a command string (quoting nightmare)
+# mpv player function
 play() {
   mpv --quiet \
     --msg-level=cplayer=no,ffmpeg=no,ao=no,ad=no,display-tags=no \
@@ -14,11 +14,12 @@ XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 STATIONS=${STATIONS:-$HOME/stations.txt}
 
 # == stations.txt example ==
+# +soma
+# +chillhop
 # sleepbot=http://www.sleepbot.com/ambience/cgi/listen.cgi/listen.pls
-# soma
 # tilderadio=https://azuracast.tilderadio.org/radio/8000/320k.ogg
 
-# Safe lookup: exact-match station name, no regex injection.
+# Safe lookup: exact-match station name
 # Only matches lines containing '=' (plain URL entries).
 lookup_station() {
   _lookup_name="$1"
